@@ -1,0 +1,5 @@
+# JUCE folders
+**/Builds
+**/JuceLibraryCode
+**/.DS_Store
+**/.idea
