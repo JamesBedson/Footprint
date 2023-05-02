@@ -9,48 +9,48 @@ class Overdrive:
     # Constructor
     def __init__(self) -> None:
 
-        self.threshold      = (1/3)    # threshold for symmetrical soft clipping
         self.gain           = 6      #dB
         self.tone           = 0.5    #Hz
         self.level          = 0.5    #dB
     
     # --------------------------------------------------------------------------
     # Processing Steps
-    def applyStaticCurve(self, x: np.ndarray):
-        # input x is a numpy array
-        N = len(x)
-        th = 1/3 # threshold for symmetrical soft clipping by Schetzen Formula
-        y = np.zeros_like(x)
-        for i in range(N):
-            if abs(x[i]) < th:
-                y[i] = 2*x[i]
-            elif abs(x[i]) >= th and abs(x[i]) <= 2*th:
-                if x[i] > 0:
-                    y[i] = (3 - (2 - x[i]*3)**2) / 3
+    def applySoftClipping(self, x: np.ndarray):
+        
+        th      = 1/3 
+        y       = np.zeros_like(x)
+        xHat    = np.abs(x)
+        
+        for n, _ in enumerate(x):
+            if xHat[n] < th:
+                y[n] = 2*x[n]
+            
+            elif xHat[n] >= th and xHat[n] <= 2*th:
+                if x[n] > 0:
+                    y[n] = (3 - (2 - x[n]*3)**2) / 3
+                
                 else:
-                    y[i] = -(3 - (2 - abs(x[i])*3)**2) / 3
+                    y[n] = -(3 - (2 - xHat[n]*3)**2) / 3
+            
             else:
-                if x[i] > 0:
-                    y[i] = 1
+                if x[n] > 0:
+                    y[n] = 1
+                
                 else:
-                    y[i] = -1
-        return y  # output y is a numpy array
+                    y[n] = -1
+        return y 
 
+
+    def applyOverdrive(self, x: np.ndarray) -> np.ndarray:
+        
+        y = np.power(10, self.gain/20) * x
+        return self.applySoftClipping(y)
     
 
-    def overdrive_(self, x: np.ndarray, sampleRate) -> np.ndarray:
-        """
-        Apply overdrive distortion to a signal.
-
-        Args:
-        - signal: array-like, input audio signal
-        - gain: float, gain amount in dB
-        - threshold: float, overdrive threshold as a fraction of the maximum signal amplitude
-
-        Returns:
-        - array-like, output distorted signal
-        """
-        x = self.applyStaticCurve(x)
+    
+    '''def overdrive_(self, x: np.ndarray, sampleRate) -> np.ndarray:
+        
+        x = self.applySoftClipping(x)
 
         # Convert dB gain to linear gain
         gain_lin = 10**(self.gain/20)
@@ -63,38 +63,39 @@ class Overdrive:
         x_overdriven = np.sign(x) * (1 - np.exp(-np.abs(x/gain_lin))) / (1 - np.exp(-1/gain_lin))
         x_overdriven *= overdrive_threshold / np.abs(x_overdriven).max()
         
-        return x_overdriven
+        return x_overdriven'''
 
-    
 
     # --------------------------------------------------------------------------
     # Plotting
-    def plotStaticCurve(self):
+    def plotStaticCurveLinear(self):
 
         numSamples = 10000
-        x = np.linspace(-1, 1, numSamples)  # input signal
-        y = self.applyStaticCurve(x) # output signal
-        fig, ax = plt.subplots()  
+        x = np.linspace(-1, 1, numSamples)      
+        y = self.applySoftClipping(x)           
+        
+        _, ax = plt.subplots()  
         ax.plot(x, y)
         ax.set_xlabel('Input signal')
         ax.set_ylabel('Output signal')
         ax.set_title('Static Curve')
-        plt.show()
+        
 
-    def plotsecondStaticCurve(self):
+    def plotStaticCurveDecibel(self):
         numSamples = 10000
-        x = np.linspace(-1, 1, numSamples)  # input signal
-        y = self.applyStaticCurve(x) # output signal
-        x_db = 20 * np.log10(np.abs(x))
-        y_db = 20 * np.log10(np.abs(y))
-        fig, ax = plt.subplots()  
-        ax.plot(x_db, y_db)
+        x = np.linspace(-1, 1, numSamples)      
+        y = self.applySoftClipping(x)           
+        X = 20 * np.log10(np.abs(x))
+        Y = 20 * np.log10(np.abs(y))
+        
+        _, ax = plt.subplots()  
+        ax.plot(X, Y)
         ax.set_xlabel('Input signal (dB)')
         ax.set_ylabel('Output signal (dB)')
         ax.set_title('Static Curve')
-        plt.show()
 
-    def signal_stft(signal, window, hop_size):
+
+    '''def signal_stft(signal, window, hop_size):
         sample_rate = 44100
         """
         Computes the Short-Time Fourier Transform (STFT) of a signal.
@@ -153,4 +154,4 @@ class Overdrive:
         plt.ylabel('Frequency (Hz)')
         plt.title('Spectrogram')
         plt.colorbar()
-        plt.show()
+        plt.show()'''
