@@ -10,9 +10,9 @@ class Overdrive:
     def __init__(self) -> None:
 
         self.threshold      = (1/3)    # threshold for symmetrical soft clipping
-        self.gain       = 6                #dB
-        self.tone            = 0.5         #Hz
-        self.level     = 0.5               #dB
+        self.gain           = 6      #dB
+        self.tone           = 0.5    #Hz
+        self.level          = 0.5    #dB
     
     # --------------------------------------------------------------------------
     # Processing Steps
@@ -50,7 +50,8 @@ class Overdrive:
         Returns:
         - array-like, output distorted signal
         """
-    
+        x = self.applyStaticCurve(x)
+
         # Convert dB gain to linear gain
         gain_lin = 10**(self.gain/20)
 
@@ -63,22 +64,6 @@ class Overdrive:
         x_overdriven *= overdrive_threshold / np.abs(x_overdriven).max()
         
         return x_overdriven
-
-
-        # x_peak = np.max(np.abs(x))  # peak value of input signal
-        # x_norm = x / x_peak       # normalized input signal
-        # x_db = 20 * np.log10(x_norm)  # input signal in dB
-        # gain_linear = 10**(self.gain/20)  # linear gain
-        # level_linear = 10**(self.level/20)  # linear level
-        # tone_linear = self.tone / sampleRate  # linear tone
-        # x_filtered = np.zeros_like(x_db)    # filtered input signal
-        # for i in range(1, len(x_db)):  # first sample is not filtered
-        #     x_filtered[i] = x_db[i-1]*tone_linear + (1 - tone_linear)*x_filtered[i-1]   # first order lowpass filter
-        # x_pre = x_filtered * gain_linear  # pre-gain signal
-        # x_pre_db = 20 * np.log10(x_pre)  # pre-gain signal in dB
-        # x_post_db = x_pre_db - self.applyStaticCurve(x_pre_db)  # post-gain signal in dB
-        # x_post = level_linear * 10**(x_post_db/20)  # post-gain signal
-        # return x_post * x_peak  # post-gain signal in time domain
 
     
 
@@ -109,3 +94,63 @@ class Overdrive:
         ax.set_title('Static Curve')
         plt.show()
 
+    def signal_stft(signal, window, hop_size):
+        sample_rate = 44100
+        """
+        Computes the Short-Time Fourier Transform (STFT) of a signal.
+        
+        Parameters:
+        - signal (np.ndarray): Input signal.
+        - window (np.ndarray): Window function to use.
+        - hop_size (int): Hop size of the FFT window.
+        
+        Returns:
+        - f (np.ndarray): Array of frequency values.
+        - t (np.ndarray): Array of time values.
+        - Zxx (np.ndarray): STFT matrix.
+        """
+        
+        # Calculate the STFT of the signal
+        n_frames = int(np.ceil(len(signal) / hop_size))
+        padded_size = (n_frames - 1) * hop_size + len(window)
+        padded_signal = np.zeros(padded_size)
+        padded_signal[:len(signal)] = signal
+        f = np.fft.rfftfreq(len(window))
+        t = np.arange(n_frames) * hop_size / float(sample_rate)
+        Zxx = np.zeros((len(f), n_frames), dtype=np.complex)
+        
+        for i in range(n_frames):
+            frame_start = i * hop_size
+            frame_end = frame_start + len(window)
+            frame = padded_signal[frame_start:frame_end] * window
+            Zxx[:, i] = np.fft.rfft(frame)
+            
+        return f, t, Zxx  
+    def plot_spectrogram(signal, sample_rate, window_size=1024, hop_size=512, window_type='hann', cmap='viridis'):
+        """
+        Computes and plots the spectrogram of a signal.
+        
+        Parameters:
+        - signal (np.ndarray): Input signal.
+        - sample_rate (int): Sample rate of the signal.
+        - window_size (int): Size of the FFT window. Default is 1024.
+        - hop_size (int): Hop size of the FFT window. Default is 512.
+        - window_type (str): Type of window function to use. Default is 'hann'.
+        - cmap (str): Colormap to use. Default is 'viridis'.
+        """
+        
+        # Calculate the STFT of the signal
+        window = np.get_window(window_type, window_size)
+        f, t, Zxx = Overdrive.signal_stft(signal, window, hop_size)
+        
+        # Convert the magnitude of the STFT to dB scale
+        Zxx = 20 * np.log10(np.abs(Zxx))
+        
+        # Plot the spectrogram
+        plt.figure(figsize=(12, 6))
+        plt.imshow(Zxx, aspect='auto', origin='lower', cmap=cmap, extent=[t.min(), t.max(), f.min(), f.max()])
+        plt.xlabel('Time (s)')
+        plt.ylabel('Frequency (Hz)')
+        plt.title('Spectrogram')
+        plt.colorbar()
+        plt.show()
