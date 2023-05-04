@@ -8,7 +8,6 @@ class Reverb:
     def __init__(self) -> None:
         
         self.mix      = 0.5
-        #self.__gain = 0
 
     def plotIR(self, x: np.ndarray):
         plt.plot(x)
@@ -76,7 +75,7 @@ class Reverb:
             fdl             = self.roll_zero(fdl, 2*L)
 
         x_zp            = self.zero_pad(x, p-1)
-        output          = self.amount_verb  * output + x_zp
+        output          = self.mix  * output + x_zp
         return output
     
     
