@@ -12,9 +12,10 @@ class Distortion:
         self.gain           = 6      #dB
         self.tone           = 0.5    #Hz
         self.level          = 0.5    #dB
+        self.alpha          = 50
         # --------------------------------------------------------------------------
     # Processing Steps
-
+    '''
         # Amplitude Detector Function
     def getAmplitudeEnvelope(self, x: np.ndarray, sampleRate: int):
 
@@ -47,7 +48,7 @@ class Distortion:
         b = b / a[0]
         a = a / a[0]
     
-        return b, a
+        return b, a'''
 
     def applyHardClipping(self, x: np.ndarray):
         
@@ -55,7 +56,7 @@ class Distortion:
         xHat    = np.abs(x)
         
         for n, _ in enumerate(x):
-            y[n] = -(xHat[n] - 1)**12 + 1
+            y[n] = -(xHat[n] - 1)**self.alpha + 1
             if x[n] < 0:
                 y[n] *= -1
         return y
@@ -73,10 +74,11 @@ class Distortion:
         y = self.applyHardClipping(x)           
         
         _, ax = plt.subplots()  
-        ax.plot(x, y)
+        ax.plot(x, y, linewidth = 5)
         ax.set_xlabel('Input signal')
         ax.set_ylabel('Output signal')
         ax.set_title('Static Curve')
+        ax.grid(True)
         
 
     def plotStaticCurveDecibel(self):
@@ -87,7 +89,8 @@ class Distortion:
         Y = 20 * np.log10(np.abs(y))
         
         _, ax = plt.subplots()  
-        ax.plot(X, Y)
+        ax.plot(X, Y, linewidth = 5)
         ax.set_xlabel('Input signal (dB)')
         ax.set_ylabel('Output signal (dB)')
         ax.set_title('Static Curve')
+        ax.grid(True)
