@@ -4,6 +4,17 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
+      <FILE id="QeE6Th" name="DisplaySection.cpp" compile="1" resource="0"
+            file="Source/DisplaySection.cpp"/>
+      <FILE id="dy7Rua" name="DisplaySection.h" compile="0" resource="0"
+            file="Source/DisplaySection.h"/>
+      <FILE id="S7jIMh" name="PedalSection.cpp" compile="1" resource="0"
+            file="Source/PedalSection.cpp"/>
+      <FILE id="A79l43" name="PedalSection.h" compile="0" resource="0" file="Source/PedalSection.h"/>
+      <FILE id="Npijp9" name="ControlSection.cpp" compile="1" resource="0"
+            file="Source/ControlSection.cpp"/>
+      <FILE id="HDtZAO" name="ControlSection.h" compile="0" resource="0"
+            file="Source/ControlSection.h"/>
       <FILE id="HQay1S" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="SU3ggO" name="PluginProcessor.h" compile="0" resource="0"
