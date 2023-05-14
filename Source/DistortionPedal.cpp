@@ -71,3 +71,6 @@ void DistortionPedal::paint (juce::Graphics& g)
     g.fillEllipse(led);
 }
 
+void DistortionPedal::resizeChild(){
+    
+}
