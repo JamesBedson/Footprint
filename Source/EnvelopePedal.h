@@ -11,18 +11,18 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Pedal.h"
 
 //==============================================================================
 /*
 */
-class EnvelopePedal  : public juce::Component
+class EnvelopePedal  : public Pedal
 {
 public:
     EnvelopePedal();
     ~EnvelopePedal() override;
 
     void paint (juce::Graphics&) override;
-    void resized() override;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EnvelopePedal)

@@ -39,13 +39,40 @@ void CompressorPedal::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("CompressorPedal", getLocalBounds(),
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.4f); // Adjust the vertical position here
+    g.drawText ("CompressorPedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
-}
 
-void CompressorPedal::resized()
-{
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
+    juce::Rectangle<int> topLeft, topRigth, bottomLeft, bottomRigth, bypass;
+    auto rectWidth = 10;
+    auto rectHeight = 10;
 
+    topLeft.setSize(rectWidth, rectHeight);
+    topLeft.setCentre(sliderCol1CentreX, sliderRow1CentreY);
+
+    topRigth.setSize(rectWidth, rectHeight);
+    topRigth.setCentre(sliderCol3CentreX, sliderRow1CentreY);
+
+    bottomLeft.setSize(rectWidth, rectHeight);
+    bottomLeft.setCentre(sliderCol1CentreX, sliderRow2CentreY);
+
+    bottomRigth.setSize(rectWidth, rectHeight);
+    bottomRigth.setCentre(sliderCol3CentreX, sliderRow2CentreY);
+
+    g.setColour(juce::Colours::white);
+    g.drawEllipse(topLeft.toFloat(), 1.5f);
+
+    g.setColour(juce::Colours::red);
+    g.drawEllipse(topRigth.toFloat(), 1.5f);
+
+    g.setColour(juce::Colours::blue);
+    g.drawEllipse(bottomLeft.toFloat(), 1.5f);
+
+    g.setColour(juce::Colours::green);
+    g.drawEllipse(bottomRigth.toFloat(), 1.5f);
+
+    juce::Rectangle<float> led;
+    led.setSize(7, 7);
+    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
+    g.fillEllipse(led);
 }
