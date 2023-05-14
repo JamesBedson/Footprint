@@ -30,6 +30,9 @@ private:
     
     juce::Slider tone, gain, level;
     std::vector<juce::Slider*> sliders {&tone, &gain, &level};
+    
+    juce::Label toneLabel, gainLabel, levelLabel;
+    std::vector<juce::Label*> sliderLabels {&toneLabel, &gainLabel, &levelLabel};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistortionPedal)
 };
