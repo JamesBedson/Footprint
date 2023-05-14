@@ -14,11 +14,20 @@
 //==============================================================================
 CompressorPedal::CompressorPedal()
 {
+<<<<<<< HEAD
     for (auto& slider : sliders) {
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     }
+=======
+    for (auto& slider : sliders){
+        addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        //slider->setTextBoxStyle(<#TextEntryBoxPosition newPosition#>, <#bool isReadOnly#>, <#int textEntryBoxWidth#>, <#int textEntryBoxHeight#>)
+    }
+
+>>>>>>> main
 }
 
 CompressorPedal::~CompressorPedal()
@@ -38,6 +47,7 @@ void CompressorPedal::paint (juce::Graphics& g)
     g.drawText ("CompressorPedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
 
+    /*
     juce::Rectangle<int> topLeft, topRight, bottomLeft, bottomRight, bypass;
     auto rectWidth = 10;
     auto rectHeight = 10;
@@ -57,7 +67,22 @@ void CompressorPedal::paint (juce::Graphics& g)
     juce::Rectangle<float> led;
     led.setSize(7, 7);
     led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
-    g.fillEllipse(led);
+    g.fillEllipse(led);*/
+}
+
+
+void CompressorPedal::resizeChild(){
+    
+    for (auto& slider : sliders){
+        slider->setSize(sliderWidth, sliderHeight);
+    }
+    
+    threshold.setCentrePosition (sliderCol1CentreX, sliderRow1CentreY);
+    ratio.setCentrePosition     (sliderCol1CentreX, sliderRow2CentreY);
+    attack.setCentrePosition    (sliderCol3CentreX, sliderRow1CentreY);
+    release.setCentrePosition   (sliderCol3CentreX, sliderRow2CentreY);
+    
+    
 }
 
 void CompressorPedal::resizeChild() {

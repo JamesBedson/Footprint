@@ -30,6 +30,10 @@ private:
 
     juce::Slider ratio, threshold, attack, release;
     std::vector<juce::Slider*> sliders {&ratio, &threshold, &attack, &release};
+<<<<<<< HEAD
+=======
+    
+>>>>>>> main
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CompressorPedal)
 };

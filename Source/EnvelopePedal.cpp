@@ -38,6 +38,12 @@ void EnvelopePedal::paint (juce::Graphics& g)
                 juce::Justification::centred, true);   // draw some placeholder text
 }
 
+<<<<<<< HEAD
 void EnvelopePedal::resizeChild()
 {
 }
+=======
+void EnvelopePedal::resizeChild(){
+    
+}
+>>>>>>> main

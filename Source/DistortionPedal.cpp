@@ -64,6 +64,7 @@ void DistortionPedal::paint (juce::Graphics& g)
     g.fillEllipse(led);
 }
 
+<<<<<<< HEAD
 void DistortionPedal::resizeChild()
 {
     for (auto& slider : sliders)
@@ -76,3 +77,8 @@ void DistortionPedal::resizeChild()
     gain.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
 }
 
+=======
+void DistortionPedal::resizeChild(){
+    
+}
+>>>>>>> main

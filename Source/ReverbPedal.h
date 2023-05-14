@@ -23,10 +23,18 @@ public:
     ReverbPedal();
     ~ReverbPedal()                  override;
 
+<<<<<<< HEAD
     void paint (juce::Graphics&)    override;
     void resizeChild()              override;
+=======
+    void paint (juce::Graphics&) override;
+    void resizeChild() override;
+>>>>>>> main
 
 
 private:
+    
+    
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbPedal)
 };

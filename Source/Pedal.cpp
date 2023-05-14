@@ -15,7 +15,7 @@
 Pedal::Pedal()
 {
     addAndMakeVisible(bypassSwitch);
-
+    
 }
 
 Pedal::~Pedal()
@@ -34,13 +34,14 @@ void Pedal::resized()
     auto height         = getHeight();
     sliderCol1CentreX   = getX() + width * 0.2f;
     sliderRow1CentreY   = getY() + height * 0.2f;
-    auto topRight       = bounds.getTopRight();
+    
     sliderCol3CentreX   = getX() + width * 0.8f;
     sliderCol2CentreX   = bounds.getCentreX();
     sliderRow2CentreY   = bounds.getCentreY();
     
     auto buttonWidth    = 20;
     auto buttonHeight   = 20;
+<<<<<<< HEAD
 
     sliderWidth         = 60;
     sliderHeight        = 60;
@@ -50,4 +51,14 @@ void Pedal::resized()
     bypassSwitch.setCentrePosition(bounds.getCentreX(), bounds.getCentreY() + width * 0.6f);
 
     resizeChild();
+=======
+    
+    sliderWidth         = 60;
+    sliderHeight        = 60;
+    bypassSwitch.setSize(buttonWidth, buttonHeight);
+    bypassSwitch.setCentrePosition(bounds.getCentreX(), bounds.getCentreY() + width * 0.6f);
+    
+    resizeChild();
+    
+>>>>>>> main
 }

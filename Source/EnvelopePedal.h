@@ -23,6 +23,7 @@ public:
     EnvelopePedal();
     ~EnvelopePedal()                override;
 
+<<<<<<< HEAD
     void paint (juce::Graphics&)    override;
     void resizeChild() override;
 
@@ -30,5 +31,14 @@ private:
 
     /*juce::Slider*/
 
+=======
+    void paint (juce::Graphics&) override;
+    void resizeChild() override;
+    
+private:
+    
+    
+    
+>>>>>>> main
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EnvelopePedal)
 };
