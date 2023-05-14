@@ -19,6 +19,18 @@ DistortionPedal::DistortionPedal()
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     }
+    for (auto& label : sliderLabels){
+        addAndMakeVisible(label);
+        label->setJustificationType(juce::Justification::horizontallyCentred);
+    }
+    
+    toneLabel.attachToComponent    (&tone, false);
+    gainLabel.attachToComponent    (&gain, false);
+    levelLabel.attachToComponent   (&level, false);
+    
+    gainLabel.setText      ("Gain", juce::dontSendNotification);
+    toneLabel.setText      ("Tone", juce::dontSendNotification);
+    levelLabel.setText     ("Level", juce::dontSendNotification);
 }
 
 DistortionPedal::~DistortionPedal()
@@ -74,4 +86,13 @@ void DistortionPedal::resizeChild()
     tone.setCentrePosition(sliderCol1CentreX, sliderRow1CentreY);
     level.setCentrePosition(sliderCol2CentreX, sliderRow2CentreY);
     gain.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
+    
+    for (auto& label : sliderLabels){
+        
+        auto sliderBounds   = label->getAttachedComponent()->getBounds();
+        auto bottomX        = sliderBounds.getBottomLeft().getX();
+        auto bottomY        = sliderBounds.getBottomLeft().getY();
+        
+        label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
+    }
 }

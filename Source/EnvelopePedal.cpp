@@ -19,6 +19,19 @@ EnvelopePedal::EnvelopePedal()
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     }
+    
+    for (auto& label : sliderLabels){
+        addAndMakeVisible(label);
+        label->setJustificationType(juce::Justification::horizontallyCentred);
+    }
+    
+    qualityFactorLabel.attachToComponent    (&qualityFactor, false);
+    sensitivityLabel.attachToComponent    (&sensitivity, false);
+    cutoffThresholdLabel.attachToComponent   (&cutoffThreshold, false);
+    
+    qualityFactorLabel.setText      ("QualityFactor", juce::dontSendNotification);
+    sensitivityLabel.setText      ("Sensitivity", juce::dontSendNotification);
+    cutoffThresholdLabel.setText     ("CutoffThreshold", juce::dontSendNotification);
 }
 
 EnvelopePedal::~EnvelopePedal()
@@ -54,5 +67,14 @@ void EnvelopePedal::resizeChild(){
     sensitivity.setCentrePosition(sliderCol1CentreX, sliderRow1CentreY);
     qualityFactor.setCentrePosition(sliderCol2CentreX, sliderRow2CentreY);
     cutoffThreshold.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
+    
+    for (auto& label : sliderLabels){
+        
+        auto sliderBounds   = label->getAttachedComponent()->getBounds();
+        auto bottomX        = sliderBounds.getBottomLeft().getX();
+        auto bottomY        = sliderBounds.getBottomLeft().getY();
+        
+        label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
+    }
 }
 
