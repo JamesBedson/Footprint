@@ -73,22 +73,3 @@ void ReverbPedal::paint (juce::Graphics& g)
     led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
     g.fillEllipse(led);
 }
-
-void ReverbPedal::resized()
-{
-    auto bounds         = getBounds();
-    auto width          = getWidth();
-    auto height         = getHeight();
-    sliderCol1CentreX   = getX() + width * 0.2f;
-    sliderRow1CentreY   = getY() + height * 0.2f;
-    sliderCol3CentreX   = getX() + width * 0.8f;
-    sliderCol2CentreX   = bounds.getCentreX();
-
-    sliderRow2CentreY   = bounds.getCentreY();
-    
-    auto buttonWidth    = 20;
-    auto buttonHeight   = 20;
-    bypassSwitch.setSize(buttonWidth, buttonHeight);
-    bypassSwitch.setCentrePosition(bounds.getCentreX(), bounds.getCentreY() + width * 0.6f);
-
-}
