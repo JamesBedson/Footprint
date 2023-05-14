@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "Pedal.h"
+#include "PedalLookAndFeel.h"
 
 //==============================================================================
 /*
@@ -25,5 +26,8 @@ public:
     void paint (juce::Graphics&) override;
 
 private:
+
+    juce::Slider ratio, threshold, attack, release;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CompressorPedal)
 };

@@ -33,8 +33,12 @@ protected:
     int sliderRow1CentreY;
     int sliderRow2CentreY;
     int sliderRow3CentreY;
-    
-    
+
+    juce::Slider slider1;
+    juce::Slider slider2;
+    juce::Slider slider3;
+    juce::Slider slider4;
+        
     juce::TextButton bypassSwitch;
     
 private:
