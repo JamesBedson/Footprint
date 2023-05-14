@@ -11,11 +11,12 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Pedal.h"
 
 //==============================================================================
 /*
 */
-class EnvelopePedal  : public juce::Component
+class EnvelopePedal  : public Pedal
 {
 public:
     EnvelopePedal();
