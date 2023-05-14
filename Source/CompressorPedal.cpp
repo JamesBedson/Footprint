@@ -19,6 +19,22 @@ CompressorPedal::CompressorPedal()
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     }
+    
+    for (auto& label : sliderLabels){
+        addAndMakeVisible(label);
+        label->setJustificationType(juce::Justification::horizontallyCentred);
+    }
+    
+    thresholdLabel.attachToComponent    (&threshold, false);
+    ratioLabel.attachToComponent        (&ratio, false);
+    attackLabel.attachToComponent       (&attack, false);
+    releaseLabel.attachToComponent      (&release, false);
+    
+    thresholdLabel.setText  ("Threshold", juce::dontSendNotification);
+    ratioLabel.setText      ("Ratio", juce::dontSendNotification);
+    attackLabel.setText     ("Attack", juce::dontSendNotification);
+    releaseLabel.setText    ("Release", juce::dontSendNotification);
+    
 }
 
 CompressorPedal::~CompressorPedal()
@@ -56,5 +72,14 @@ void CompressorPedal::resizeChild(){
     attack.setCentrePosition    (sliderCol3CentreX, sliderRow1CentreY);
     release.setCentrePosition   (sliderCol3CentreX, sliderRow2CentreY);
     
+    for (auto& label : sliderLabels){
+        
+        auto sliderBounds   = label->getAttachedComponent()->getBounds();
+        auto bottomX        = sliderBounds.getBottomLeft().getX();
+        auto bottomY        = sliderBounds.getBottomLeft().getY();
+        
+        label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
+        
+    }
     
 }
