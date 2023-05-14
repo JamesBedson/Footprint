@@ -14,7 +14,6 @@
 //==============================================================================
 PedalSection::PedalSection()
 {
-    addAndMakeVisible(pedal);
     addAndMakeVisible(CompressorPedal);
     addAndMakeVisible(ReverbPedal);
     addAndMakeVisible(EnvelopePedal);
@@ -42,8 +41,8 @@ void PedalSection::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("PedalSection", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    //g.drawText ("PedalSection", getLocalBounds(),
+    //            juce::Justification::centred, true);   // draw some placeholder text
     
 }
 
