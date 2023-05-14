@@ -39,6 +39,8 @@ void Pedal::resized()
     sliderCol2CentreX   = bounds.getCentreX();
     sliderRow2CentreY   = bounds.getCentreY();
     
+    sliderRow3CentreY   = bounds.getCentreY() + 53;
+    
     auto buttonWidth    = 20;
     auto buttonHeight   = 20;
     
