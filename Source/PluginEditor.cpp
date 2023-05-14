@@ -51,7 +51,7 @@ void FootprintAudioProcessorEditor::resized()
     pedalSection.setCentrePosition(editorCentre.getX(),
                                    editorCentre.getY() + pedalYOffset);
     
-    int displaySectionWidth     = 0.6f * editorWidth;
+    int displaySectionWidth     = 0.62f * editorWidth;
     int displaySectionHeight    = 0.35f * editorHeight;
     auto pedalSectionTopRight   = pedalSection.getBounds().getTopRight();
     
@@ -60,4 +60,14 @@ void FootprintAudioProcessorEditor::resized()
     
     displaySection.setSize(displaySectionWidth, displaySectionHeight);
     displaySection.setTopRightPosition(displaySectionTopRightX, displaySectionTopRightY);
+
+    int controlSectionWidth = 0.2f * editorWidth;
+    int controlSectionHeight = displaySectionHeight;
+    auto controlSectionTopLeft = pedalSection.getBounds().getTopLeft();
+
+    int controlSectionTopLeftY = displaySectionTopRightY;
+    int controlSectionTopLeftX = pedalSectionTopRight.getX() - pedalSectionWidth;
+
+    controlSection.setSize(controlSectionWidth, controlSectionHeight);
+    controlSection.setTopLeftPosition(controlSectionTopLeftX, controlSectionTopLeftY);
 }
