@@ -42,7 +42,7 @@ void DistortionPedal::paint (juce::Graphics& g)
     g.drawText ("DistortionPedal", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
     
-    juce::Rectangle<int> topLeft, topRigth, bottomCenter, bypass;
+    juce::Rectangle<int> topLeft, topRigth, bottomCenter;
     auto rectWidth = 10;
     auto rectHeight = 10;
     
