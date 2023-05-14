@@ -16,6 +16,8 @@ CompressorPedal::CompressorPedal()
 {
     for (auto& slider : sliders){
         addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        //slider->setTextBoxStyle(<#TextEntryBoxPosition newPosition#>, <#bool isReadOnly#>, <#int textEntryBoxWidth#>, <#int textEntryBoxHeight#>)
     }
 
 }
@@ -81,6 +83,10 @@ void CompressorPedal::paint (juce::Graphics& g)
 
 
 void CompressorPedal::resizeChild(){
+    
+    for (auto& slider : sliders){
+        slider->setSize(sliderWidth, sliderHeight);
+    }
     
     threshold.setCentrePosition (sliderCol1CentreX, sliderRow1CentreY);
     ratio.setCentrePosition     (sliderCol1CentreX, sliderRow2CentreY);

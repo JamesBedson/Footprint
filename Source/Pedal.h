@@ -34,6 +34,8 @@ protected:
     int sliderRow1CentreY;
     int sliderRow2CentreY;
     int sliderRow3CentreY;
+    
+    int sliderWidth, sliderHeight;
         
     juce::TextButton bypassSwitch;
     PedalLookAndFeel lookAndFeel;
