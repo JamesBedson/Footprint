@@ -13,9 +13,14 @@
 FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    
+    
+    // "Add and make visible" all child components of the editor
+    
+    addAndMakeVisible(displaySection);
+    addAndMakeVisible(pedalSection);
+    addAndMakeVisible(controlSection);
+    setSize (1200, 900);
 }
 
 FootprintAudioProcessorEditor::~FootprintAudioProcessorEditor()
@@ -27,14 +32,32 @@ void FootprintAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
     g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+
 }
 
 void FootprintAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    auto editorBounds       = getBounds();
+    auto editorCentre       = editorBounds.getCentre();
+    int editorWidth         = getWidth();
+    int editorHeight        = getHeight();
+    
+    int pedalSectionWidth   = 0.85f * editorWidth;
+    int pedalSectionHeight  = 0.4f * editorHeight;
+    int pedalYOffset        = editorHeight * 0.25f;
+    
+    pedalSection.setSize(pedalSectionWidth, pedalSectionHeight);
+    pedalSection.setCentrePosition(editorCentre.getX(),
+                                   editorCentre.getY() + pedalYOffset);
+    
+    int displaySectionWidth     = 0.6f * editorWidth;
+    int displaySectionHeight    = 0.35f * editorHeight;
+    auto pedalSectionTopRight   = pedalSection.getBounds().getTopRight();
+    
+    int displaySectionTopRightY = editorCentre.getY() - editorHeight * 0.45f;
+    int displaySectionTopRightX = pedalSectionTopRight.getX();
+    
+    displaySection.setSize(displaySectionWidth, displaySectionHeight);
+    displaySection.setTopRightPosition(displaySectionTopRightX, displaySectionTopRightY);
 }

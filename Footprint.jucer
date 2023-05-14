@@ -4,6 +4,44 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
+      <GROUP id="{5225B940-ED4F-AD17-6DB3-89C4F47FAD31}" name="Sections">
+        <FILE id="QeE6Th" name="DisplaySection.cpp" compile="1" resource="0"
+              file="Source/DisplaySection.cpp"/>
+        <FILE id="dy7Rua" name="DisplaySection.h" compile="0" resource="0"
+              file="Source/DisplaySection.h"/>
+        <FILE id="S7jIMh" name="PedalSection.cpp" compile="1" resource="0"
+              file="Source/PedalSection.cpp"/>
+        <FILE id="A79l43" name="PedalSection.h" compile="0" resource="0" file="Source/PedalSection.h"/>
+        <FILE id="Npijp9" name="ControlSection.cpp" compile="1" resource="0"
+              file="Source/ControlSection.cpp"/>
+        <FILE id="HDtZAO" name="ControlSection.h" compile="0" resource="0"
+              file="Source/ControlSection.h"/>
+      </GROUP>
+      <GROUP id="{E4B74972-FAAA-9BE8-F516-73B3C28081DE}" name="Pedals">
+        <FILE id="HzZCo5" name="EnvelopePedal.cpp" compile="1" resource="0"
+              file="Source/EnvelopePedal.cpp"/>
+        <FILE id="vEM7H1" name="EnvelopePedal.h" compile="0" resource="0" file="Source/EnvelopePedal.h"/>
+        <FILE id="qHLboM" name="PedalLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/PedalLookAndFeel.cpp"/>
+        <FILE id="gYmgmU" name="PedalLookAndFeel.h" compile="0" resource="0"
+              file="Source/PedalLookAndFeel.h"/>
+        <FILE id="kI3zTw" name="DistortionPedal.cpp" compile="1" resource="0"
+              file="Source/DistortionPedal.cpp"/>
+        <FILE id="OHfHI2" name="DistortionPedal.h" compile="0" resource="0"
+              file="Source/DistortionPedal.h"/>
+        <FILE id="jZHIlw" name="ReverbPedal.cpp" compile="1" resource="0" file="Source/ReverbPedal.cpp"/>
+        <FILE id="Z2Uugh" name="ReverbPedal.h" compile="0" resource="0" file="Source/ReverbPedal.h"/>
+        <FILE id="djHOwR" name="CompressorPedal.cpp" compile="1" resource="0"
+              file="Source/CompressorPedal.cpp"/>
+        <FILE id="OdSref" name="CompressorPedal.h" compile="0" resource="0"
+              file="Source/CompressorPedal.h"/>
+        <FILE id="wqla2j" name="Pedal.cpp" compile="1" resource="0" file="Source/Pedal.cpp"/>
+        <FILE id="ozX25T" name="Pedal.h" compile="0" resource="0" file="Source/Pedal.h"/>
+      </GROUP>
+      <FILE id="GTexXm" name="EditorLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/EditorLookAndFeel.cpp"/>
+      <FILE id="sBHe95" name="EditorLookAndFeel.h" compile="0" resource="0"
+            file="Source/EditorLookAndFeel.h"/>
       <FILE id="HQay1S" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="SU3ggO" name="PluginProcessor.h" compile="0" resource="0"
