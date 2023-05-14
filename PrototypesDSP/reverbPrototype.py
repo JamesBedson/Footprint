@@ -7,10 +7,19 @@ class Reverb:
     # Constructor
     def __init__(self) -> None:
         
-        self.mix      = 0.5
+        self.mix = 0.5
+        self.fs       = 44100
 
     def plotIR(self, x: np.ndarray):
-        plt.plot(x)
+
+        time = np.linspace(0, len(x) / self.fs, num = len(x))
+
+        # Plot audio file against time array
+        plt.plot(time, x)
+        plt.xlabel('Time (s)')
+        plt.ylabel('Amplitude')
+        plt.show()
+
 
 
     # --------------------------------------------------------------------------
@@ -51,8 +60,10 @@ class Reverb:
 
         num_ir_blocks       = int(p/k)
         num_sig_blocks      = int(len(x) / L)
+
         H                   = self.precompute_frequency_responses(h, L, k, num_ir_blocks)
         fdl                 = np.zeros(2*L*num_ir_blocks).astype('complex128')
+
         output              = np.zeros(p+len(x)-1).astype('float64')
         out                 = np.zeros(2*L-1)
 
@@ -75,67 +86,6 @@ class Reverb:
             fdl             = self.roll_zero(fdl, 2*L)
 
         x_zp            = self.zero_pad(x, p-1)
-        output          = self.mix  * output + x_zp
+        output          = self.mix*0.3  * output + x_zp
+        print(self.mix*0.3)
         return output
-    
-    
-    '''def applyStaticCurve(self, X: np.ndarray):
-
-        G                   = np.zeros_like(X)                              # Initialising array of gain values (in dB) that will be computed
-        slope               = 1 - 1/self.ratio                                   
-
-        # Static Curve Algorithm
-        for n, sample in enumerate(X):
-            if sample > self.thresholdInDB:              
-                G[n] = slope * (self.thresholdInDB - sample)                # Apply new slope to obtain gain value for sample if amplitude in dB is larger than threshold
-            else:               
-                G[n] = 0                                                    # Below threshold? Don't compute gain.
-        
-        return G'''
-    
-"""
-    def compress(self, x: np.ndarray, sampleRate) -> np.ndarray:
-
-        detector            = np.abs(x)                                     # Apply detector function (absolute value, square...)
-        
-        # Block 1
-        xPeak               = self.averageSignal(detector, sampleRate)      # Average the peaks (with first order low pass)
-        
-        # Block 2
-        xPeak[xPeak <= 0]   = np.finfo(float).eps                           # Handling log
-        X                   = 20 * np.log10(xPeak)                          # Converting to decibels
-        G                   = self.applyStaticCurve(X)                      # Obtain the new gain values in decibels
-        
-        # Block 3
-        g                   = np.power(10, G/20)                          # Convert to linear
-        g                   = self.averageSignal(g, sampleRate)             # Average the new gain values (with first order filter) 
-
-        return x * g
-    
-
-    # --------------------------------------------------------------------------
-    # Plotting
-    def plotStaticCurve(self):
-        
-        numSamples  = 100
-        X           = np.linspace(-96, 0, numSamples)               # Defining input signal as linear function in log domain
-        G           = self.applyStaticCurve(X)                      # Obtain log gain values
-        Y           = X + G                                         # Adding input signal and gain together (log domain - remember?)
-
-        _, ax = plt.subplots(1, 1)
-        ax.set_xlabel("Input [dB]")
-        ax.xaxis.set_label_position("top")
-        ax.xaxis.set_ticks_position("top")
-        ax.set_ylim(-96, 0)
-        ax.set_xlim(-96, 0)
-        ax.set_xticks([-96, -72, -48, -24, -12, -6, 0])
-        ax.set_yticks([-96, -72, -48, -24, -12, -6, 0])
-        ax.grid(True)
-        ax.set_ylabel("Output [dB]")
-        ax.yaxis.set_label_position("right")
-        ax.yaxis.set_ticks_position("right")
-        ax.set_title("Static Compresor Curve", fontdict= {"fontweight": "bold"})
-        ax.plot(X, Y)
-        
-        thresholdPlot = [self.thresholdInDB] * numSamples
-        ax.plot(X, thresholdPlot, linestyle = "dashed") """

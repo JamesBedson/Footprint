@@ -1,0 +1,60 @@
+/*
+  ==============================================================================
+
+    CompressorPedal.cpp
+    Created: 14 May 2023 10:42:45am
+    Author:  James Bedson
+
+  ==============================================================================
+*/
+
+#include <JuceHeader.h>
+#include "CompressorPedal.h"
+
+//==============================================================================
+CompressorPedal::CompressorPedal()
+{
+    for (auto& slider : sliders) {
+        addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    }
+}
+
+CompressorPedal::~CompressorPedal()
+{
+}
+
+void CompressorPedal::paint (juce::Graphics& g)
+{
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+
+    g.setColour (juce::Colours::grey);
+    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+
+    g.setColour (juce::Colours::white);
+    g.setFont (14.0f);
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.4f); // Adjust the vertical position here
+    g.drawText ("CompressorPedal", textBounds,
+                juce::Justification::centred, true);   // draw some placeholder text
+
+    juce::Rectangle<float> led;
+    led.setSize(7, 7);
+    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
+    g.fillEllipse(led);
+}
+
+
+void CompressorPedal::resizeChild(){
+    
+    for (auto& slider : sliders){
+        slider->setSize(sliderWidth, sliderHeight);
+    }
+    
+    threshold.setCentrePosition (sliderCol1CentreX, sliderRow1CentreY);
+    ratio.setCentrePosition     (sliderCol1CentreX, sliderRow2CentreY);
+    attack.setCentrePosition    (sliderCol3CentreX, sliderRow1CentreY);
+    release.setCentrePosition   (sliderCol3CentreX, sliderRow2CentreY);
+    
+    
+}

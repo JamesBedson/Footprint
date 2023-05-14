@@ -14,8 +14,10 @@
 //==============================================================================
 PedalSection::PedalSection()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+    addAndMakeVisible(CompressorPedal);
+    addAndMakeVisible(ReverbPedal);
+    addAndMakeVisible(EnvelopePedal);
+    addAndMakeVisible(DistortionPedal);
 
 }
 
@@ -39,13 +41,24 @@ void PedalSection::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("PedalSection", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    //g.drawText ("PedalSection", getLocalBounds(),
+    //            juce::Justification::centred, true);   // draw some placeholder text
+    
 }
 
 void PedalSection::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
+    auto bounds = getLocalBounds();
+    
+    CompressorPedal.setSize(200, 300);
+    CompressorPedal.setCentrePosition(bounds.getX() + getWidth() * 0.25f - CompressorPedal.getWidth() * 0.58f, bounds.getCentreY());
 
+    DistortionPedal.setSize(200, 300);
+    DistortionPedal.setCentrePosition(bounds.getX() + getWidth() * 0.5f - DistortionPedal.getWidth() * 0.58f, bounds.getCentreY());
+
+    ReverbPedal.setSize(200, 300);
+    ReverbPedal.setCentrePosition(bounds.getX() + getWidth() * 0.75f - ReverbPedal.getWidth() * 0.58f, bounds.getCentreY());
+
+    EnvelopePedal.setSize(200, 300);
+    EnvelopePedal.setCentrePosition(bounds.getX() + getWidth() - EnvelopePedal.getWidth() * 0.58f, bounds.getCentreY());
 }
