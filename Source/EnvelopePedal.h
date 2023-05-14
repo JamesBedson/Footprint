@@ -36,7 +36,8 @@ private:
     void resizeChild() override;
     
 private:
-    
+    juce::Slider qualityFactor, sensitivity, cutoffThreshold;
+    std::vector<juce::Slider*> sliders {&qualityFactor, &sensitivity, &cutoffThreshold};
     
     
 >>>>>>> main
