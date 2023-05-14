@@ -14,8 +14,7 @@
 //==============================================================================
 PedalSection::PedalSection()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+    addAndMakeVisible(pedal);
 
 }
 
@@ -41,11 +40,15 @@ void PedalSection::paint (juce::Graphics& g)
     g.setFont (14.0f);
     g.drawText ("PedalSection", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
+    
+    g.drawRect(pedal.getBounds());
 }
 
 void PedalSection::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
+    auto bounds = getLocalBounds();
+    
+    pedal.setSize(200, 300);
+    pedal.setCentrePosition(bounds.getCentreX(), bounds.getCentreY());
 
 }
