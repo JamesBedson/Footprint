@@ -78,3 +78,6 @@ void ReverbPedal::paint (juce::Graphics& g)
     
 }
 
+void ReverbPedal::resizeChild(){
+    
+}
