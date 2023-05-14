@@ -25,13 +25,6 @@ ReverbPedal::~ReverbPedal()
 
 void ReverbPedal::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
@@ -39,8 +32,12 @@ void ReverbPedal::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
+
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.4f); // Adjust the vertical position here
+    g.drawText("ReverbPedal", textBounds,
+        juce::Justification::centred, true);   // draw some placeholder text
     
-    juce::Rectangle<int> topLeft, topRigth, bottomLeft, bottomRigth, bypass;
+    juce::Rectangle<int> topLeft, topRigth, bottomCenter;
     auto rectWidth = 10;
     auto rectHeight = 10;
     
@@ -50,26 +47,25 @@ void ReverbPedal::paint (juce::Graphics& g)
     topRigth.setSize(rectWidth, rectHeight);
     topRigth.setCentre(sliderCol3CentreX, sliderRow1CentreY);
     
-    bottomLeft.setSize(rectWidth, rectHeight);
-    bottomLeft.setCentre(sliderCol1CentreX, sliderRow2CentreY);
-    
-    bottomRigth.setSize(rectWidth, rectHeight);
-    bottomRigth.setCentre(sliderCol3CentreX, sliderRow2CentreY);
-    
+    bottomCenter.setSize(rectWidth, rectHeight);
+    bottomCenter.setCentre(sliderCol2CentreX, sliderRow2CentreY);
+
     g.setColour(juce::Colours::white);
     g.drawEllipse(topLeft.toFloat(), 1.5f);
+    g.fillEllipse(topLeft.toFloat());
     
-    g.setColour(juce::Colours::red);
+    g.setColour(juce::Colours::white);
     g.drawEllipse(topRigth.toFloat(), 1.5f);
+    g.fillEllipse(topRigth.toFloat());
     
-    g.setColour(juce::Colours::blue);
-    g.drawEllipse(bottomLeft.toFloat(), 1.5f);
-    
-    g.setColour(juce::Colours::green);
-    g.drawEllipse(bottomRigth.toFloat(), 1.5f);
+    g.setColour(juce::Colours::white);
+    g.drawEllipse(bottomCenter.toFloat(), 1.5f);
+    g.fillEllipse(bottomCenter.toFloat());
+
     
     juce::Rectangle<float> led;
     led.setSize(7, 7);
     led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
     g.fillEllipse(led);
 }
+
