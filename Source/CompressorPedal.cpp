@@ -14,9 +14,20 @@
 //==============================================================================
 CompressorPedal::CompressorPedal()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+<<<<<<< HEAD
+    for (auto& slider : sliders) {
+        addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    }
+=======
+    for (auto& slider : sliders){
+        addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    }
 
+>>>>>>> main
 }
 
 CompressorPedal::~CompressorPedal()
@@ -25,13 +36,6 @@ CompressorPedal::~CompressorPedal()
 
 void CompressorPedal::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
@@ -43,36 +47,52 @@ void CompressorPedal::paint (juce::Graphics& g)
     g.drawText ("CompressorPedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
 
-    juce::Rectangle<int> topLeft, topRigth, bottomLeft, bottomRigth, bypass;
+    /*
+    juce::Rectangle<int> topLeft, topRight, bottomLeft, bottomRight, bypass;
     auto rectWidth = 10;
     auto rectHeight = 10;
 
     topLeft.setSize(rectWidth, rectHeight);
     topLeft.setCentre(sliderCol1CentreX, sliderRow1CentreY);
 
-    topRigth.setSize(rectWidth, rectHeight);
-    topRigth.setCentre(sliderCol3CentreX, sliderRow1CentreY);
+    topRight.setSize(rectWidth, rectHeight);
+    topRight.setCentre(sliderCol3CentreX, sliderRow1CentreY);
 
     bottomLeft.setSize(rectWidth, rectHeight);
     bottomLeft.setCentre(sliderCol1CentreX, sliderRow2CentreY);
 
-    bottomRigth.setSize(rectWidth, rectHeight);
-    bottomRigth.setCentre(sliderCol3CentreX, sliderRow2CentreY);
-
-    g.setColour(juce::Colours::white);
-    g.drawEllipse(topLeft.toFloat(), 1.5f);
-
-    g.setColour(juce::Colours::red);
-    g.drawEllipse(topRigth.toFloat(), 1.5f);
-
-    g.setColour(juce::Colours::blue);
-    g.drawEllipse(bottomLeft.toFloat(), 1.5f);
-
-    g.setColour(juce::Colours::green);
-    g.drawEllipse(bottomRigth.toFloat(), 1.5f);
+    bottomRight.setSize(rectWidth, rectHeight);
+    bottomRight.setCentre(sliderCol3CentreX, sliderRow2CentreY);
 
     juce::Rectangle<float> led;
     led.setSize(7, 7);
     led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
-    g.fillEllipse(led);
+    g.fillEllipse(led);*/
+}
+
+
+void CompressorPedal::resizeChild(){
+    
+    for (auto& slider : sliders){
+        slider->setSize(sliderWidth, sliderHeight);
+    }
+    
+    threshold.setCentrePosition (sliderCol1CentreX, sliderRow1CentreY);
+    ratio.setCentrePosition     (sliderCol1CentreX, sliderRow2CentreY);
+    attack.setCentrePosition    (sliderCol3CentreX, sliderRow1CentreY);
+    release.setCentrePosition   (sliderCol3CentreX, sliderRow2CentreY);
+    
+    
+}
+
+void CompressorPedal::resizeChild() {
+    for (auto& slider : sliders) 
+    {
+        slider->setSize(sliderWidth, sliderHeight);
+    }
+
+    threshold.setCentrePosition     (sliderCol1CentreX, sliderRow1CentreY);
+    ratio.setCentrePosition         (sliderCol1CentreX, sliderRow2CentreY);
+    attack.setCentrePosition        (sliderCol3CentreX, sliderRow1CentreY);
+    release.setCentrePosition       (sliderCol3CentreX, sliderRow2CentreY);
 }

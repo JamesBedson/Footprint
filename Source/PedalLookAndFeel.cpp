@@ -17,6 +17,8 @@ PedalLookAndFeel::PedalLookAndFeel()
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
 
+    getLookAndFeel().setColour(juce::Slider::thumbColourId, juce::Colours::red);
+
 }
 
 PedalLookAndFeel::~PedalLookAndFeel()
@@ -25,13 +27,6 @@ PedalLookAndFeel::~PedalLookAndFeel()
 
 void PedalLookAndFeel::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
