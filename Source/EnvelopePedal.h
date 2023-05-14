@@ -27,7 +27,8 @@ public:
     void resizeChild() override;
     
 private:
-    
+    juce::Slider qualityFactor, sensitivity, cutoffThreshold;
+    std::vector<juce::Slider*> sliders {&qualityFactor, &sensitivity, &cutoffThreshold};
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EnvelopePedal)

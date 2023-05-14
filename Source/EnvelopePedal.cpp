@@ -14,8 +14,11 @@
 //==============================================================================
 EnvelopePedal::EnvelopePedal()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+    for (auto& slider : sliders){
+        addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    }
 
 }
 
@@ -40,4 +43,11 @@ void EnvelopePedal::paint (juce::Graphics& g)
 
 void EnvelopePedal::resizeChild(){
     
+    for (auto& slider : sliders){
+        slider->setSize(sliderWidth, sliderHeight);
+    }
+    
+    sensitivity.setCentrePosition(sliderCol1CentreX, sliderRow1CentreY);
+    qualityFactor.setCentrePosition(sliderCol2CentreX, sliderRow2CentreY);
+    cutoffThreshold.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
 }
