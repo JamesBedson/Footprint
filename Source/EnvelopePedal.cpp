@@ -19,7 +19,6 @@ EnvelopePedal::EnvelopePedal()
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     }
-
 }
 
 EnvelopePedal::~EnvelopePedal()
@@ -39,13 +38,13 @@ void EnvelopePedal::paint (juce::Graphics& g)
     juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.4f); // Adjust the vertical position here
     g.drawText ("EnvelopePedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
+    
+    juce::Rectangle<float> led;
+    led.setSize(7, 7);
+    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
+    g.fillEllipse(led);
 }
 
-<<<<<<< HEAD
-void EnvelopePedal::resizeChild()
-{
-}
-=======
 void EnvelopePedal::resizeChild(){
     
     for (auto& slider : sliders){
@@ -56,4 +55,4 @@ void EnvelopePedal::resizeChild(){
     qualityFactor.setCentrePosition(sliderCol2CentreX, sliderRow2CentreY);
     cutoffThreshold.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
 }
->>>>>>> main
+
