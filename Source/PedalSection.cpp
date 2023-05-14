@@ -15,6 +15,10 @@
 PedalSection::PedalSection()
 {
     addAndMakeVisible(pedal);
+    addAndMakeVisible(CompressorPedal);
+    addAndMakeVisible(ReverbPedal);
+    addAndMakeVisible(EnvelopePedal);
+    addAndMakeVisible(DistortionPedal);
 
 }
 
@@ -41,14 +45,21 @@ void PedalSection::paint (juce::Graphics& g)
     g.drawText ("PedalSection", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
     
-    g.drawRect(pedal.getBounds());
 }
 
 void PedalSection::resized()
 {
     auto bounds = getLocalBounds();
     
-    pedal.setSize(200, 300);
-    pedal.setCentrePosition(bounds.getCentreX(), bounds.getCentreY());
+    CompressorPedal.setSize(200, 300);
+    CompressorPedal.setCentrePosition(bounds.getX() + getWidth() * 0.25f - CompressorPedal.getWidth() * 0.58f, bounds.getCentreY());
 
+    DistortionPedal.setSize(200, 300);
+    DistortionPedal.setCentrePosition(bounds.getX() + getWidth() * 0.5f - DistortionPedal.getWidth() * 0.58f, bounds.getCentreY());
+
+    ReverbPedal.setSize(200, 300);
+    ReverbPedal.setCentrePosition(bounds.getX() + getWidth() * 0.75f - ReverbPedal.getWidth() * 0.58f, bounds.getCentreY());
+
+    EnvelopePedal.setSize(200, 300);
+    EnvelopePedal.setCentrePosition(bounds.getX() + getWidth() - EnvelopePedal.getWidth() * 0.58f, bounds.getCentreY());
 }

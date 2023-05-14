@@ -12,6 +12,10 @@
 
 #include <JuceHeader.h>
 #include "Pedal.h"
+#include "CompressorPedal.h"
+#include "ReverbPedal.h"
+#include "EnvelopePedal.h"
+#include "DistortionPedal.h"
 
 //==============================================================================
 /*
@@ -29,4 +33,8 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PedalSection)
     
     Pedal pedal;
+    CompressorPedal CompressorPedal;
+    ReverbPedal ReverbPedal;
+    EnvelopePedal EnvelopePedal;
+    DistortionPedal DistortionPedal;
 };

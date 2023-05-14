@@ -11,11 +11,12 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Pedal.h"
 
 //==============================================================================
 /*
 */
-class ReverbPedal  : public juce::Component
+class ReverbPedal  : public Pedal
 {
 public:
     ReverbPedal();

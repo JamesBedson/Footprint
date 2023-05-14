@@ -20,7 +20,7 @@ FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProc
     addAndMakeVisible(displaySection);
     addAndMakeVisible(pedalSection);
     addAndMakeVisible(controlSection);
-    setSize (1200, 900);
+    setSize (1100, 700);
 }
 
 FootprintAudioProcessorEditor::~FootprintAudioProcessorEditor()
@@ -44,8 +44,8 @@ void FootprintAudioProcessorEditor::resized()
     int editorHeight        = getHeight();
     
     int pedalSectionWidth   = 0.85f * editorWidth;
-    int pedalSectionHeight  = 0.4f * editorHeight;
-    int pedalYOffset        = editorHeight * 0.25f;
+    int pedalSectionHeight  = 0.5f * editorHeight;
+    int pedalYOffset        = editorHeight * 0.2f;
     
     pedalSection.setSize(pedalSectionWidth, pedalSectionHeight);
     pedalSection.setCentrePosition(editorCentre.getX(),
