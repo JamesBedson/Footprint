@@ -71,3 +71,4 @@ void ReverbPedal::paint (juce::Graphics& g)
     led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
     g.fillEllipse(led);
 }
+
