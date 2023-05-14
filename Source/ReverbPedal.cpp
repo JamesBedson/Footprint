@@ -25,13 +25,6 @@ ReverbPedal::~ReverbPedal()
 
 void ReverbPedal::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
@@ -39,6 +32,10 @@ void ReverbPedal::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
+
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.4f); // Adjust the vertical position here
+    g.drawText("ReverbPedal", textBounds,
+        juce::Justification::centred, true);   // draw some placeholder text
     
     juce::Rectangle<int> topLeft, topRigth, bottomCenter;
     auto rectWidth = 10;
