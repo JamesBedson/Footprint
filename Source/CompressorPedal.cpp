@@ -17,7 +17,7 @@ CompressorPedal::CompressorPedal()
     for (auto& slider : sliders){
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-        //slider->setTextBoxStyle(<#TextEntryBoxPosition newPosition#>, <#bool isReadOnly#>, <#int textEntryBoxWidth#>, <#int textEntryBoxHeight#>)
+        slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     }
 
 }
