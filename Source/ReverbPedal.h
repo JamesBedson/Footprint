@@ -28,8 +28,9 @@ public:
 
 
 private:
-    
-    
+
+    juce::Slider mix, highCut, lowCut;
+    std::vector<juce::Slider*> sliders {&mix, &highCut, &lowCut};
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbPedal)
 };
