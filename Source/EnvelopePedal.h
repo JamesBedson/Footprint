@@ -21,10 +21,14 @@ class EnvelopePedal  : public Pedal
 {
 public:
     EnvelopePedal();
-    ~EnvelopePedal() override;
+    ~EnvelopePedal()                override;
 
-    void paint (juce::Graphics&) override;
+    void paint (juce::Graphics&)    override;
+    void resizeChild() override;
 
 private:
+
+    /*juce::Slider*/
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EnvelopePedal)
 };

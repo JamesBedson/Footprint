@@ -21,9 +21,10 @@ class ReverbPedal  : public Pedal
 {
 public:
     ReverbPedal();
-    ~ReverbPedal() override;
+    ~ReverbPedal()                  override;
 
-    void paint (juce::Graphics&) override;
+    void paint (juce::Graphics&)    override;
+    void resizeChild()              override;
 
 
 private:

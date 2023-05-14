@@ -14,9 +14,11 @@
 //==============================================================================
 DistortionPedal::DistortionPedal()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
+    for (auto& slider : sliders) {
+        addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    }
 }
 
 DistortionPedal::~DistortionPedal()
@@ -55,19 +57,22 @@ void DistortionPedal::paint (juce::Graphics& g)
     
     bottomCenter.setSize(rectWidth, rectHeight);
     bottomCenter.setCentre(sliderCol2CentreX, sliderRow2CentreY);
-    
-    g.setColour(juce::Colours::white);
-    g.drawEllipse(topLeft.toFloat(), 1.5f);
-    
-    g.setColour(juce::Colours::red);
-    g.drawEllipse(topRigth.toFloat(), 1.5f);
-    
-    g.setColour(juce::Colours::blue);
-    g.drawEllipse(bottomCenter.toFloat(), 1.5f);
         
     juce::Rectangle<float> led;
     led.setSize(7, 7);
     led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
     g.fillEllipse(led);
+}
+
+void DistortionPedal::resizeChild()
+{
+    for (auto& slider : sliders)
+    {
+        slider->setSize(sliderWidth, sliderHeight);
+    }
+
+    tone.setCentrePosition(sliderCol1CentreX, sliderRow1CentreY);
+    level.setCentrePosition(sliderCol2CentreX, sliderRow2CentreY);
+    gain.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
 }
 

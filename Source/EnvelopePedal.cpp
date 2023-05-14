@@ -37,3 +37,7 @@ void EnvelopePedal::paint (juce::Graphics& g)
     g.drawText ("EnvelopePedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
 }
+
+void EnvelopePedal::resizeChild()
+{
+}

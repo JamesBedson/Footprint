@@ -19,10 +19,11 @@ class Pedal  : public juce::Component
 {
 public:
     Pedal();
-    ~Pedal() override;
+    ~Pedal()                            override;
 
-    void paint (juce::Graphics&) override;
-    void resized() override;
+    void paint (juce::Graphics&)        override;
+    void resized()                      override;
+    virtual void resizeChild() = 0;
 
 protected:
     
@@ -34,10 +35,7 @@ protected:
     int sliderRow2CentreY;
     int sliderRow3CentreY;
 
-    juce::Slider slider1;
-    juce::Slider slider2;
-    juce::Slider slider3;
-    juce::Slider slider4;
+    int sliderWidth, sliderHeight;
         
     juce::TextButton bypassSwitch;
     

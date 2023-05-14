@@ -69,3 +69,6 @@ void ReverbPedal::paint (juce::Graphics& g)
     g.fillEllipse(led);
 }
 
+void ReverbPedal::resizeChild()
+{
+}
