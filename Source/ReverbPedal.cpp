@@ -18,9 +18,23 @@ ReverbPedal::ReverbPedal()
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0,0);
-        slider->setLookAndFeel(&lookAndFeel);
+        //slider->setLookAndFeel(&lookAndFeel);
+    }
+    for (auto& label : sliderLabels) {
+        addAndMakeVisible(label);
+        label->setJustificationType(juce::Justification::horizontallyCentred);
     }
     type.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+
+    mixLabel.attachToComponent(&mix, false);
+    highCutLabel.attachToComponent(&highCut, false);
+    lowCutLabel.attachToComponent(&lowCut, false);
+    typeLabel.attachToComponent(&type, false);
+
+    mixLabel.setText("Mix", juce::dontSendNotification);
+    highCutLabel.setText("H.Cut", juce::dontSendNotification);
+    lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
+    typeLabel.setText("Type", juce::dontSendNotification);
 }
 
 ReverbPedal::~ReverbPedal()
@@ -47,7 +61,18 @@ void ReverbPedal::paint (juce::Graphics& g)
     g.drawText ("ReverbPedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
 
+    juce::Rectangle<int> topLeft, topRigth, bottomCenter;
+    auto rectWidth = 10;
+    auto rectHeight = 10;
 
+    topLeft.setSize(rectWidth, rectHeight);
+    topLeft.setCentre(sliderCol1CentreX, sliderRow1CentreY);
+
+    topRigth.setSize(rectWidth, rectHeight);
+    topRigth.setCentre(sliderCol3CentreX, sliderRow1CentreY);
+
+    bottomCenter.setSize(rectWidth, rectHeight);
+    bottomCenter.setCentre(sliderCol2CentreX, sliderRow2CentreY);
     
     juce::Rectangle<float> led;
     led.setSize(7, 7);
@@ -71,4 +96,12 @@ void ReverbPedal::resizeChild(){
     lowCut.setCentrePosition    (sliderCol1CentreX, sliderRow1CentreY);
     type.setCentrePosition      (sliderCol2CentreX, sliderRow3CentreY);
     
+    for (auto& label : sliderLabels) {
+
+        auto sliderBounds   = label->getAttachedComponent()->getBounds();
+        auto bottomX        = sliderBounds.getBottomLeft().getX();
+        auto bottomY        = sliderBounds.getBottomLeft().getY();
+
+        label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
+    }
 }
