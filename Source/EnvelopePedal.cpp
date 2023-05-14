@@ -25,12 +25,6 @@ EnvelopePedal::~EnvelopePedal()
 
 void EnvelopePedal::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
 
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
@@ -39,13 +33,7 @@ void EnvelopePedal::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("EnvelopePedal", getLocalBounds(),
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.4f); // Adjust the vertical position here
+    g.drawText ("EnvelopePedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
-}
-
-void EnvelopePedal::resized()
-{
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-
 }
