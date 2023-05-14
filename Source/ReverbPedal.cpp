@@ -19,6 +19,7 @@ ReverbPedal::ReverbPedal()
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0,0);
     }
+    type.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
 }
 
 ReverbPedal::~ReverbPedal()
@@ -58,11 +59,15 @@ void ReverbPedal::paint (juce::Graphics& g)
 void ReverbPedal::resizeChild(){
     
     for (auto& slider : sliders){
-        slider->setSize(sliderWidth, sliderHeight);
+        if (slider != &type){
+            slider->setSize(sliderWidth, sliderHeight);
+        }
+        else type.setSize(150, 50);
     }
     
     mix.setCentrePosition       (sliderCol2CentreX, sliderRow2CentreY);
     highCut.setCentrePosition   (sliderCol3CentreX, sliderRow1CentreY);
     lowCut.setCentrePosition    (sliderCol1CentreX, sliderRow1CentreY);
+    type.setCentrePosition      (sliderCol2CentreX, sliderRow3CentreY);
     
 }
