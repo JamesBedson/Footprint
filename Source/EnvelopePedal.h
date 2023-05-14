@@ -21,8 +21,17 @@ class EnvelopePedal  : public Pedal
 {
 public:
     EnvelopePedal();
-    ~EnvelopePedal() override;
+    ~EnvelopePedal()                override;
 
+<<<<<<< HEAD
+    void paint (juce::Graphics&)    override;
+    void resizeChild() override;
+
+private:
+
+    /*juce::Slider*/
+
+=======
     void paint (juce::Graphics&) override;
     void resizeChild() override;
     
@@ -31,5 +40,6 @@ private:
     std::vector<juce::Slider*> sliders {&qualityFactor, &sensitivity, &cutoffThreshold};
     
     
+>>>>>>> main
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EnvelopePedal)
 };

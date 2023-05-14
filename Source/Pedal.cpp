@@ -41,6 +41,17 @@ void Pedal::resized()
     
     auto buttonWidth    = 20;
     auto buttonHeight   = 20;
+<<<<<<< HEAD
+
+    sliderWidth         = 60;
+    sliderHeight        = 60;
+
+
+    bypassSwitch.setSize(buttonWidth, buttonHeight);
+    bypassSwitch.setCentrePosition(bounds.getCentreX(), bounds.getCentreY() + width * 0.6f);
+
+    resizeChild();
+=======
     
     sliderWidth         = 60;
     sliderHeight        = 60;
@@ -49,4 +60,5 @@ void Pedal::resized()
     
     resizeChild();
     
+>>>>>>> main
 }

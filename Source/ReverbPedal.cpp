@@ -55,6 +55,11 @@ void ReverbPedal::paint (juce::Graphics& g)
     
 }
 
+<<<<<<< HEAD
+void ReverbPedal::resizeChild()
+{
+}
+=======
 void ReverbPedal::resizeChild(){
     
     for (auto& slider : sliders){
@@ -66,3 +71,4 @@ void ReverbPedal::resizeChild(){
     lowCut.setCentrePosition    (sliderCol1CentreX, sliderRow1CentreY);
     
 }
+>>>>>>> main

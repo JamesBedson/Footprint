@@ -41,6 +41,11 @@ void EnvelopePedal::paint (juce::Graphics& g)
                 juce::Justification::centred, true);   // draw some placeholder text
 }
 
+<<<<<<< HEAD
+void EnvelopePedal::resizeChild()
+{
+}
+=======
 void EnvelopePedal::resizeChild(){
     
     for (auto& slider : sliders){
@@ -51,3 +56,4 @@ void EnvelopePedal::resizeChild(){
     qualityFactor.setCentrePosition(sliderCol2CentreX, sliderRow2CentreY);
     cutoffThreshold.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
 }
+>>>>>>> main
