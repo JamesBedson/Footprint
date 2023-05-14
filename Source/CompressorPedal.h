@@ -11,19 +11,23 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Pedal.h"
+#include "PedalLookAndFeel.h"
 
 //==============================================================================
 /*
 */
-class CompressorPedal  : public juce::Component
+class CompressorPedal : public Pedal
 {
 public:
     CompressorPedal();
     ~CompressorPedal() override;
 
     void paint (juce::Graphics&) override;
-    void resized() override;
 
 private:
+
+    juce::Slider ratio, threshold, attack, release;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CompressorPedal)
 };
