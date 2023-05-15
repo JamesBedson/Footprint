@@ -39,6 +39,8 @@ CompressorPedal::CompressorPedal()
 
 CompressorPedal::~CompressorPedal()
 {
+    
+    
 }
 
 void CompressorPedal::paint (juce::Graphics& g)
