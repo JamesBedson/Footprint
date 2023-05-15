@@ -12,6 +12,10 @@
               file="Source/AudioProcessingModule.cpp"/>
         <FILE id="nynLSk" name="AudioProcessingModule.h" compile="0" resource="0"
               file="Source/AudioProcessingModule.h"/>
+        <FILE id="H03tlO" name="EnvelopeFilter.cpp" compile="1" resource="0"
+              file="Source/EnvelopeFilter.cpp"/>
+        <FILE id="SowV4u" name="EnvelopeFilter.h" compile="0" resource="0"
+              file="Source/EnvelopeFilter.h"/>
       </GROUP>
       <GROUP id="{5225B940-ED4F-AD17-6DB3-89C4F47FAD31}" name="Sections">
         <FILE id="QeE6Th" name="DisplaySection.cpp" compile="1" resource="0"
