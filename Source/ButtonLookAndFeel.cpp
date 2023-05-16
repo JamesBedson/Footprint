@@ -24,7 +24,7 @@ ButtonLookAndFeel::~ButtonLookAndFeel()
 {
 }
 
-void drawToggleButton (juce::Graphics&, juce::ToggleButton&, bool shouldDrawButtonAsHighlighted,                      bool shouldDrawButtonAsDown) {
-    
+void ButtonLookAndFeel::drawToggleButton (juce::Graphics& g, juce::ToggleButton& button,
+                        bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown){
     
 }

@@ -18,7 +18,7 @@ DistortionPedal::DistortionPedal()
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-        slider->setLookAndFeel(&lookAndFeel);
+        slider->setLookAndFeel(&pedalLookAndFeel);
 
     }
     for (auto& label : sliderLabels){
