@@ -43,6 +43,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
 
         const float thickness = 0.7f;
 
+        //Inner part
         {
             juce::Path filledArc;
             filledArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, angle, thickness);
@@ -52,25 +53,26 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
         {
             const float innerRadius = radius * 0.2f;
             juce::Path p;
-            p.addTriangle (-innerRadius, 0.0f,
-                           0.0f, -radius * thickness * 1.1f,
-                           innerRadius, 0.0f);
+            juce::Line<float> line (juce::Point<float> (10, 10), juce::Point<float> (50, 50));
+            p.addLineSegment(line, 2);
+            //p.addTriangle (-innerRadius, 0.0f, 0.0f, -radius * thickness * 1.1f, innerRadius, 0.0f);
 
             p.addEllipse (-innerRadius, -innerRadius, innerRadius * 2.0f, innerRadius * 2.0f);
 
             g.fillPath (p, juce::AffineTransform::rotation (angle).translated (centreX, centreY));
         }
 
-//        if (slider.isEnabled())
-//            g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
-//        else
-//            g.setColour (juce::Colours::red);
-//
-//        juce::Path outlineArc;
-//        outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
-//        outlineArc.closeSubPath();
-//
-//        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
+        //Outer part
+        if (slider.isEnabled())
+            g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
+        else
+            g.setColour (juce::Colours::red);
+
+        juce::Path outlineArc;
+        outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
+        outlineArc.closeSubPath();
+
+        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
     }
 //    else
 //    {
