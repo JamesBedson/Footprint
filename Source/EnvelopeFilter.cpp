@@ -26,7 +26,7 @@ void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock) {
 void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
     juce::MidiBuffer& midiMessages, double sampleRate) {
 
-    juce::AudioBuffer<float> ampBuffer = getAmplitudeEnvelope(buffer, sampleRate);
+    juce::AudioBuffer<float> ampBuffer = getAmplitudeEnvelope(buffer);
 
 
 
@@ -56,7 +56,7 @@ Matrix EnvelopeFilter::getLPFCoefficients() {
     return ba;
 }
 
-juce::AudioBuffer<float> EnvelopeFilter::getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer, double sampleRate) {
+juce::AudioBuffer<float> EnvelopeFilter::getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer) {
     juce::AudioBuffer<float> ampBuffer;
     ampBuffer.makeCopyOf(buffer);
     for (int i = 0; i < ampBuffer.getNumSamples(); i++) {
