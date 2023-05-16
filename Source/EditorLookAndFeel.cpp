@@ -36,11 +36,24 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
     if (radius > 12.0f)
     {
         if (slider.isEnabled())
-            g.setColour (slider.findColour (juce::Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
+            g.setColour (juce::Colours::white.darker());
         else
             g.setColour (juce::Colours::red);
         
-        const float thickness = 0.7f;
+        const float thickness = 0.95f;
+        
+        juce::Path outlineArc;
+        outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness+0.02);
+        outlineArc.closeSubPath();
+        
+        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
+        
+        if (slider.isEnabled())
+            g.setColour (juce::Colours::white);
+        else
+            g.setColour (juce::Colours::red);
+        
+        //const float thickness = 0.9f;
         
         //Inner part
         {
@@ -68,7 +81,7 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
         
         //Outer part
         /*if (slider.isEnabled())
-            g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
+            g.setColour (juce::Colours::white.darker());
         else
             g.setColour (juce::Colours::red);
         
