@@ -36,7 +36,7 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
     if (radius > 12.0f)
     {
         if (slider.isEnabled())
-            g.setColour (juce::Colours::white.darker());
+            g.setColour (juce::Colours::white.darker().darker());
         else
             g.setColour (juce::Colours::red);
         
