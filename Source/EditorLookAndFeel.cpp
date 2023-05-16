@@ -22,30 +22,56 @@ EditorLookAndFeel::EditorLookAndFeel()
 EditorLookAndFeel::~EditorLookAndFeel()
 {
 }
-
-void EditorLookAndFeel::paint (juce::Graphics& g)
+void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-    g.drawText ("EditorLookAndFeel", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    const float radius = fmin ((float) width * 0.5f, (float) height * 0.5f) - 2.0f;
+    const float centreX = (float) x + (float) width * 0.5f;
+    const float centreY = (float) y + (float) height * 0.5f;
+    const float rx = centreX - radius;
+    const float ry = centreY - radius;
+    const float rw = radius * 2.0f;
+    const float angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
+    const bool isMouseOver = slider.isMouseOverOrDragging() && slider.isEnabled();
+    
+    if (radius > 12.0f)
+    {
+        if (slider.isEnabled())
+            g.setColour (slider.findColour (juce::Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
+        else
+            g.setColour (juce::Colours::red);
+        
+        const float thickness = 0.7f;
+        
+        //Inner part
+        {
+            juce::Path filledArc;
+            filledArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, angle, thickness);
+            g.fillPath (filledArc);
+        }
+        
+        {
+            const float innerRadius = radius * 0.2f;
+            juce::Path p;
+            juce::Line<float> line (juce::Point<float> (10, 10), juce::Point<float> (50, 50));
+            p.addLineSegment(line, 2);
+            //p.addTriangle (-innerRadius, 0.0f, 0.0f, -radius * thickness * 1.1f, innerRadius, 0.0f);
+            
+            p.addEllipse (-innerRadius, -innerRadius, innerRadius * 2.0f, innerRadius * 2.0f);
+            
+            g.fillPath (p, juce::AffineTransform::rotation (angle).translated (centreX, centreY));
+        }
+        
+        //Outer part
+        if (slider.isEnabled())
+            g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
+        else
+            g.setColour (juce::Colours::red);
+        
+        juce::Path outlineArc;
+        outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
+        outlineArc.closeSubPath();
+        
+        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
+    }
 }
 
-void EditorLookAndFeel::resized()
-{
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-
-}
