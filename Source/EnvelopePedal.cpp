@@ -43,13 +43,13 @@ EnvelopePedal::~EnvelopePedal()
 void EnvelopePedal::paint (juce::Graphics& g)
 {
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    g.setColour(juce::Colours::indianred);
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::indianred);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    g.setColour(juce::Colours::white);
+    g.setFont(14.0f);
 
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
     juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
     g.drawText ("EnvelopePedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text

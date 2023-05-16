@@ -41,7 +41,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
     {
         if (slider.isEnabled())
             //g.setColour (slider.findColour (juce::Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
-            g.setColour(juce::Colours::white.darker().darker());
+            g.setColour(juce::Colours::white.darker().darker().darker());
         else
             g.setColour (juce::Colours::red);
 
@@ -86,7 +86,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
             juce::Line<float> line (juce::Point<float>(5,5), juce::Point<float>(13, 13));
             g.setColour(juce::Colours::black);
             linePath.addLineSegment(line, 2);
-            g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.2f).translated(centerX, centerY));
+            g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.3f).translated(centerX, centerY));
 
             
         }
