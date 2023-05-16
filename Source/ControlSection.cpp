@@ -35,6 +35,9 @@ ControlSection::ControlSection()
 
 ControlSection::~ControlSection()
 {
+    for (auto* slider : sliders){
+        slider->setLookAndFeel(nullptr);
+    }
 }
 
 void ControlSection::paint (juce::Graphics& g)
