@@ -35,22 +35,17 @@ ControlSection::ControlSection()
 
 ControlSection::~ControlSection()
 {
+    for (auto* slider : sliders){
+        slider->setLookAndFeel(nullptr);
+    }
 }
 
 void ControlSection::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (juce::Colours::darkgreen);   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
+    g.setColour(juce::Colours::royalblue);
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::royalblue);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
     g.setColour (juce::Colours::white);
     g.setFont (25.0f);
     juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.39f); // Adjust the vertical position here
