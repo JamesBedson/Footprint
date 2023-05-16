@@ -21,11 +21,11 @@ Pedal::Pedal()
 
 Pedal::~Pedal()
 {
+    bypassSwitch.setLookAndFeel(nullptr);
 }
 
 void Pedal::paint (juce::Graphics& g)
 {
-    //DBG("entrado: ");
     juce::Rectangle<float> led;
     led.setSize(7, 7);
     led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
