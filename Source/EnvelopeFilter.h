@@ -21,8 +21,12 @@ public:
     
     void prepare(double sampleRate, int samplePerBlock) override;
     void processBlock(juce::AudioBuffer<float>& buffer,
-        juce::MidiBuffer& midiMessages) override;
+        juce::MidiBuffer& midiMessages, double sampleRate) override;
 
+    void setSampleRate(double s) {
+        if (s > 0) { sampleRate = s; }
+    }
+    
     void setQualityFactor(float q) {
         if (q >= 0) { qualityFactor = q; }
     }
@@ -31,11 +35,37 @@ public:
         if (s >= 0) { sensitivity = s; }
     }
 
+    void setCutoff1(double c) {
+        if (c > 0) { cutoff1 = c; }
+    }
 
-    Matrix getLPFCoefficients(double sampleRate, float cutoffFrequency, float qualityFactor);
-    juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>&buffer, double sampleRate);
+    void setThresholdMinFreq(double t) {
+        if (t > 0) { thresholdMinFreq = t; }
+    }
+
+    void setNyquist() {
+        nyquist = sampleRate / 2;
+    }
+
+    void setWindowSize(int w) {
+        if (w > 0) { windowSize = w; }
+    }
+
+
+
+    Matrix getLPFCoefficients();
+    juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>&buffer);
 
 private:
+    double sampleRate;
     float qualityFactor;
     float sensitivity;
+
+    
+    double cutoff1;
+    double thresholdMinFreq;
+    double nyquist;
+    int windowSize;
+    //std::vector<double>& window;
+    
 };
