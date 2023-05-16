@@ -31,9 +31,11 @@ FootprintAudioProcessorEditor::~FootprintAudioProcessorEditor()
 void FootprintAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
+    g.drawImage(background, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    /*
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     g.setColour (juce::Colours::white);
-
+     */
 }
 
 void FootprintAudioProcessorEditor::resized()

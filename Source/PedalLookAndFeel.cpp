@@ -41,7 +41,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
     {
         if (slider.isEnabled())
             //g.setColour (slider.findColour (juce::Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
-            g.setColour(juce::Colours::white.darker().darker());
+            g.setColour(juce::Colours::white.darker().darker().darker());
         else
             g.setColour (juce::Colours::red);
 
@@ -57,7 +57,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
         if (slider.isEnabled())
             //g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
             g.setColour(juce::Colours::white);
-
+            //g.fillAll(juce::Colours::white);
         else
             g.setColour(juce::Colours::black);
 
@@ -71,8 +71,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
 
         {
             const float innerRadius = radius * 0.2f;
-            //p.addTriangle (-innerRadius, 0.0f, 0.0f, -radius * thickness * 1.1f, innerRadius, 0.0f);
-            //p.addEllipse(centreX, centreY, innerRadius * 6.0f, innerRadius * 6.0f);
+
 
             juce::Path ellipsePath;
             auto ellipseHeight = innerRadius * 7.0f;
@@ -86,7 +85,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
             juce::Line<float> line (juce::Point<float>(5,5), juce::Point<float>(13, 13));
             g.setColour(juce::Colours::black);
             linePath.addLineSegment(line, 2);
-            g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.2f).translated(centerX, centerY));
+            g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.3f).translated(centerX, centerY));
 
             
         }
@@ -107,6 +106,14 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
 //
 //        g.fillPath (p, juce::AffineTransform::rotation (angle).translated (centreX, centreY));
 //    }
+}
+
+void PedalLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& byPassSwitch, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+{
+    g.setColour(juce::Colours::transparentBlack);
+    g.drawEllipse(byPassSwitch.getLocalBounds().toFloat(), 10.0f);
+    g.setColour(juce::Colours::white);
+    g.fillEllipse(byPassSwitch.getLocalBounds().toFloat());
 }
 
 //OTHER LINES TRIALS:

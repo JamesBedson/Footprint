@@ -77,9 +77,9 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
             
             juce::Path ellipse2Path;
             
-            ellipse2Path.addEllipse(centerX - (ellipseHeight * 0.5f), centerY - (ellipseWidth * 0.5f), innerRadius * 0.8f, innerRadius * 0.8f);
+            ellipse2Path.addEllipse(centerX - (ellipseHeight * 0.455f), centerY - (ellipseWidth * 0.455f), innerRadius * 0.7f, innerRadius * 0.7f);
             g.setColour(juce::Colours::black);
-            g.fillPath(ellipse2Path, juce::AffineTransform::rotation(angle-90.2f).translated(centerX, centerY));
+            g.fillPath(ellipse2Path, juce::AffineTransform::rotation(angle-90.3f).translated(centerX, centerY));
         }
         
         //Outer part

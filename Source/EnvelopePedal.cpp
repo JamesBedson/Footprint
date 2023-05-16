@@ -38,26 +38,40 @@ EnvelopePedal::EnvelopePedal()
 
 EnvelopePedal::~EnvelopePedal()
 {
+    for (auto* slider : sliders){
+        slider->setLookAndFeel(nullptr);
+    }
 }
 
-void EnvelopePedal::paint (juce::Graphics& g)
+void EnvelopePedal::paintBackground(juce::Graphics& g){
+    
+    if (slot == 1){
+        g.drawImage(backgroundSlot1, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 2){
+        g.drawImage(backgroundSlot2, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 3){
+        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 4){
+        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else {
+        return;
+    }
+    
+    /*
+    g.setColour(juce::Colours::indianred);
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::indianred);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    g.setColour(juce::Colours::white);
+    g.setFont(14.0f);*/
+}
+
+
+void EnvelopePedal::paintAdditionalComponents(juce::Graphics& g)
 {
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
     juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
     g.drawText ("EnvelopePedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
-    
-    juce::Rectangle<float> led;
-    led.setSize(7, 7);
-    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
-    g.fillEllipse(led);
 }
 
 void EnvelopePedal::resizeChild(){
@@ -79,4 +93,3 @@ void EnvelopePedal::resizeChild(){
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
     }
 }
-

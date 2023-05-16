@@ -25,21 +25,17 @@ DisplaySection::~DisplaySection()
 
 void DisplaySection::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
+    g.drawImage(displayBackground, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    
+    /*
+    g.setColour(juce::Colours::salmon);
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::salmon);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);*/
+    g.setColour(juce::Colours::white);
+    g.setFont (20.0f);
 
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (juce::Colours::darkorange);   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-    g.drawText ("DisplaySection", getLocalBounds(),
+    g.drawText ("Display Section", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
 }
 

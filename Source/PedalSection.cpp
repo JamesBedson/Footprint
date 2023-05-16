@@ -14,10 +14,12 @@
 //==============================================================================
 PedalSection::PedalSection()
 {
-    addAndMakeVisible(CompressorPedal);
-    addAndMakeVisible(ReverbPedal);
-    addAndMakeVisible(EnvelopePedal);
-    addAndMakeVisible(DistortionPedal);
+    
+    addAndMakeVisible(compressorPedal);
+    addAndMakeVisible(reverbPedal);
+    addAndMakeVisible(envelopePedal);
+    addAndMakeVisible(distortionPedal);
+    
 
 }
 
@@ -27,38 +29,32 @@ PedalSection::~PedalSection()
 
 void PedalSection::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (juce::Colours::darkred);   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
+    g.setColour (juce::Colours::white.darker().darker());
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::transparentBlack);
+    //g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    //g.drawText ("PedalSection", getLocalBounds(),
-    //            juce::Justification::centred, true);   // draw some placeholder text
-    
 }
 
 void PedalSection::resized()
 {
     auto bounds = getLocalBounds();
     
-    CompressorPedal.setSize(200, 300);
-    CompressorPedal.setCentrePosition(bounds.getX() + getWidth() * 0.25f - CompressorPedal.getWidth() * 0.58f, bounds.getCentreY());
+    compressorPedal.setSlot(1);
+    distortionPedal.setSlot(2);
+    reverbPedal.setSlot(3);
+    envelopePedal.setSlot(4);
+    
+    compressorPedal.setSize(200, 300);
+    compressorPedal.setCentrePosition(bounds.getX() + getWidth() * 0.25f - compressorPedal.getWidth() * 0.58f, bounds.getCentreY());
 
-    DistortionPedal.setSize(200, 300);
-    DistortionPedal.setCentrePosition(bounds.getX() + getWidth() * 0.5f - DistortionPedal.getWidth() * 0.58f, bounds.getCentreY());
-
-    ReverbPedal.setSize(200, 300);
-    ReverbPedal.setCentrePosition(bounds.getX() + getWidth() * 0.75f - ReverbPedal.getWidth() * 0.58f, bounds.getCentreY());
-
-    EnvelopePedal.setSize(200, 300);
-    EnvelopePedal.setCentrePosition(bounds.getX() + getWidth() - EnvelopePedal.getWidth() * 0.58f, bounds.getCentreY());
+    distortionPedal.setSize(200, 300);
+    distortionPedal.setCentrePosition(bounds.getX() + getWidth() * 0.5f - distortionPedal.getWidth() * 0.58f, bounds.getCentreY());
+    
+    reverbPedal.setSize(200, 300);
+    reverbPedal.setCentrePosition(bounds.getX() + getWidth() * 0.75f - reverbPedal.getWidth() * 0.58f, bounds.getCentreY());
+    
+    envelopePedal.setSize(200, 300);
+    envelopePedal.setCentrePosition(bounds.getX() + getWidth() - envelopePedal.getWidth() * 0.58f, bounds.getCentreY());
 }

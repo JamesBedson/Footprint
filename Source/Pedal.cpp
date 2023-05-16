@@ -15,18 +15,39 @@
 Pedal::Pedal()
 {
     addAndMakeVisible(bypassSwitch);
-    bypassSwitch.setLookAndFeel(&buttonLookAndFeel);
-    
+    bypassSwitch.setLookAndFeel(&pedalLookAndFeel);
+    bypassSwitch.addListener(this);
 }
 
 Pedal::~Pedal()
 {
+    bypassSwitch.setLookAndFeel(nullptr);
 }
 
 void Pedal::paint (juce::Graphics& g)
 {
-    
+    paintBackground(g);
+    if (isInside)
+    {
+        auto bounds = getLocalBounds().reduced(6.0f, 6.0f);
+        g.setColour(juce::Colours::white.darker());
+        g.drawRoundedRectangle(bounds.toFloat(), 10.0f, 1.0f);
+        g.setColour(juce::Colours::black);
+
+    }
+
+    juce::Rectangle<float> led;
+    led.setSize(7, 7);
+    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
+    if (bypassSwitch.getToggleState())
+    {
+        g.setColour(juce::Colours::darkorange);
+    }
+    g.fillEllipse(led);
+    g.setColour(juce::Colours::white);
+    paintAdditionalComponents(g);
 }
+
 
 void Pedal::resized()
 {
@@ -55,4 +76,30 @@ void Pedal::resized()
     
     resizeChild();
 
+}
+
+void Pedal::buttonClicked(juce::Button* button)
+{
+    if (button == &bypassSwitch)
+    {
+        repaint();
+    }
+}
+
+void Pedal::mouseMove(const juce::MouseEvent& event)
+{
+    isInside = true;
+    repaint();
+}
+
+void Pedal::mouseExit(const juce::MouseEvent& event)
+{
+    isInside = false;
+    repaint();
+}
+
+void Pedal::setSlot(int slot){
+    
+    jassert(slot >= 1 & slot <= 4);
+    this->slot = slot;
 }
