@@ -35,7 +35,5 @@ private:
     PedalSection                pedalSection;
     ControlSection              controlSection;
     
-    
-    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessorEditor)
 };
