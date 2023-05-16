@@ -12,7 +12,6 @@
 
 #include <JuceHeader.h>
 #include "PedalLookAndFeel.h"
-#include "ButtonLookAndFeel.h"
 
 //==============================================================================
 /*
@@ -46,8 +45,6 @@ protected:
     
     juce::ToggleButton bypassSwitch;
     PedalLookAndFeel pedalLookAndFeel;
-
-    //ButtonLookAndFeel buttonLookAndFeel;
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pedal)

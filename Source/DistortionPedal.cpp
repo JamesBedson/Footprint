@@ -37,6 +37,9 @@ DistortionPedal::DistortionPedal()
 
 DistortionPedal::~DistortionPedal()
 {
+    for (auto* slider : sliders){
+        slider->setLookAndFeel(nullptr);
+    }
 }
 
 void DistortionPedal::paintChild(juce::Graphics& g)

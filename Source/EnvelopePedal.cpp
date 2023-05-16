@@ -38,6 +38,9 @@ EnvelopePedal::EnvelopePedal()
 
 EnvelopePedal::~EnvelopePedal()
 {
+    for (auto* slider : sliders){
+        slider->setLookAndFeel(nullptr);
+    }
 }
 
 void EnvelopePedal::paintChild(juce::Graphics& g)
