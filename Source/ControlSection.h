@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "EditorLookAndFeel.h"
 
 //==============================================================================
 /*
@@ -39,6 +40,8 @@ private:
     std::vector<juce::Slider*> sliders{&input, &output};
     juce::Label inputLabel, outputLabel;
     std::vector<juce::Label*> sliderLabels{ &inputLabel, &outputLabel};
+    
+    EditorLookAndFeel lookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlSection)
 };
