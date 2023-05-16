@@ -54,13 +54,18 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
             const float innerRadius = radius * 0.2f;
             juce::Path p;
             //p.addTriangle (-innerRadius, 0.0f, 0.0f, -radius * thickness * 1.1f, innerRadius, 0.0f);
-            
+            //p.addEllipse(centreX, centreY, innerRadius * 6.0f, innerRadius * 6.0f);
+
             p.addEllipse (-innerRadius, -innerRadius, innerRadius * 6.0f, innerRadius * 6.0f);
-            
-            juce::Line<float> line (juce::Point<float> (10, 10), juce::Point<float> (30, 30));
+            g.setColour(juce::Colours::white);
+            g.fillPath(p, juce::AffineTransform::rotation(angle).translated(centreX, centreY));
+
+            juce::Line<float> line(juce::Point<float>(10, 10), juce::Point<float>(30, 30));
             p.addLineSegment(line, 6);
+            g.setColour(juce::Colours::black);
+            g.fillPath(p, juce::AffineTransform::rotation(angle).translated(centreX, centreY));
+
             
-            g.fillPath (p, juce::AffineTransform::rotation (angle).translated (centreX, centreY));
         }
 
 //        //Outer part

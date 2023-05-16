@@ -40,5 +40,7 @@ private:
     juce::Label inputLabel, outputLabel;
     std::vector<juce::Label*> sliderLabels{ &inputLabel, &outputLabel};
 
+    EditorLook
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlSection)
 };
