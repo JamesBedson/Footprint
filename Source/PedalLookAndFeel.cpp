@@ -57,7 +57,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
         if (slider.isEnabled())
             //g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
             g.setColour(juce::Colours::white);
-
+            //g.fillAll(juce::Colours::white);
         else
             g.setColour(juce::Colours::black);
 
@@ -107,6 +107,14 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
 //
 //        g.fillPath (p, juce::AffineTransform::rotation (angle).translated (centreX, centreY));
 //    }
+}
+
+void PedalLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& byPassSwitch, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+{
+    g.setColour(juce::Colours::transparentBlack);
+    g.drawEllipse(byPassSwitch.getLocalBounds().toFloat(), 10.0f);
+    g.setColour(juce::Colours::white);
+    g.fillEllipse(byPassSwitch.getLocalBounds().toFloat());
 }
 
 //OTHER LINES TRIALS:

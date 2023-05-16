@@ -43,7 +43,7 @@ EnvelopePedal::~EnvelopePedal()
     }
 }
 
-void EnvelopePedal::paint (juce::Graphics& g)
+void EnvelopePedal::paintChild(juce::Graphics& g)
 {
 
     g.setColour(juce::Colours::indianred);
@@ -56,11 +56,6 @@ void EnvelopePedal::paint (juce::Graphics& g)
     juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
     g.drawText ("EnvelopePedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
-    
-    juce::Rectangle<float> led;
-    led.setSize(7, 7);
-    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
-    g.fillEllipse(led);
 }
 
 void EnvelopePedal::resizeChild(){

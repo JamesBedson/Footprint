@@ -44,7 +44,7 @@ ReverbPedal::~ReverbPedal()
     }
 }
 
-void ReverbPedal::paint (juce::Graphics& g)
+void ReverbPedal::paintChild(juce::Graphics& g)
 {
 
     g.setColour(juce::Colours::hotpink);
@@ -69,14 +69,7 @@ void ReverbPedal::paint (juce::Graphics& g)
     topRigth.setCentre(sliderCol3CentreX, sliderRow1CentreY);
 
     bottomCenter.setSize(rectWidth, rectHeight);
-    bottomCenter.setCentre(sliderCol2CentreX, sliderRow2CentreY);
-    
-    juce::Rectangle<float> led;
-    led.setSize(7, 7);
-    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
-    g.fillEllipse(led);
-    
-    
+    bottomCenter.setCentre(sliderCol2CentreX, sliderRow2CentreY);   
 }
 
 void ReverbPedal::resizeChild(){

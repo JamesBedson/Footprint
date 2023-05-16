@@ -15,18 +15,28 @@
 Pedal::Pedal()
 {
     addAndMakeVisible(bypassSwitch);
-    //bypassSwitch.setLookAndFeel(&buttonLookAndFeel);
-    
+    bypassSwitch.setLookAndFeel(&pedalLookAndFeel);
+    bypassSwitch.addListener(this);
 }
 
 Pedal::~Pedal()
 {
+    bypassSwitch.setLookAndFeel(nullptr);
 }
 
 void Pedal::paint (juce::Graphics& g)
 {
-    
+    juce::Rectangle<float> led;
+    led.setSize(7, 7);
+    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
+    if (bypassSwitch.isMouseButtonDown())
+    {
+        g.setColour(juce::Colours::red);
+    }
+    g.fillEllipse(led);
+    paintChild(g);
 }
+
 
 void Pedal::resized()
 {
@@ -55,4 +65,12 @@ void Pedal::resized()
     
     resizeChild();
 
+}
+
+void Pedal::buttonClicked(juce::Button* button)
+{
+    if (button == &bypassSwitch)
+    {
+        repaint();
+    }
 }

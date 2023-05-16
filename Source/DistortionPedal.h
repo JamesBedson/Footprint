@@ -23,7 +23,7 @@ public:
     DistortionPedal();
     ~DistortionPedal()              override;
 
-    void paint (juce::Graphics&)    override;
+    void paintChild(juce::Graphics&)    override;
     void resizeChild()              override;
 
 private:
