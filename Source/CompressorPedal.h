@@ -21,10 +21,10 @@ class CompressorPedal : public Pedal
 {
 public:
     CompressorPedal();
-    ~CompressorPedal()              override;
+    ~CompressorPedal()                  override;
 
-    void paint (juce::Graphics&)    override;
-    void resizeChild()              override;
+    void paintChild(juce::Graphics&)    override;
+    void resizeChild()                  override;
 
 private:
 

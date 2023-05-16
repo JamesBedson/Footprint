@@ -17,16 +17,19 @@
 //==============================================================================
 /*
 */
-class Pedal  : public juce::Component
+class Pedal  : public juce::Component, public juce::Button::Listener
 {
 public:
     Pedal();
-    ~Pedal()                            override;
+    ~Pedal()                                            override;
 
-    void paint (juce::Graphics&)        override;
-    void resized()                      override;
+    void paint (juce::Graphics&)                        override;
+    void resized()                                      override;
     
+    virtual void paintChild(juce::Graphics&) = 0;
     virtual void resizeChild() = 0;
+
+    void buttonClicked(juce::Button* button)            override;
 
 protected:
     
@@ -41,8 +44,9 @@ protected:
     int sliderWidth, sliderHeight;
     int sliderLabelWidth, sliderLabelHeight;
     
-    juce::TextButton bypassSwitch;
+    juce::ToggleButton bypassSwitch;
     PedalLookAndFeel pedalLookAndFeel;
+
     //ButtonLookAndFeel buttonLookAndFeel;
     
 private:
