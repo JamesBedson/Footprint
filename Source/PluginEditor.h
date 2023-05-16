@@ -35,5 +35,8 @@ private:
     PedalSection                pedalSection;
     ControlSection              controlSection;
     
+    juce::Image                 background = juce::ImageCache::getFromMemory(BinaryData::backgroundPurpleBlue_png,
+                                                                             BinaryData::backgroundPurpleBlue_pngSize);
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessorEditor)
 };

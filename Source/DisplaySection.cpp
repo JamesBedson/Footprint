@@ -25,10 +25,13 @@ DisplaySection::~DisplaySection()
 
 void DisplaySection::paint (juce::Graphics& g)
 {
+    g.drawImage(displayBackground, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    
+    /*
     g.setColour(juce::Colours::salmon);
     g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
     g.setColour(juce::Colours::salmon);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);*/
     g.setColour(juce::Colours::white);
     g.setFont (20.0f);
 

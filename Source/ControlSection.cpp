@@ -42,10 +42,11 @@ ControlSection::~ControlSection()
 
 void ControlSection::paint (juce::Graphics& g)
 {
+    /*
     g.setColour(juce::Colours::royalblue);
     g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
     g.setColour(juce::Colours::royalblue);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);*/
     g.setColour (juce::Colours::white);
     g.setFont (25.0f);
     juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.39f); // Adjust the vertical position here

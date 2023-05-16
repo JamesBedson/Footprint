@@ -75,3 +75,9 @@ void Pedal::buttonClicked(juce::Button* button)
         repaint();
     }
 }
+
+void Pedal::setSlot(int slot){
+    
+    jassert(slot >= 1 and slot <= 4);
+    this->slot = slot;
+}

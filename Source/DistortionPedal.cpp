@@ -74,10 +74,22 @@ void DistortionPedal::resizeChild()
 
 void DistortionPedal::paintBackground(juce::Graphics& g){
     
+    if (slot == 1){
+        g.drawImage(backgroundSlot1, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 2){
+        g.drawImage(backgroundSlot2, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 3){
+        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 4){
+        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else {
+        return;
+    }
+    /*
     g.setColour(juce::Colours::lightseagreen);
     g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
     g.setColour(juce::Colours::lightseagreen);
     g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
     g.setColour(juce::Colours::white);
-    g.setFont(14.0f);
+    g.setFont(14.0f);*/
 }
