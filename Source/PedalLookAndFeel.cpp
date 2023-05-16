@@ -39,11 +39,25 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
     if (radius > 12.0f)
     {
         if (slider.isEnabled())
-            g.setColour (slider.findColour (juce::Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
+            //g.setColour (slider.findColour (juce::Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
+            g.setColour(juce::Colours::white.darker().darker());
         else
             g.setColour (juce::Colours::red);
 
-        const float thickness = 0.7f;
+        const float thickness = 0.9f;
+
+        juce::Path outlineArc;
+        outlineArc.addPieSegment(rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness + 0.07f);
+        outlineArc.closeSubPath();
+        g.strokePath(outlineArc, juce::PathStrokeType(slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
+
+        //Outer part
+        if (slider.isEnabled())
+            //g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
+            g.setColour(juce::Colours::white);
+
+        else
+            g.setColour(juce::Colours::black);
 
         //Inner part
         {
@@ -64,23 +78,6 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
             g.setColour(juce::Colours::white);
             g.fillPath(ellipsePath);
 
-            //g.fillPath(ellipsePath, juce::AffineTransform::rotation(angle).translated(centerX - innerRadius, centerY - innerRadius));
-            //juce::Path linePath;
-            //linePath.startNewSubPath(centerX, centerY);
-            ////linePath.addLineSegment();
-            ////linePath.lineTo(centerX + (radius * 0.75f) * std::cos(angle), centerY + (radius * 0.75f) * std::sin(angle));
-            ////linePath.lineTo(centerX + radius * std::cos(angle), centerY + radius * std::sin(angle));
-            //linePath.lineTo(centerX - (radius * 0.75f) * std::sin(angle), centerY + (radius * 0.75f) * std::cos(angle));
-            //g.setColour(juce::Colours::black);
-            //g.strokePath(linePath, juce::PathStrokeType(2.0f));
-            //g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.0f).translated(centerX, centerY));
-
-            //juce::Path linePath;
-            //linePath.startNewSubPath(centerX, centerY);
-            //linePath.addLineSegment();
-            //linePath.lineTo(centerX + (radius * 0.75f) * std::cos(angle), centerY + (radius * 0.75f) * std::sin(angle));
-            //linePath.lineTo(centerX + radius * std::cos(angle), centerY + radius * std::sin(angle));
-
             juce::Path linePath;
             linePath.startNewSubPath(centerX, centerY);
             juce::Line<float> line (juce::Point<float>(5,5), juce::Point<float>(13, 13));
@@ -90,18 +87,6 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
 
             
         }
-
-        ////Outer part
-        //if (slider.isEnabled())
-        //    g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
-        //else
-        //    g.setColour (juce::Colours::red);
-
-        //juce::Path outlineArc;
-        //outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
-        //outlineArc.closeSubPath();
-
-        //g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
         
     }
 //    else
@@ -120,3 +105,21 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
 //        g.fillPath (p, juce::AffineTransform::rotation (angle).translated (centreX, centreY));
 //    }
 }
+
+//OTHER LINES TRIALS:
+            //g.fillPath(ellipsePath, juce::AffineTransform::rotation(angle).translated(centerX - innerRadius, centerY - innerRadius));
+            //juce::Path linePath;
+            //linePath.startNewSubPath(centerX, centerY);
+            ////linePath.addLineSegment();
+            ////linePath.lineTo(centerX + (radius * 0.75f) * std::cos(angle), centerY + (radius * 0.75f) * std::sin(angle));
+            ////linePath.lineTo(centerX + radius * std::cos(angle), centerY + radius * std::sin(angle));
+            //linePath.lineTo(centerX - (radius * 0.75f) * std::sin(angle), centerY + (radius * 0.75f) * std::cos(angle));
+            //g.setColour(juce::Colours::black);
+            //g.strokePath(linePath, juce::PathStrokeType(2.0f));
+            //g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.0f).translated(centerX, centerY));
+
+            //juce::Path linePath;
+            //linePath.startNewSubPath(centerX, centerY);
+            //linePath.addLineSegment();
+            //linePath.lineTo(centerX + (radius * 0.75f) * std::cos(angle), centerY + (radius * 0.75f) * std::sin(angle));
+            //linePath.lineTo(centerX + radius * std::cos(angle), centerY + radius * std::sin(angle));
