@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "Pedal.h"
+#include "PedalLookAndFeel.h"
 
 //==============================================================================
 /*
@@ -20,10 +21,17 @@ class CompressorPedal : public Pedal
 {
 public:
     CompressorPedal();
-    ~CompressorPedal() override;
+    ~CompressorPedal()              override;
 
-    void paint (juce::Graphics&) override;
+    void paint (juce::Graphics&)    override;
+    void resizeChild()              override;
 
 private:
+
+    juce::Slider ratio, threshold, attack, release;
+    std::vector<juce::Slider*> sliders {&ratio, &threshold, &attack, &release};
+    juce::Label ratioLabel, thresholdLabel, attackLabel, releaseLabel;
+    std::vector<juce::Label*> sliderLabels {&ratioLabel, &thresholdLabel, &attackLabel, &releaseLabel};
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CompressorPedal)
 };

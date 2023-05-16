@@ -4,6 +4,15 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
+      <GROUP id="{C23AE629-B8F6-997A-3B6D-29BBBBA3E068}" name="DSP">
+        <FILE id="Sgap8m" name="CompressorDSP.cpp" compile="1" resource="0"
+              file="Source/CompressorDSP.cpp"/>
+        <FILE id="dVabnS" name="CompressorDSP.h" compile="0" resource="0" file="Source/CompressorDSP.h"/>
+        <FILE id="hIvEzz" name="AudioProcessingModule.cpp" compile="1" resource="0"
+              file="Source/AudioProcessingModule.cpp"/>
+        <FILE id="nynLSk" name="AudioProcessingModule.h" compile="0" resource="0"
+              file="Source/AudioProcessingModule.h"/>
+      </GROUP>
       <GROUP id="{5225B940-ED4F-AD17-6DB3-89C4F47FAD31}" name="Sections">
         <FILE id="QeE6Th" name="DisplaySection.cpp" compile="1" resource="0"
               file="Source/DisplaySection.cpp"/>

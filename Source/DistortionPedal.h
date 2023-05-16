@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "Pedal.h"
+#include "PedalLookAndFeel.h"
 
 //==============================================================================
 /*
@@ -20,10 +21,18 @@ class DistortionPedal  : public Pedal
 {
 public:
     DistortionPedal();
-    ~DistortionPedal() override;
+    ~DistortionPedal()              override;
 
-    void paint (juce::Graphics&) override;
+    void paint (juce::Graphics&)    override;
+    void resizeChild()              override;
 
 private:
+    
+    juce::Slider tone, gain, level;
+    std::vector<juce::Slider*> sliders {&tone, &gain, &level};
+    
+    juce::Label toneLabel, gainLabel, levelLabel;
+    std::vector<juce::Label*> sliderLabels {&toneLabel, &gainLabel, &levelLabel};
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistortionPedal)
 };

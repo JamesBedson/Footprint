@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
+#include "PedalLookAndFeel.h"
 //==============================================================================
 /*
 */
@@ -19,10 +19,12 @@ class Pedal  : public juce::Component
 {
 public:
     Pedal();
-    ~Pedal() override;
+    ~Pedal()                            override;
 
-    void paint (juce::Graphics&) override;
-    void resized() override;
+    void paint (juce::Graphics&)        override;
+    void resized()                      override;
+    
+    virtual void resizeChild() = 0;
 
 protected:
     
@@ -33,13 +35,13 @@ protected:
     int sliderRow1CentreY;
     int sliderRow2CentreY;
     int sliderRow3CentreY;
-    
+
+    int sliderWidth, sliderHeight;
+    int sliderLabelWidth, sliderLabelHeight;
     
     juce::TextButton bypassSwitch;
+    PedalLookAndFeel lookAndFeel;
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pedal)
-    
-    
-    
 };

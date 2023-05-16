@@ -32,7 +32,7 @@ void DisplaySection::paint (juce::Graphics& g)
        drawing code..
     */
 
-    g.fillAll (juce::Colours::darkcyan);   // clear the background
+    g.fillAll (juce::Colours::darkorange);   // clear the background
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component

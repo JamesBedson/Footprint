@@ -14,9 +14,23 @@
 //==============================================================================
 DistortionPedal::DistortionPedal()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
+    for (auto& slider : sliders) {
+        addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    }
+    for (auto& label : sliderLabels){
+        addAndMakeVisible(label);
+        label->setJustificationType(juce::Justification::horizontallyCentred);
+    }
+    
+    toneLabel.attachToComponent    (&tone, false);
+    gainLabel.attachToComponent    (&gain, false);
+    levelLabel.attachToComponent   (&level, false);
+    
+    gainLabel.setText      ("Gain", juce::dontSendNotification);
+    toneLabel.setText      ("Tone", juce::dontSendNotification);
+    levelLabel.setText     ("Level", juce::dontSendNotification);
 }
 
 DistortionPedal::~DistortionPedal()
@@ -39,7 +53,7 @@ void DistortionPedal::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.4f); // Adjust the vertical position here
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
     g.drawText ("DistortionPedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
     
@@ -55,15 +69,6 @@ void DistortionPedal::paint (juce::Graphics& g)
     
     bottomCenter.setSize(rectWidth, rectHeight);
     bottomCenter.setCentre(sliderCol2CentreX, sliderRow2CentreY);
-    
-    g.setColour(juce::Colours::white);
-    g.drawEllipse(topLeft.toFloat(), 1.5f);
-    
-    g.setColour(juce::Colours::red);
-    g.drawEllipse(topRigth.toFloat(), 1.5f);
-    
-    g.setColour(juce::Colours::blue);
-    g.drawEllipse(bottomCenter.toFloat(), 1.5f);
         
     juce::Rectangle<float> led;
     led.setSize(7, 7);
@@ -71,3 +76,23 @@ void DistortionPedal::paint (juce::Graphics& g)
     g.fillEllipse(led);
 }
 
+void DistortionPedal::resizeChild()
+{
+    for (auto& slider : sliders)
+    {
+        slider->setSize(sliderWidth, sliderHeight);
+    }
+
+    tone.setCentrePosition(sliderCol1CentreX, sliderRow1CentreY);
+    level.setCentrePosition(sliderCol2CentreX, sliderRow2CentreY);
+    gain.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
+    
+    for (auto& label : sliderLabels){
+        
+        auto sliderBounds   = label->getAttachedComponent()->getBounds();
+        auto bottomX        = sliderBounds.getBottomLeft().getX();
+        auto bottomY        = sliderBounds.getBottomLeft().getY();
+        
+        label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
+    }
+}

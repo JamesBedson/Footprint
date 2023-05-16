@@ -14,9 +14,24 @@
 //==============================================================================
 EnvelopePedal::EnvelopePedal()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
+    for (auto& slider : sliders){
+        addAndMakeVisible(slider);
+        slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+        slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    }
+    
+    for (auto& label : sliderLabels){
+        addAndMakeVisible(label);
+        label->setJustificationType(juce::Justification::horizontallyCentred);
+    }
+    
+    qualityFactorLabel.attachToComponent    (&qualityFactor, false);
+    sensitivityLabel.attachToComponent    (&sensitivity, false);
+    cutoffThresholdLabel.attachToComponent   (&cutoffThreshold, false);
+    
+    qualityFactorLabel.setText      ("QualityFactor", juce::dontSendNotification);
+    sensitivityLabel.setText      ("Sensitivity", juce::dontSendNotification);
+    cutoffThresholdLabel.setText     ("CutoffThreshold", juce::dontSendNotification);
 }
 
 EnvelopePedal::~EnvelopePedal()
@@ -33,7 +48,33 @@ void EnvelopePedal::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.4f); // Adjust the vertical position here
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
     g.drawText ("EnvelopePedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
+    
+    juce::Rectangle<float> led;
+    led.setSize(7, 7);
+    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
+    g.fillEllipse(led);
 }
+
+void EnvelopePedal::resizeChild(){
+    
+    for (auto& slider : sliders){
+        slider->setSize(sliderWidth, sliderHeight);
+    }
+    
+    sensitivity.setCentrePosition(sliderCol1CentreX, sliderRow1CentreY);
+    qualityFactor.setCentrePosition(sliderCol2CentreX, sliderRow2CentreY);
+    cutoffThreshold.setCentrePosition(sliderCol3CentreX, sliderRow1CentreY);
+    
+    for (auto& label : sliderLabels){
+        
+        auto sliderBounds   = label->getAttachedComponent()->getBounds();
+        auto bottomX        = sliderBounds.getBottomLeft().getX();
+        auto bottomY        = sliderBounds.getBottomLeft().getY();
+        
+        label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
+    }
+}
+
