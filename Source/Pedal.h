@@ -41,6 +41,7 @@ protected:
     
     juce::TextButton bypassSwitch;
     PedalLookAndFeel lookAndFeel;
+    //ButtonLookAndFeel buttonlookAndFeel;
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pedal)
