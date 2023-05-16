@@ -35,6 +35,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
     const float sliderRange = rotaryEndAngle - rotaryStartAngle;
     const float angle = rotaryStartAngle + (sliderPos * sliderRange);
     const bool isMouseOver = slider.isMouseOverOrDragging() && slider.isEnabled();
+    const float outerRadius = radius * 0.83f;
 
     if (radius > 12.0f)
     {
@@ -47,7 +48,8 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
         const float thickness = 0.9f;
 
         juce::Path outlineArc;
-        outlineArc.addPieSegment(rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness + 0.07f);
+        outlineArc.addPieSegment(rx + (radius - outerRadius), ry + (radius - outerRadius), rw - (2.0f * (radius - outerRadius)), rw - (2.0f * (radius - outerRadius)), rotaryStartAngle, rotaryEndAngle, thickness + 0.07f);
+        //outlineArc.addPieSegment(rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness + 0.07f);
         outlineArc.closeSubPath();
         g.strokePath(outlineArc, juce::PathStrokeType(slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
 
@@ -62,7 +64,8 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
         //Inner part
         {
             juce::Path filledArc;
-            filledArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, angle, thickness);
+            filledArc.addPieSegment(rx + (radius - outerRadius), ry + (radius - outerRadius), rw - (2.0f * (radius - outerRadius)), rw - (2.0f * (radius - outerRadius)), rotaryStartAngle, angle, thickness);
+            //filledArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, angle, thickness);
             g.fillPath (filledArc);
         }
 
