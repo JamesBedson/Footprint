@@ -16,7 +16,7 @@
 //==============================================================================
 /*
 */
-class Pedal  : public juce::Component, public juce::Button::Listener
+class Pedal  : public juce::Component, public juce::Button::Listener, public juce::MouseListener
 {
 public:
     Pedal();
@@ -30,6 +30,8 @@ public:
     virtual void resizeChild() = 0;
 
     void buttonClicked(juce::Button* button)            override;
+    void mouseMove(const juce::MouseEvent& event)       override;
+    void mouseExit(const juce::MouseEvent& event)       override;
     void setSlot(int slot);
 
 protected:
@@ -53,6 +55,8 @@ protected:
     juce::Image         backgroundSlot3 = juce::ImageCache::getFromMemory(BinaryData::Slot3PurpleBlue_png, BinaryData::Slot3PurpleBlue_pngSize);
     
     int slot = 0;
+
+    bool isInside = false;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pedal)

@@ -71,8 +71,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
 
         {
             const float innerRadius = radius * 0.2f;
-            //p.addTriangle (-innerRadius, 0.0f, 0.0f, -radius * thickness * 1.1f, innerRadius, 0.0f);
-            //p.addEllipse(centreX, centreY, innerRadius * 6.0f, innerRadius * 6.0f);
+
 
             juce::Path ellipsePath;
             auto ellipseHeight = innerRadius * 7.0f;
