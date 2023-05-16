@@ -9,8 +9,6 @@
 */
 
 #pragma once
-<<<<<<< Updated upstream
-=======
 #include "AudioProcessingModule.h"
 #include <JuceHeader.h>
 using Matrix = std::vector<std::vector<double>>;
@@ -41,4 +39,3 @@ private:
     float qualityFactor;
     float sensitivity;
 };
->>>>>>> Stashed changes
