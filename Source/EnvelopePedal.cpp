@@ -43,16 +43,19 @@ EnvelopePedal::~EnvelopePedal()
     }
 }
 
-void EnvelopePedal::paintChild(juce::Graphics& g)
-{
-
+void EnvelopePedal::paintBackground(juce::Graphics& g){
+    
     g.setColour(juce::Colours::indianred);
     g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
     g.setColour(juce::Colours::indianred);
     g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
     g.setColour(juce::Colours::white);
     g.setFont(14.0f);
+}
 
+
+void EnvelopePedal::paintAdditionalComponents(juce::Graphics& g)
+{
     juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
     g.drawText ("EnvelopePedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
@@ -77,4 +80,3 @@ void EnvelopePedal::resizeChild(){
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
     }
 }
-

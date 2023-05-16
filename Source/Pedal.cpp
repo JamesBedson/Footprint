@@ -26,6 +26,7 @@ Pedal::~Pedal()
 
 void Pedal::paint (juce::Graphics& g)
 {
+    paintBackground(g);
     juce::Rectangle<float> led;
     led.setSize(7, 7);
     led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
@@ -34,7 +35,7 @@ void Pedal::paint (juce::Graphics& g)
         g.setColour(juce::Colours::red);
     }
     g.fillEllipse(led);
-    paintChild(g);
+    paintAdditionalComponents(g);
 }
 
 

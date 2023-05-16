@@ -44,32 +44,12 @@ ReverbPedal::~ReverbPedal()
     }
 }
 
-void ReverbPedal::paintChild(juce::Graphics& g)
+void ReverbPedal::paintAdditionalComponents(juce::Graphics& g)
 {
-
-    g.setColour(juce::Colours::hotpink);
-    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
-    g.setColour(juce::Colours::hotpink);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
-    g.setColour(juce::Colours::white);
-    g.setFont(14.0f);
-
     juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
     g.drawText ("ReverbPedal", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
 
-    juce::Rectangle<int> topLeft, topRigth, bottomCenter;
-    auto rectWidth = 10;
-    auto rectHeight = 10;
-
-    topLeft.setSize(rectWidth, rectHeight);
-    topLeft.setCentre(sliderCol1CentreX, sliderRow1CentreY);
-
-    topRigth.setSize(rectWidth, rectHeight);
-    topRigth.setCentre(sliderCol3CentreX, sliderRow1CentreY);
-
-    bottomCenter.setSize(rectWidth, rectHeight);
-    bottomCenter.setCentre(sliderCol2CentreX, sliderRow2CentreY);   
 }
 
 void ReverbPedal::resizeChild(){
@@ -94,4 +74,15 @@ void ReverbPedal::resizeChild(){
 
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
     }
+}
+
+void ReverbPedal::paintBackground(juce::Graphics& g){
+    
+    g.setColour(juce::Colours::hotpink);
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::hotpink);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    g.setColour(juce::Colours::white);
+    g.setFont(14.0f);
+    
 }
