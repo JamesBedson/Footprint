@@ -18,7 +18,7 @@ class EnvelopeFilter : AudioProcessingModule {
 public:
     EnvelopeFilter();
     ~EnvelopeFilter() override;
-    
+
     void prepare(double sampleRate, int samplePerBlock) override;
     void processBlock(juce::AudioBuffer<float>& buffer,
         juce::MidiBuffer& midiMessages, double sampleRate) override;
@@ -26,7 +26,7 @@ public:
     void setSampleRate(double s) {
         if (s > 0) { sampleRate = s; }
     }
-    
+
     void setQualityFactor(float q) {
         if (q >= 0) { qualityFactor = q; }
     }
@@ -51,21 +51,25 @@ public:
         if (w > 0) { windowSize = w; }
     }
 
-
+    //void setWindow() {
+    //for (int i = 0; i < windowSize; i++) { window[i] = 0.0; }
+    //}
 
     Matrix getLPFCoefficients();
-    juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>&buffer);
+    juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer);
+    juce::AudioBuffer<float> applyLPF(juce::AudioBuffer<float> buffer, Matrix ba);
 
 private:
+
     double sampleRate;
     float qualityFactor;
     float sensitivity;
 
-    
+
     double cutoff1;
     double thresholdMinFreq;
     double nyquist;
     int windowSize;
     //std::vector<double>& window;
-    
+
 };
