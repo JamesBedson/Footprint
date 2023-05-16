@@ -25,10 +25,10 @@ EditorLookAndFeel::~EditorLookAndFeel()
 void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider)
 {
     const float radius = fmin ((float) width * 0.5f, (float) height * 0.5f) - 2.0f;
-    const float centreX = (float) x + (float) width * 0.5f;
-    const float centreY = (float) y + (float) height * 0.5f;
-    const float rx = centreX - radius;
-    const float ry = centreY - radius;
+    const float centerX = (float) x + (float) width * 0.5f;
+    const float centerY = (float) y + (float) height * 0.5f;
+    const float rx = centerX - radius;
+    const float ry = centerY - radius;
     const float rw = radius * 2.0f;
     const float angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
     const bool isMouseOver = slider.isMouseOverOrDragging() && slider.isEnabled();
@@ -51,18 +51,23 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
         
         {
             const float innerRadius = radius * 0.2f;
-            juce::Path p;
-            juce::Line<float> line (juce::Point<float> (10, 10), juce::Point<float> (50, 50));
-            p.addLineSegment(line, 2);
-            //p.addTriangle (-innerRadius, 0.0f, 0.0f, -radius * thickness * 1.1f, innerRadius, 0.0f);
+            juce::Path ellipse1Path;
             
-            p.addEllipse (-innerRadius, -innerRadius, innerRadius * 2.0f, innerRadius * 2.0f);
+            auto ellipseHeight = innerRadius * 8.0f;
+            auto ellipseWidth = innerRadius * 8.0f;
+            ellipse1Path.addEllipse(centerX - (ellipseHeight * 0.5f), centerY - (ellipseWidth * 0.5f), ellipseHeight, ellipseWidth);
+            g.setColour(juce::Colours::white);
+            g.fillPath (ellipse1Path);
             
-            g.fillPath (p, juce::AffineTransform::rotation (angle).translated (centreX, centreY));
+            juce::Path ellipse2Path;
+            
+            ellipse2Path.addEllipse(centerX - (ellipseHeight * 0.5f), centerY - (ellipseWidth * 0.5f), innerRadius * 0.8f, innerRadius * 0.8f);
+            g.setColour(juce::Colours::black);
+            g.fillPath(ellipse2Path, juce::AffineTransform::rotation(angle-90.2f).translated(centerX, centerY));
         }
         
         //Outer part
-        if (slider.isEnabled())
+        /*if (slider.isEnabled())
             g.setColour (slider.findColour (juce::Slider::rotarySliderOutlineColourId));
         else
             g.setColour (juce::Colours::red);
@@ -71,7 +76,7 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
         outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
         outlineArc.closeSubPath();
         
-        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
+        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));*/
     }
 }
 
