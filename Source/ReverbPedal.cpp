@@ -39,6 +39,9 @@ ReverbPedal::ReverbPedal()
 
 ReverbPedal::~ReverbPedal()
 {
+    for (auto* slider : sliders){
+        slider->setLookAndFeel(nullptr);
+    }
 }
 
 void ReverbPedal::paint (juce::Graphics& g)

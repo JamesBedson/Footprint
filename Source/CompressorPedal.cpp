@@ -41,8 +41,9 @@ CompressorPedal::CompressorPedal()
 
 CompressorPedal::~CompressorPedal()
 {
-    
-    
+    for (auto* slider : sliders){
+        slider->setLookAndFeel(nullptr);
+    }
 }
 
 void CompressorPedal::paint (juce::Graphics& g)
