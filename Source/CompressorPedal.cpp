@@ -46,18 +46,12 @@ CompressorPedal::~CompressorPedal()
     }
 }
 
-void CompressorPedal::paintChild(juce::Graphics& g)
+void CompressorPedal::paintAdditionalComponents(juce::Graphics& g)
 {
-    g.setColour(juce::Colours::sandybrown);
-    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
-    g.setColour(juce::Colours::sandybrown);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
-    g.setColour(juce::Colours::white);
-    g.setFont(14.0f);
-
-    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
-    g.drawText("CompressorPedal", textBounds,
-        juce::Justification::centred, true);   // draw some placeholder text
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); 
+    g.drawText("CompressorPedal",
+               textBounds,
+               juce::Justification::centred, true);
 }
 
 void CompressorPedal::resizeChild(){
@@ -80,5 +74,16 @@ void CompressorPedal::resizeChild(){
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
         
     }
+    
+}
+
+void CompressorPedal::paintBackground(juce::Graphics &g){
+    g.setColour(juce::Colours::sandybrown);
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::sandybrown);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    g.setColour(juce::Colours::white);
+    g.setFont(14.0f);
+
     
 }
