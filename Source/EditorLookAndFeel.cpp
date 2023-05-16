@@ -22,30 +22,77 @@ EditorLookAndFeel::EditorLookAndFeel()
 EditorLookAndFeel::~EditorLookAndFeel()
 {
 }
-
-void EditorLookAndFeel::paint (juce::Graphics& g)
+void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
+    const float radius = fmin ((float) width * 0.5f, (float) height * 0.5f) - 2.0f;
+    const float centerX = (float) x + (float) width * 0.5f;
+    const float centerY = (float) y + (float) height * 0.5f;
+    const float rx = centerX - radius;
+    const float ry = centerY - radius;
+    const float rw = radius * 2.0f;
+    const float angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
+    const bool isMouseOver = slider.isMouseOverOrDragging() && slider.isEnabled();
+    const float outerRadius = radius * 0.9f;
 
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-    g.drawText ("EditorLookAndFeel", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    if (radius > 12.0f)
+    {
+        if (slider.isEnabled())
+            g.setColour (juce::Colours::white.darker().darker());
+        else
+            g.setColour (juce::Colours::red);
+        
+        const float thickness = 0.95f;
+        
+        juce::Path outlineArc;
+        outlineArc.addPieSegment(rx + (radius - outerRadius), ry + (radius - outerRadius), rw - (2.0f * (radius - outerRadius)), rw - (2.0f * (radius - outerRadius)), rotaryStartAngle, rotaryEndAngle, thickness + 0.02f);
+        //outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness+0.02);
+        outlineArc.closeSubPath();
+        
+        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));
+        
+        if (slider.isEnabled())
+            g.setColour (juce::Colours::white);
+        else
+            g.setColour (juce::Colours::red);
+        
+        //const float thickness = 0.9f;
+        
+        //Inner part
+        {
+            juce::Path filledArc;
+            filledArc.addPieSegment(rx + (radius - outerRadius), ry + (radius - outerRadius), rw - (2.0f * (radius - outerRadius)), rw - (2.0f * (radius - outerRadius)), rotaryStartAngle, angle, thickness);
+            //filledArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, angle, thickness);
+            g.fillPath (filledArc);
+        }
+        
+        {
+            const float innerRadius = radius * 0.2f;
+            juce::Path ellipse1Path;
+            
+            auto ellipseHeight = innerRadius * 8.0f;
+            auto ellipseWidth = innerRadius * 8.0f;
+            ellipse1Path.addEllipse(centerX - (ellipseHeight * 0.5f), centerY - (ellipseWidth * 0.5f), ellipseHeight, ellipseWidth);
+            g.setColour(juce::Colours::white);
+            g.fillPath (ellipse1Path);
+            
+            juce::Path ellipse2Path;
+            
+            ellipse2Path.addEllipse(centerX - (ellipseHeight * 0.5f), centerY - (ellipseWidth * 0.5f), innerRadius * 0.8f, innerRadius * 0.8f);
+            g.setColour(juce::Colours::black);
+            g.fillPath(ellipse2Path, juce::AffineTransform::rotation(angle-90.2f).translated(centerX, centerY));
+        }
+        
+        //Outer part
+        /*if (slider.isEnabled())
+            g.setColour (juce::Colours::white.darker());
+        else
+            g.setColour (juce::Colours::red);
+        
+        juce::Path outlineArc;
+        outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
+        outlineArc.closeSubPath();
+        
+        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));*/
+    }
 }
 
-void EditorLookAndFeel::resized()
-{
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-
-}

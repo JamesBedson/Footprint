@@ -5,6 +5,12 @@
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
       <GROUP id="{C23AE629-B8F6-997A-3B6D-29BBBBA3E068}" name="DSP">
+        <FILE id="mYfNXO" name="DistortionDSP.cpp" compile="1" resource="0"
+              file="Source/DistortionDSP.cpp"/>
+        <FILE id="QylQje" name="DistortionDSP.h" compile="0" resource="0" file="Source/DistortionDSP.h"/>
+        <FILE id="Sgap8m" name="CompressorDSP.cpp" compile="1" resource="0"
+              file="Source/CompressorDSP.cpp"/>
+        <FILE id="dVabnS" name="CompressorDSP.h" compile="0" resource="0" file="Source/CompressorDSP.h"/>
         <FILE id="hIvEzz" name="AudioProcessingModule.cpp" compile="1" resource="0"
               file="Source/AudioProcessingModule.cpp"/>
         <FILE id="nynLSk" name="AudioProcessingModule.h" compile="0" resource="0"
@@ -28,6 +34,10 @@
               file="Source/ControlSection.h"/>
       </GROUP>
       <GROUP id="{E4B74972-FAAA-9BE8-F516-73B3C28081DE}" name="Pedals">
+        <FILE id="tRIsxg" name="ButtonLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/ButtonLookAndFeel.cpp"/>
+        <FILE id="FZAFEd" name="ButtonLookAndFeel.h" compile="0" resource="0"
+              file="Source/ButtonLookAndFeel.h"/>
         <FILE id="HzZCo5" name="EnvelopePedal.cpp" compile="1" resource="0"
               file="Source/EnvelopePedal.cpp"/>
         <FILE id="vEM7H1" name="EnvelopePedal.h" compile="0" resource="0" file="Source/EnvelopePedal.h"/>
