@@ -15,6 +15,7 @@
 Pedal::Pedal()
 {
     addAndMakeVisible(bypassSwitch);
+
     bypassSwitch.setLookAndFeel(&pedalLookAndFeel);
     bypassSwitch.addListener(this);
 }
