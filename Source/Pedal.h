@@ -16,7 +16,7 @@
 //==============================================================================
 /*
 */
-class Pedal  : public juce::Component, public juce::Button::Listener, public juce::MouseListener
+class Pedal : public juce::Component, public juce::Button::Listener, public juce::MouseListener
 {
 public:
     Pedal();
