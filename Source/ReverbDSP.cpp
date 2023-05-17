@@ -40,12 +40,17 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-    
     juce::dsp::AudioBlock<float> block{ buffer };                                   // Create a block referencing the audio buffer
 
-
     for (int channel = 0; channel < block.getNumChannels(); ++channel) {            // Traverse channels. Mono reverb will be applied to each channel
-        auto* channelData = block.getChannelPointer(channel); 
-        //Now call reverb processing function (&channelData) - to be created
+        monoChannel = block.getSingleChannelBlock(channel);
+        processedMonoChannel = processMono(monoChannel, midiMessages, sampleRate);
+        processedMonoChannel.copyTo(buffer);
     }
+}
+
+juce::dsp::AudioBlock<float> Reverb::processMono(juce::dsp::AudioBlock<float> channelData, juce::MidiBuffer& midiMessages, double sampleRate) {
+    
+    
+    return channelData;
 }
