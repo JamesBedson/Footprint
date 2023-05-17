@@ -23,7 +23,7 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock){
     
 }
 
-void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages, double sampleRate){
     /*Some notes on implementation:
     The number of samples in these buffers is NOT guaranteed to be the same for every callback,
     and may be more or less than the estimated value given to prepareToPlay(). Your code must be able
