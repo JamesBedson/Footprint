@@ -42,37 +42,14 @@ DistortionPedal::~DistortionPedal()
     }
 }
 
-void DistortionPedal::paint (juce::Graphics& g)
+void DistortionPedal::paintAdditionalComponents(juce::Graphics& g)
 {
-    g.setColour(juce::Colours::lightseagreen);
-    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
-    g.setColour(juce::Colours::lightseagreen);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
-    g.setColour(juce::Colours::white);
-    g.setFont(14.0f);
 
-    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
-    g.drawText ("DistortionPedal", textBounds,
-                juce::Justification::centred, true);   // draw some placeholder text
-    
-    juce::Rectangle<int> topLeft, topRigth, bottomCenter;
-    auto rectWidth = 10;
-    auto rectHeight = 10;
-    
-    topLeft.setSize(rectWidth, rectHeight);
-    topLeft.setCentre(sliderCol1CentreX, sliderRow1CentreY);
-    
-    topRigth.setSize(rectWidth, rectHeight);
-    topRigth.setCentre(sliderCol3CentreX, sliderRow1CentreY);
-    
-    bottomCenter.setSize(rectWidth, rectHeight);
-    bottomCenter.setCentre(sliderCol2CentreX, sliderRow2CentreY);
-        
-    juce::Rectangle<float> led;
-    led.setSize(7, 7);
-    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
-    g.fillEllipse(led);
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); 
+    g.drawText("DistortionPedal", textBounds,
+        juce::Justification::centred, true);
 }
+
 
 void DistortionPedal::resizeChild()
 {
@@ -93,4 +70,26 @@ void DistortionPedal::resizeChild()
         
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
     }
+}
+
+void DistortionPedal::paintBackground(juce::Graphics& g){
+    
+    if (slot == 1){
+        g.drawImage(backgroundSlot1, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 2){
+        g.drawImage(backgroundSlot2, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 3){
+        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else if (slot == 4){
+        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+    } else {
+        return;
+    }
+    /*
+    g.setColour(juce::Colours::lightseagreen);
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::lightseagreen);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    g.setColour(juce::Colours::white);
+    g.setFont(14.0f);*/
 }

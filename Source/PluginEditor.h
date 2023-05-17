@@ -30,10 +30,13 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    FootprintAudioProcessor& audioProcessor;
-    DisplaySection displaySection;
-    PedalSection pedalSection;
-    ControlSection controlSection;
-
+    FootprintAudioProcessor&    audioProcessor;
+    DisplaySection              displaySection;
+    PedalSection                pedalSection;
+    ControlSection              controlSection;
+    
+    juce::Image                 background = juce::ImageCache::getFromMemory(BinaryData::backgroundPurpleBlue_png,
+                                                                             BinaryData::backgroundPurpleBlue_pngSize);
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessorEditor)
 };

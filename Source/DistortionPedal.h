@@ -21,10 +21,11 @@ class DistortionPedal  : public Pedal
 {
 public:
     DistortionPedal();
-    ~DistortionPedal()              override;
+    ~DistortionPedal()                                  override;
 
-    void paint (juce::Graphics&)    override;
-    void resizeChild()              override;
+    void paintBackground(juce::Graphics&)               override;
+    void paintAdditionalComponents(juce::Graphics&)     override;
+    void resizeChild()                                  override;
 
 private:
     

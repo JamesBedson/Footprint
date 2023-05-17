@@ -16,16 +16,23 @@
 //==============================================================================
 /*
 */
-class Pedal  : public juce::Component
+class Pedal  : public juce::Component, public juce::Button::Listener, public juce::MouseListener
 {
 public:
     Pedal();
-    ~Pedal()                            override;
+    ~Pedal()                                            override;
 
-    void paint (juce::Graphics&)        override;
-    void resized()                      override;
+    void paint (juce::Graphics&)                        override;
+    void resized()                                      override;
     
+    virtual void paintBackground(juce::Graphics&) = 0;
+    virtual void paintAdditionalComponents(juce::Graphics&) = 0;
     virtual void resizeChild() = 0;
+
+    void buttonClicked(juce::Button* button)            override;
+    void mouseMove(const juce::MouseEvent& event)       override;
+    void mouseExit(const juce::MouseEvent& event)       override;
+    void setSlot(int slot);
 
 protected:
     
@@ -40,9 +47,17 @@ protected:
     int sliderWidth, sliderHeight;
     int sliderLabelWidth, sliderLabelHeight;
     
-    juce::TextButton bypassSwitch;
-    PedalLookAndFeel pedalLookAndFeel;
-  
+    juce::ToggleButton  bypassSwitch;
+    PedalLookAndFeel    pedalLookAndFeel;
+    
+    juce::Image         backgroundSlot1 = juce::ImageCache::getFromMemory(BinaryData::Slot1PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
+    juce::Image         backgroundSlot2 = juce::ImageCache::getFromMemory(BinaryData::Slot2PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
+    juce::Image         backgroundSlot3 = juce::ImageCache::getFromMemory(BinaryData::Slot3PurpleBlue_png, BinaryData::Slot3PurpleBlue_pngSize);
+    
+    int slot = 0;
+
+    bool isInside = false;
+
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pedal)
 };

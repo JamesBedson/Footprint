@@ -32,8 +32,8 @@ public:
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PedalSection)
     
-    CompressorPedal CompressorPedal;
-    ReverbPedal ReverbPedal;
-    EnvelopePedal EnvelopePedal;
-    DistortionPedal DistortionPedal;
+    CompressorPedal     compressorPedal;
+    ReverbPedal         reverbPedal;
+    EnvelopePedal       envelopePedal;
+    DistortionPedal     distortionPedal;
 };
