@@ -22,6 +22,6 @@ void Compressor::prepare(double sampleRate, int samplesPerBlock){
     
 }
 
-void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages, double sampleRate){
     
 }

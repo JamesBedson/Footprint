@@ -22,6 +22,6 @@ void Distortion::prepare(double sampleRate, int samplesPerBlock){
     
 }
 
-void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages, double sampleRate){
     
 }
