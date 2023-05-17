@@ -8,9 +8,6 @@
   ==============================================================================
 */
 
-<<<<<<< Updated upstream
-#include "Envelope.h"
-=======
 #include "EnvelopeFilter.h"
 
 
@@ -62,7 +59,9 @@ juce::AudioBuffer<float> EnvelopeFilter::getAmplitudeEnvelope(const juce::AudioB
     for (std::vector<double>& c : ba) { for (double& element : c) { element = element / ba[1][0]; } }
 
     juce::IIRCoefficients c = juce::IIRCoefficients::makeLowPass(sampleRate, cutoff);
-
-
+    
+    // Added so code does not crash
+    juce::AudioBuffer<float> fix;
+    return fix;
 }
->>>>>>> Stashed changes
+

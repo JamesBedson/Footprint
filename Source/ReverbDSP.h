@@ -22,5 +22,7 @@ public:
     void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) override;
 
 private:
+
+
     
 };
