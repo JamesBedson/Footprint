@@ -9,3 +9,19 @@
 */
 
 #include "ReverbDSP.h"
+
+Reverb::Reverb(){
+    
+}
+
+Reverb::~Reverb(){
+    
+}
+
+void Reverb::prepare(double sampleRate, int samplesPerBlock){
+    
+}
+
+void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+    
+}
