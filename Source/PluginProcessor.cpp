@@ -95,6 +95,9 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    sp_rt = sampleRate;
+    reverb.prepare(sampleRate, samplesPerBlock);
+    
 }
 
 void FootprintAudioProcessor::releaseResources()
@@ -137,7 +140,8 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-    
+        
+    reverb.processBlock(buffer, midiMessages, sp_rt);
     
 }
 

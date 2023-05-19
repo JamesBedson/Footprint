@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "ReverbDSP.h"
 
 //==============================================================================
 /**
@@ -59,4 +60,7 @@ public:
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessor)
+    
+    int sp_rt;
+    Reverb reverb;
 };
