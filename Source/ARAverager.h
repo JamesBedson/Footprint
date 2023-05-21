@@ -1,32 +1,35 @@
 /*
   ==============================================================================
 
-    CompressorDSP.h
-    Created: 15 May 2023 6:48:31pm
+    ARAverager.h
+    Created: 21 May 2023 7:34:51pm
     Author:  James Bedson
 
   ==============================================================================
 */
 
 #pragma once
-#include "AudioProcessingModule.h"
-#include "ARAverager.h"
 #include <JuceHeader.h>
+#include "AudioProcessingModule.h"
+#define MIN_TIME_CONST 0.000001
 
-class Compressor : AudioProcessingModule {
+class ARAverager : public AudioProcessingModule{
     
 public:
-    Compressor();
-    ~Compressor() override;
+    
+    ARAverager();
+    ~ARAverager() override;
     
     void prepare(double sampleRate, int samplesPerBlock, int numChannels) override;
     void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) override;
-
+    
+    void setAttack(double attack);
+    void setRelease(double release);
+    
 private:
     
-    ARAverager attackReleaseAverager;
+    double              attack, release;
+    double              alphaA, alphaR;
+    std::vector<float>  previousOuts;
     
 };
-
-
-

@@ -19,9 +19,9 @@ public:
     EnvelopeFilter();
     ~EnvelopeFilter() override;
 
-    void prepare(double sampleRate, int samplePerBlock) override;
+    void prepare(double sampleRate, int samplePerBlock, int numChannels) override;
     void processBlock(juce::AudioBuffer<float>& buffer,
-        juce::MidiBuffer& midiMessages, double sampleRate) override;
+        juce::MidiBuffer& midiMessages) override;
 
     void setSampleRate(double s) {
         if (s > 0) { sampleRate = s; }
