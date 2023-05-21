@@ -23,13 +23,16 @@ public:
     void prepare(double sampleRate, int samplesPerBlock, int numChannels) override;
     void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) override;
     
-    void setAttack(double attack);
-    void setRelease(double release);
+    void setAttack(juce::Atomic<float>* attack);
+    void setRelease(juce::Atomic<float>* release);
     
 private:
+    juce::Atomic<float>*    attack;
+    juce::Atomic<float>*    release;
     
-    double              attack, release;
-    double              alphaA, alphaR;
-    std::vector<float>  previousOuts;
+    double                  alphaA, alphaR;
+    double                  sampleRate;
+    std::vector<float>      previousOuts;
+    
     
 };
