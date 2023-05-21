@@ -20,8 +20,7 @@ ARAverager::~ARAverager(){
 
 void ARAverager::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     
-    alphaA = std::exp(-1.f / (sampleRate * attack));
-    alphaR = std::exp(-1.f / (sampleRate * release));
+    this->sampleRate = sampleRate;
     
     previousOuts.resize(numChannels);
     
@@ -31,7 +30,10 @@ void ARAverager::prepare(double sampleRate, int samplesPerBlock, int numChannels
     
 }
 
-void ARAverager::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+void ARAverager::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer&){
+    
+    alphaA = std::exp(-1.f / (sampleRate * attack->get()));
+    alphaR = std::exp(-1.f / (sampleRate * release->get()));
     
     for (int ch = 0; ch < buffer.getNumChannels(); ch++){
         
@@ -47,17 +49,14 @@ void ARAverager::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
             else alphaToUse = alphaR;
             
             channelWritePTR[n] = (1 - alphaToUse) * channelReadPtr[n] + alphaToUse * previousOuts[ch];
-            juce::dsp::IIR::Coefficients<float> coeffs;
         }
     }
 }
 
-void ARAverager::setAttack(double attack){
-    jassert(attack > MIN_TIME_CONST);
+void ARAverager::setAttack(juce::Atomic<float>* attack){
     this->attack    = attack;
 }
 
-void ARAverager::setRelease(double release){
-    jassert(release > MIN_TIME_CONST);
+void ARAverager::setRelease(juce::Atomic<float>* release){
     this->release   = release;
 }
