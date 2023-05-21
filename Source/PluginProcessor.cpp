@@ -93,8 +93,9 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    arAverager.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+    arAverager.setAttack(0.0001);
+    arAverager.setRelease(0.0001);
 }
 
 void FootprintAudioProcessor::releaseResources()
@@ -138,6 +139,7 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
+    arAverager.processBlock(buffer, midiMessages);
     
 }
 

@@ -18,12 +18,12 @@ Reverb::~Reverb(){
     
 }
 
-void Reverb::prepare(double sampleRate, int samplesPerBlock){
+void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     //Setup before execution. Executed when play is pressed
     
 }
 
-void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages, double sampleRate){
+void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
     /*Some notes on implementation:
     The number of samples in these buffers is NOT guaranteed to be the same for every callback,
     and may be more or less than the estimated value given to prepareToPlay(). Your code must be able
@@ -44,13 +44,12 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
     for (int channel = 0; channel < block.getNumChannels(); ++channel) {            // Traverse channels. Mono reverb will be applied to each channel
         monoChannel = block.getSingleChannelBlock(channel);
-        processedMonoChannel = processMono(monoChannel, midiMessages, sampleRate);
+        //processedMonoChannel = processMono(monoChannel, midiMessages, sampleRate);
         processedMonoChannel.copyTo(buffer);
     }
 }
 
 juce::dsp::AudioBlock<float> Reverb::processMono(juce::dsp::AudioBlock<float> channelData, juce::MidiBuffer& midiMessages, double sampleRate) {
-    
     
     return channelData;
 }

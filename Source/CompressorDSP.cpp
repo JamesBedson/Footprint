@@ -18,10 +18,14 @@ Compressor::~Compressor(){
     
 }
 
-void Compressor::prepare(double sampleRate, int samplesPerBlock){
+void Compressor::prepare(double sampleRate, int samplesPerBlock, int numChannels){
+    
+    attackReleaseAverager.prepare(sampleRate, samplesPerBlock, numChannels);
     
 }
 
-void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages, double sampleRate){
+void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+    
+    
     
 }

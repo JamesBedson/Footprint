@@ -18,10 +18,10 @@ Distortion::~Distortion(){
     
 }
 
-void Distortion::prepare(double sampleRate, int samplesPerBlock){
+void Distortion::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     
 }
 
-void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages, double sampleRate){
+void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
     
 }
