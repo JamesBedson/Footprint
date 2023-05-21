@@ -94,8 +94,8 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     arAverager.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
-    arAverager.setAttack(0.0001);
-    arAverager.setRelease(0.0001);
+    arAverager.setAttack(0.01);
+    arAverager.setRelease(0.01);
 }
 
 void FootprintAudioProcessor::releaseResources()
