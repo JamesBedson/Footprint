@@ -26,14 +26,14 @@ public:
     void setAttack(juce::Atomic<float>* attackPtr);
     void setRelease(juce::Atomic<float>* releasePtr);
     void setThreshold(juce::Atomic<float>* thresholdPtr);
-    void setRatio(juce::Atomic<float>* ratioPtr);
+    void setRatio(juce::Atomic<int>* ratioPtr);
 
 private:
     
     juce::Atomic<float>* attack;
     juce::Atomic<float>* release;
     juce::Atomic<float>* threshold;
-    juce::Atomic<float>* ratio;
+    juce::Atomic<int>* ratio;
     ARAverager attackReleaseAverager;
     
     void computeStaticCurve(juce::AudioBuffer<float>&);

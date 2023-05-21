@@ -20,6 +20,8 @@ Compressor::~Compressor(){
 
 void Compressor::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     
+    attackReleaseAverager.setAttack(attack);
+    attackReleaseAverager.setRelease(release);
     attackReleaseAverager.prepare(sampleRate, samplesPerBlock, numChannels);
     
     
@@ -86,7 +88,7 @@ void Compressor::setRelease(juce::Atomic<float> *releasePtr){
     this->release = releasePtr;
 }
 
-void Compressor::setRatio(juce::Atomic<float> *ratioPtr){
+void Compressor::setRatio(juce::Atomic<int> *ratioPtr){
     this->ratio = ratioPtr;
 }
 
