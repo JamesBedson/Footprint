@@ -9,16 +9,20 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "ARAverager.h"
+#include "CompressorDSP.h"
 //==============================================================================
 /**
 */
+
+using APVTS = juce::AudioProcessorValueTreeState;
+
 class FootprintAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
 {
 public:
+    
     //==============================================================================
     FootprintAudioProcessor();
     ~FootprintAudioProcessor() override;
@@ -55,11 +59,21 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-
+    
+    APVTS apvts {*this, nullptr, "Pedal Parameters", createParameters()};
+    
 private:
+    APVTS::ParameterLayout createParameters();
+    void updateParameters();
+    
+    juce::Atomic<float> compressorAttack;
+    juce::Atomic<float> compressorRelease;
+    juce::Atomic<float> compressorThreshold;
+    juce::Atomic<int> compressorRatio;
+    
+    Compressor compressor;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessor)
-    
-    ARAverager arAverager;
     
 };

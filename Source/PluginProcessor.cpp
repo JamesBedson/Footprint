@@ -22,6 +22,11 @@ FootprintAudioProcessor::FootprintAudioProcessor()
                        )
 #endif
 {
+    updateParameters();
+    compressor.setRatio(&compressorRatio);
+    compressor.setAttack(&compressorAttack);
+    compressor.setRelease(&compressorRelease);
+    compressor.setThreshold(&compressorThreshold);
 }
 
 FootprintAudioProcessor::~FootprintAudioProcessor()
@@ -93,7 +98,8 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    arAverager.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+    updateParameters();
+    compressor.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
 }
 
 void FootprintAudioProcessor::releaseResources()
@@ -137,7 +143,9 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    arAverager.processBlock(buffer, midiMessages);
+    updateParameters();
+    compressor.processBlock(buffer, midiMessages);
+    
     
 }
 
@@ -172,3 +180,44 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new FootprintAudioProcessor();
 }
+
+APVTS::ParameterLayout FootprintAudioProcessor::createParameters(){
+    
+    auto attack = std::make_unique<juce::AudioParameterFloat>
+    (juce::ParameterID {"Compressor_Attack", 1},
+     "Compressor_Attack",
+     juce::NormalisableRange<float>(0.001f, 0.5f, 0.002f, 1.f),
+     0.01f);
+    
+    auto release = std::make_unique<juce::AudioParameterFloat>
+    (juce::ParameterID {"Compressor_Release", 2},
+     "Compressor_Release",
+     juce::NormalisableRange<float>(0.001f, 0.5f, 0.002f, 1.f),
+     0.01f);
+    
+    auto threshold = std::make_unique<juce::AudioParameterFloat>
+    (juce::ParameterID {"Compressor_Threshold", 3},
+     "Compressor_Threshold",
+     juce::NormalisableRange<float>(-80.f, 20.f, 0.1f, 1.f),
+     -35.f);
+    
+    auto ratio = std::make_unique<juce::AudioParameterInt>
+    (juce::ParameterID {"Compressor_Ratio", 4},
+     "Compressor_Ratio",
+     1,
+     15,
+     10);
+    
+    return {std::move(attack), std::move(release), std::move(threshold), std::move(ratio)};
+}
+
+
+void FootprintAudioProcessor::updateParameters(){
+    
+    compressorAttack.set(apvts.getRawParameterValue("Compressor_Attack")->load());
+    compressorRelease.set(apvts.getRawParameterValue("Compressor_Release")->load());
+    compressorThreshold.set(apvts.getRawParameterValue("Compressor_Threshold")->load());
+    compressorRatio.set(apvts.getRawParameterValue("Compressor_Threshold")->load());
+    
+}
+
