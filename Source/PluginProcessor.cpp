@@ -149,7 +149,7 @@ bool FootprintAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     //////////////////////////////////////////////// input WAVEFORM VIEWER //////////////////////////////////////////////////
-    displaySection->inputWaveform.pushBuffer(buffer);
+    //displaySection->inputWaveform.pushBuffer(buffer);
     
     /////////////////////////////////////////////INPUT RMS LEVEL METER//////////////////////////////////////////////////
     juce::ScopedNoDenormals noInDenormals;

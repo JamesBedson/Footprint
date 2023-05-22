@@ -31,8 +31,8 @@ DisplaySection::DisplaySection()
         outputWaveform.setBufferSize(int(bufferSizeView.getValue())*120);
     };
     
-    inputWaveform.setColours(juce::Colours::black.withAlpha(0.5f), juce::Colours::white.withAlpha(0.7f));
-    outputWaveform.setColours(juce::Colours::transparentBlack.withAlpha(0.5f), juce::Colours::white.withAlpha(0.7f));
+    inputWaveform.setColours(juce::Colours::white.withBrightness(0.5f), juce::Colours::black);
+    outputWaveform.setColours(juce::Colours::white, juce::Colours::black);
     
 }
 
@@ -60,8 +60,9 @@ void DisplaySection::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
-    inputWaveform.setBounds(470, 50, 400, 100);
-    outputWaveform.setBounds(470, 160, 400, 100);
+    inputWaveform.setBounds(140, 18, 500, 100);
+    outputWaveform.setBounds(140, 125, 500, 100);
+    
     
     bufferSizeView.setBounds(900, 155, 400, 100);
 

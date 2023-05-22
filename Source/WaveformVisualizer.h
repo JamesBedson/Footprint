@@ -17,7 +17,5 @@ class WaveformVisualizer : public juce::AudioVisualiserComponent
 public:
     WaveformVisualizer();
     ~WaveformVisualizer();
-    
-    
-    
+
 };
