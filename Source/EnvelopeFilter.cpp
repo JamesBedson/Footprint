@@ -23,7 +23,7 @@ void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock) {
 }
 
 void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
-    juce::MidiBuffer& midiMessages, double sampleRate) {
+    juce::MidiBuffer& midiMessages) {
 
     juce::AudioBuffer<float> ampBuffer = getAmplitudeEnvelope(buffer);
 
