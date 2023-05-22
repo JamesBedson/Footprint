@@ -20,8 +20,10 @@ FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProc
     addAndMakeVisible(displaySection);
     addAndMakeVisible(pedalSection);
     addAndMakeVisible(controlSection);
-    addAndMakeVisible(levelMeterLeft);
-    addAndMakeVisible(levelMeterRight);
+    addAndMakeVisible(levelInMeterLeft);
+    addAndMakeVisible(levelInMeterRight);
+    addAndMakeVisible(levelOutMeterLeft);
+    addAndMakeVisible(levelOutMeterRight);
     setSize (1100, 700);
     startTimerHz(24);
 }
@@ -76,16 +78,24 @@ void FootprintAudioProcessorEditor::resized()
     controlSection.setSize(controlSectionWidth, controlSectionHeight);
     controlSection.setTopLeftPosition(controlSectionTopLeftX, controlSectionTopLeftY);
 
-    levelMeterLeft.setBounds(350, 50, 15, 210);
-    levelMeterRight.setBounds(370, 50, 15, 210);
+    levelInMeterLeft.setBounds(350, 50, 15, 210);
+    levelInMeterRight.setBounds(370, 50, 15, 210);
+
+    levelOutMeterLeft.setBounds(420, 50, 15, 210);
+    levelOutMeterRight.setBounds(440, 50, 15, 210);
 
 }
 
 void FootprintAudioProcessorEditor::timerCallback()
 {
-    levelMeterLeft.setLevel(audioProcessor.getRmsValue(0));
-    levelMeterRight.setLevel(audioProcessor.getRmsValue(1));
+    levelInMeterLeft.setLevel(audioProcessor.getInRmsValue(0));
+    levelInMeterRight.setLevel(audioProcessor.getInRmsValue(1));
 
-    levelMeterLeft.repaint();
-    levelMeterRight.repaint();
+    levelOutMeterLeft.setLevel(audioProcessor.getOutRmsValue(0));
+    levelOutMeterRight.setLevel(audioProcessor.getOutRmsValue(1));
+
+    levelInMeterLeft.repaint();
+    levelInMeterRight.repaint();
+    levelOutMeterLeft.repaint();
+    levelOutMeterRight.repaint();
 }

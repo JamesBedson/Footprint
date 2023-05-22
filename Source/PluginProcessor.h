@@ -62,7 +62,8 @@ public:
     
     APVTS apvts {*this, nullptr, "Pedal Parameters", createParameters()};
     
-    float getRmsValue(const int channel) const;
+    float getInRmsValue(const int channel) const;
+    float getOutRmsValue(const int channel) const;
 
 private:
     APVTS::ParameterLayout createParameters();
@@ -76,7 +77,8 @@ private:
     Compressor compressor;
     
     //==============================================================================
-    juce::LinearSmoothedValue<float> rmsLevelLeft, rmsLevelRight;
+    juce::LinearSmoothedValue<float> rmsInLevelLeft, rmsInLevelRight;
+    juce::LinearSmoothedValue<float> rmsOutLevelLeft, rmsOutLevelRight;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessor)
     
 };
