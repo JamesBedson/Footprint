@@ -215,7 +215,7 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////// output WAVEFORM VIEWER //////////////////////////////////////////////////
-    displaySection->outputWaveform.pushBuffer(buffer);
+    //displaySection->outputWaveform.pushBuffer(buffer);
 
 }
 
@@ -313,5 +313,5 @@ float FootprintAudioProcessor::getOutRmsValue(const int channel) const
 
 void FootprintAudioProcessor::setDisplaySection(DisplaySection* section)
 {
-    displaySection = section;
+    this->displaySection = section;
 }

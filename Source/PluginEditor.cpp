@@ -13,7 +13,7 @@
 FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    audioProcessor.setDisplaySection(displaySection);
+    audioProcessor.setDisplaySection(&displaySection);
     // "Add and make visible" all child components of the editor
     
     addAndMakeVisible(displaySection);
@@ -66,8 +66,8 @@ void FootprintAudioProcessorEditor::resized()
     int displaySectionTopRightY = editorCentre.getY() - editorHeight * 0.45f;
     int displaySectionTopRightX = pedalSectionTopRight.getX();
     
-    displaySection->setSize(displaySectionWidth, displaySectionHeight);
-    displaySection->setTopRightPosition(displaySectionTopRightX, displaySectionTopRightY);
+    displaySection.setSize(displaySectionWidth, displaySectionHeight);
+    displaySection.setTopRightPosition(displaySectionTopRightX, displaySectionTopRightY);
 
     int controlSectionWidth = 0.2f * editorWidth;
     int controlSectionHeight = displaySectionHeight;
