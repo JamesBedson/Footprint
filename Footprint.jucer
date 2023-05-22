@@ -17,6 +17,10 @@
     </GROUP>
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
       <GROUP id="{C23AE629-B8F6-997A-3B6D-29BBBBA3E068}" name="DSP">
+        <FILE id="Fpzx4h" name="WaveformVisualizer.cpp" compile="1" resource="0"
+              file="Source/WaveformVisualizer.cpp"/>
+        <FILE id="Y8chQ3" name="WaveformVisualizer.h" compile="0" resource="0"
+              file="Source/WaveformVisualizer.h"/>
         <FILE id="yBy6ha" name="LevelMeter.cpp" compile="1" resource="0" file="Source/LevelMeter.cpp"/>
         <FILE id="gHOPpp" name="LevelMeter.h" compile="0" resource="0" file="Source/LevelMeter.h"/>
         <FILE id="hvzWfN" name="ARAverager.cpp" compile="1" resource="0" file="Source/ARAverager.cpp"/>
