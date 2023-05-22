@@ -15,7 +15,6 @@
 Pedal::Pedal()
 {
     addAndMakeVisible(bypassSwitch);
-
     bypassSwitch.setLookAndFeel(&pedalLookAndFeel);
     bypassSwitch.addListener(this);
 }
@@ -51,13 +50,13 @@ void Pedal::paint (juce::Graphics& g)
 
 void Pedal::resized()
 {
-    auto bounds         = getBounds();
-    auto width          = getWidth();
-    auto height         = getHeight();
-    sliderCol1CentreX   = getX() + width * 0.2f;
-    sliderRow1CentreY   = getY() + height * 0.2f + 22.f;
+    auto bounds         = getLocalBounds();
+    auto width          = bounds.getWidth();
+    auto height         = bounds.getHeight();
+    sliderCol1CentreX   = bounds.getX() + width * 0.2f;
+    sliderRow1CentreY   = bounds.getY() + height * 0.2f + 22.f;
     
-    sliderCol3CentreX   = getX() + width * 0.8f;
+    sliderCol3CentreX   = bounds.getX() + width * 0.8f;
     sliderCol2CentreX   = bounds.getCentreX();
     sliderRow2CentreY   = bounds.getCentreY() + 22.f;
     

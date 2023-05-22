@@ -28,6 +28,7 @@ FootprintAudioProcessor::FootprintAudioProcessor()
     compressor.setAttack(&compressorAttack);
     compressor.setRelease(&compressorRelease);
     compressor.setThreshold(&compressorThreshold);
+
 }
 
 FootprintAudioProcessor::~FootprintAudioProcessor()
@@ -147,6 +148,11 @@ bool FootprintAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 
 void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    //////////////////////////////////////////////// input WAVEFORM VIEWER //////////////////////////////////////////////////
+    if (displaySection != nullptr){
+        displaySection->inputWaveform.pushBuffer(buffer);
+    }
+
     /////////////////////////////////////////////INPUT RMS LEVEL METER//////////////////////////////////////////////////
     juce::ScopedNoDenormals noInDenormals;
     rmsInLevelLeft.skip(buffer.getNumSamples());
@@ -209,6 +215,12 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             rmsOutLevelRight.setCurrentAndTargetValue(value);
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////// output WAVEFORM VIEWER //////////////////////////////////////////////////
+    if (displaySection != nullptr){
+        displaySection->outputWaveform.pushBuffer(buffer);
+    }
+
 }
 
 //==============================================================================
@@ -301,4 +313,9 @@ float FootprintAudioProcessor::getOutRmsValue(const int channel) const
     if (channel == 1)
         return rmsOutLevelRight.getCurrentValue();
     return 0.0f;
+}
+
+void FootprintAudioProcessor::setDisplaySection(DisplaySection* section)
+{
+    this->displaySection = section;
 }

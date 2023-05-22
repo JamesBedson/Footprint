@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "CompressorDSP.h"
+#include "DisplaySection.h"
 //==============================================================================
 /**
 */
@@ -64,6 +65,10 @@ public:
     
     float getInRmsValue(const int channel) const;
     float getOutRmsValue(const int channel) const;
+    
+    DisplaySection* displaySection = nullptr;
+    void setDisplaySection(DisplaySection* section);
+    
 
 private:
     APVTS::ParameterLayout createParameters();
@@ -72,7 +77,7 @@ private:
     juce::Atomic<float> compressorAttack;
     juce::Atomic<float> compressorRelease;
     juce::Atomic<float> compressorThreshold;
-    juce::Atomic<int> compressorRatio;
+    juce::Atomic<int>   compressorRatio;
     
     Compressor compressor;
     
