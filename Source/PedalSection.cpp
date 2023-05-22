@@ -35,6 +35,15 @@ void PedalSection::paint (juce::Graphics& g)
     //g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
+    g.setColour(juce::Colours::white);
+    juce::Line<float> line1 (juce::Point<float>((getLocalBounds().getWidth() * 0.25f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.25f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
+    juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.5f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.5f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
+    juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.75f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.75f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
+    juce::Line<float> line4(juce::Point<float>((getLocalBounds().getWidth()) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth()) + 50.0f, getLocalBounds().getHeight() * 0.5f));
+    g.drawLine(line1, 2.0f);
+    g.drawLine(line2, 2.0f);
+    g.drawLine(line3, 2.0f);
+    g.drawLine(line4, 2.0f);
 }
 
 void PedalSection::resized()

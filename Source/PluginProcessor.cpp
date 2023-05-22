@@ -101,11 +101,15 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 {
     updateParameters();
     compressor.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
-    rmsLevelLeft.reset(sampleRate, 0.5);
-    rmsLevelRight.reset(sampleRate, 0.5);
+    rmsInLevelLeft.reset(sampleRate, 0.5);
+    rmsInLevelRight.reset(sampleRate, 0.5);
+    rmsOutLevelLeft.reset(sampleRate, 0.5);
+    rmsOutLevelRight.reset(sampleRate, 0.5);
 
-    rmsLevelLeft.setCurrentAndTargetValue(-100.0f);
-    rmsLevelRight.setCurrentAndTargetValue(-100.0f);
+    rmsInLevelLeft.setCurrentAndTargetValue(-100.0f);
+    rmsInLevelRight.setCurrentAndTargetValue(-100.0f);
+    rmsOutLevelLeft.setCurrentAndTargetValue(-100.0f);
+    rmsOutLevelRight.setCurrentAndTargetValue(-100.0f);
 
 }
 
@@ -143,31 +147,31 @@ bool FootprintAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 
 void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    inputWaveform.pushBuffer(buffer);
-    outputWaveform.pushBuffer(buffer);
-    
-    juce::ScopedNoDenormals noDenormals;
-    rmsLevelLeft.skip(buffer.getNumSamples());
-    rmsLevelRight.skip(buffer.getNumSamples());
+    /////////////////////////////////////////////INPUT RMS LEVEL METER//////////////////////////////////////////////////
+    juce::ScopedNoDenormals noInDenormals;
+    rmsInLevelLeft.skip(buffer.getNumSamples());
+    rmsInLevelRight.skip(buffer.getNumSamples());
     {
         const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-        if (value < rmsLevelLeft.getCurrentValue())
+        if (value < rmsInLevelLeft.getCurrentValue())
         {
-            rmsLevelLeft.setTargetValue(value);
+            rmsInLevelLeft.setTargetValue(value);
         }
         else
-            rmsLevelLeft.setCurrentAndTargetValue(value);
+            rmsInLevelLeft.setCurrentAndTargetValue(value);
     }
 
     {
         const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-        if (value < rmsLevelRight.getCurrentValue())
+        if (value < rmsInLevelRight.getCurrentValue())
         {
-            rmsLevelRight.setTargetValue(value);
+            rmsInLevelRight.setTargetValue(value);
         }
         else
-            rmsLevelRight.setCurrentAndTargetValue(value);
+            rmsInLevelRight.setCurrentAndTargetValue(value);
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -176,7 +180,39 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         buffer.clear (i, 0, buffer.getNumSamples());
     
     updateParameters();
-    compressor.processBlock(buffer, midiMessages);    
+    compressor.processBlock(buffer, midiMessages);   
+
+
+    //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
+
+    /////////////////////////////////////////////OUTPUT RMS LEVEL METER//////////////////////////////////////////////////
+    juce::ScopedNoDenormals noOutDenormals;
+    rmsOutLevelLeft.skip(buffer.getNumSamples());
+    rmsOutLevelRight.skip(buffer.getNumSamples());
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < rmsOutLevelLeft.getCurrentValue())
+        {
+            rmsOutLevelLeft.setTargetValue(value);
+        }
+        else
+            rmsOutLevelLeft.setCurrentAndTargetValue(value);
+    }
+
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < rmsOutLevelRight.getCurrentValue())
+        {
+            rmsOutLevelRight.setTargetValue(value);
+        }
+        else
+            rmsOutLevelRight.setCurrentAndTargetValue(value);
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 }
 
 //==============================================================================
@@ -251,13 +287,22 @@ void FootprintAudioProcessor::updateParameters(){
     
 }
 
-float FootprintAudioProcessor::getRmsValue(const int channel) const
+float FootprintAudioProcessor::getInRmsValue(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
     if (channel == 0)
-        return rmsLevelLeft.getCurrentValue();
+        return rmsInLevelLeft.getCurrentValue();
     if (channel == 1)
-        return rmsLevelRight.getCurrentValue();
+        return rmsInLevelRight.getCurrentValue();
     return 0.0f;
 }
 
+float FootprintAudioProcessor::getOutRmsValue(const int channel) const
+{
+    jassert(channel == 0 || channel == 1);
+    if (channel == 0)
+        return rmsOutLevelLeft.getCurrentValue();
+    if (channel == 1)
+        return rmsOutLevelRight.getCurrentValue();
+    return 0.0f;
+}

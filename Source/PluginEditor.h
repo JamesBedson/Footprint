@@ -25,9 +25,9 @@ public:
     ~FootprintAudioProcessorEditor() override;
 
     //==============================================================================
-    void Timer::timerCallback();
+    void timerCallback()                override;
     void paint (juce::Graphics&)        override;
-    void resized() override;
+    void resized()                      override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -39,7 +39,8 @@ private:
     
     juce::Image                 background = juce::ImageCache::getFromMemory(BinaryData::backgroundPurpleBlue_png,
                                                                              BinaryData::backgroundPurpleBlue_pngSize);
-    LevelMeter levelMeterLeft, levelMeterRight;
+    LevelMeter levelInMeterLeft, levelInMeterRight;
+    LevelMeter levelOutMeterLeft, levelOutMeterRight;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessorEditor)
 };
