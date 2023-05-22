@@ -4,19 +4,21 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{1732951E-82A5-3A2C-CB2C-33985A771FC2}" name="Assets">
-      <FILE id="Ddh527" name="Slot1PurpleBlue.png" compile="0" resource="1"
-            file="../../../Downloads/Assets/Slot1PurpleBlue.png"/>
-      <FILE id="lPxdhu" name="Slot2PurpleBlue.png" compile="0" resource="1"
-            file="../../../Downloads/Assets/Slot2PurpleBlue.png"/>
-      <FILE id="uyqfh2" name="Slot3PurpleBlue.png" compile="0" resource="1"
-            file="../../../Downloads/Assets/Slot3PurpleBlue.png"/>
-      <FILE id="C3GGvL" name="backgroundPurpleBlue.png" compile="0" resource="1"
-            file="../../../Downloads/Assets/backgroundPurpleBlue.png"/>
-      <FILE id="pDaLsL" name="DisplayPanel.png" compile="0" resource="1"
-            file="../../../Downloads/Assets/DisplayPanel.png"/>
+      <FILE id="RfR3DX" name="backgroundPurpleBlue.png" compile="0" resource="1"
+            file="../../../../../Downloads/Assets/backgroundPurpleBlue.png"/>
+      <FILE id="Log1cl" name="DisplayPanel.png" compile="0" resource="1"
+            file="../../../../../Downloads/Assets/DisplayPanel.png"/>
+      <FILE id="ZriyoA" name="Slot1PurpleBlue.png" compile="0" resource="1"
+            file="../../../../../Downloads/Assets/Slot1PurpleBlue.png"/>
+      <FILE id="y4RdnL" name="Slot2PurpleBlue.png" compile="0" resource="1"
+            file="../../../../../Downloads/Assets/Slot2PurpleBlue.png"/>
+      <FILE id="YOZUAu" name="Slot3PurpleBlue.png" compile="0" resource="1"
+            file="../../../../../Downloads/Assets/Slot3PurpleBlue.png"/>
     </GROUP>
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
       <GROUP id="{C23AE629-B8F6-997A-3B6D-29BBBBA3E068}" name="DSP">
+        <FILE id="hvzWfN" name="ARAverager.cpp" compile="1" resource="0" file="Source/ARAverager.cpp"/>
+        <FILE id="b1KjSL" name="ARAverager.h" compile="0" resource="0" file="Source/ARAverager.h"/>
         <FILE id="mxm5TD" name="ReverbDSP.cpp" compile="1" resource="0" file="Source/ReverbDSP.cpp"/>
         <FILE id="QgDKIG" name="ReverbDSP.h" compile="0" resource="0" file="Source/ReverbDSP.h"/>
         <FILE id="mYfNXO" name="DistortionDSP.cpp" compile="1" resource="0"

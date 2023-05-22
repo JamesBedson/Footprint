@@ -11,18 +11,18 @@
 #pragma once
 
 #include <JuceHeader.h>
-
 //==============================================================================
 /*
 */
 class AudioProcessingModule
 {
 public:
+    
     AudioProcessingModule();
     virtual ~AudioProcessingModule() = 0;
     
-    virtual void prepare(double sampleRate, int samplesPerBlock) = 0;
-    virtual void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages, double sampleRate) = 0;
+    virtual void prepare(double sampleRate, int samplesPerBlock, int numChannels) = 0;
+    virtual void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) = 0;
     
 private:
     

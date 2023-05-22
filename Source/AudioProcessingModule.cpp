@@ -19,5 +19,4 @@ AudioProcessingModule::AudioProcessingModule(){
 
 AudioProcessingModule::~AudioProcessingModule(){
     
-    
 }
