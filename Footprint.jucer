@@ -4,19 +4,21 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{1732951E-82A5-3A2C-CB2C-33985A771FC2}" name="Assets">
-      <FILE id="LtDXei" name="backgroundPurpleBlue.png" compile="0" resource="1"
+      <FILE id="O5pe5C" name="backgroundPurpleBlue.png" compile="0" resource="1"
             file="../../../Downloads/Assets/backgroundPurpleBlue.png"/>
-      <FILE id="QWxZJf" name="DisplayPanel.png" compile="0" resource="1"
+      <FILE id="lyFHn9" name="DisplayPanel.png" compile="0" resource="1"
             file="../../../Downloads/Assets/DisplayPanel.png"/>
-      <FILE id="Suve46" name="Slot1PurpleBlue.png" compile="0" resource="1"
+      <FILE id="jewJ7c" name="Slot1PurpleBlue.png" compile="0" resource="1"
             file="../../../Downloads/Assets/Slot1PurpleBlue.png"/>
-      <FILE id="oMSSB4" name="Slot2PurpleBlue.png" compile="0" resource="1"
+      <FILE id="aHApOq" name="Slot2PurpleBlue.png" compile="0" resource="1"
             file="../../../Downloads/Assets/Slot2PurpleBlue.png"/>
-      <FILE id="nVDKrx" name="Slot3PurpleBlue.png" compile="0" resource="1"
+      <FILE id="daAnLW" name="Slot3PurpleBlue.png" compile="0" resource="1"
             file="../../../Downloads/Assets/Slot3PurpleBlue.png"/>
     </GROUP>
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
       <GROUP id="{C23AE629-B8F6-997A-3B6D-29BBBBA3E068}" name="DSP">
+        <FILE id="yBy6ha" name="LevelMeter.cpp" compile="1" resource="0" file="Source/LevelMeter.cpp"/>
+        <FILE id="gHOPpp" name="LevelMeter.h" compile="0" resource="0" file="Source/LevelMeter.h"/>
         <FILE id="hvzWfN" name="ARAverager.cpp" compile="1" resource="0" file="Source/ARAverager.cpp"/>
         <FILE id="b1KjSL" name="ARAverager.h" compile="0" resource="0" file="Source/ARAverager.h"/>
         <FILE id="mxm5TD" name="ReverbDSP.cpp" compile="1" resource="0" file="Source/ReverbDSP.cpp"/>
