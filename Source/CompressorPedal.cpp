@@ -19,7 +19,6 @@ CompressorPedal::CompressorPedal()
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
         slider->setLookAndFeel(&pedalLookAndFeel);
-
     }
     
     for (auto& label : sliderLabels){
@@ -31,7 +30,16 @@ CompressorPedal::CompressorPedal()
     ratioLabel.attachToComponent        (&ratio, false);
     attackLabel.attachToComponent       (&attack, false);
     releaseLabel.attachToComponent      (&release, false);
-    
+
+
+    juce::Font labelFont;
+
+    labelFont.setTypefaceName("Futura");
+    labelFont.setHeight(GUIAttributes::PedalFontSizes::h2);
+    thresholdLabel.setFont(labelFont);
+    ratioLabel.setFont(labelFont);
+    attackLabel.setFont(labelFont);
+    releaseLabel.setFont(labelFont);
     thresholdLabel.setText  ("Threshold", juce::dontSendNotification);
     ratioLabel.setText      ("Ratio", juce::dontSendNotification);
     attackLabel.setText     ("Attack", juce::dontSendNotification);
@@ -48,8 +56,14 @@ CompressorPedal::~CompressorPedal()
 
 void CompressorPedal::paintAdditionalComponents(juce::Graphics& g)
 {
-    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); 
-    g.drawText("CompressorPedal",
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.38f);
+
+    juce::Font font;
+    font.setHeight(GUIAttributes::PedalFontSizes::h1);
+    font.setTypefaceName("Futura");
+    g.setFont(font);
+
+    g.drawText("COMPRESSOR",
                textBounds,
                juce::Justification::centred, true);
 }
