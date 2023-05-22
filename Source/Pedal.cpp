@@ -27,13 +27,13 @@ Pedal::~Pedal()
 void Pedal::paint (juce::Graphics& g)
 {
     paintBackground(g);
-    if (isInside)
+
+    if (isMouseOver(true))
     {
         auto bounds = getLocalBounds().reduced(6.0f, 6.0f);
         g.setColour(juce::Colours::white.darker());
         g.drawRoundedRectangle(bounds.toFloat(), 10.0f, 1.0f);
         g.setColour(juce::Colours::black);
-
     }
 
     juce::Rectangle<float> led;
@@ -85,7 +85,7 @@ void Pedal::buttonClicked(juce::Button* button)
     }
 }
 
-void Pedal::mouseMove(const juce::MouseEvent& event)
+void Pedal::mouseEnter(const juce::MouseEvent& event)
 {
     isInside = true;
     repaint();

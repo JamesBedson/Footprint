@@ -15,8 +15,8 @@ namespace GUIAttributes {
         const int h2 = 17; //Sliders
     }
     namespace ControlFontSizes {
-        const int h1 = 26; //Titles
-        const int h2 = 20; //Sliders
+        const int h1 = 50; //Titles
+        const int h2 = 18; //Sliders
     }
     namespace DisplayFontSizes {
         const int h1 = 20; //Titles

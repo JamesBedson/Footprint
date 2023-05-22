@@ -186,7 +186,7 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         buffer.clear (i, 0, buffer.getNumSamples());
     
     updateParameters();
-    compressor.processBlock(buffer, midiMessages);   
+    compressor.processBlock(buffer, midiMessages);
 
 
     //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
