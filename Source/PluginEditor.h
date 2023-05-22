@@ -33,7 +33,7 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     FootprintAudioProcessor&    audioProcessor;
-    DisplaySection              displaySection;
+    DisplaySection*              displaySection;
     PedalSection                pedalSection;
     ControlSection              controlSection;
     

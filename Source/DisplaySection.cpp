@@ -16,7 +16,24 @@ DisplaySection::DisplaySection()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-
+    addAndMakeVisible(inputWaveform);
+    addAndMakeVisible(outputWaveform);
+    
+    inputWaveform.setRepaintRate(40);
+    inputWaveform.setBufferSize(256);
+    outputWaveform.setRepaintRate(40);
+    outputWaveform.setBufferSize(256);
+    
+    addAndMakeVisible(bufferSizeView);
+    bufferSizeView.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    bufferSizeView.onValueChange = [this](){
+        inputWaveform.setBufferSize(int(bufferSizeView.getValue())*120);
+        outputWaveform.setBufferSize(int(bufferSizeView.getValue())*120);
+    };
+    
+    inputWaveform.setColours(juce::Colours::black.withAlpha(0.5f), juce::Colours::white.withAlpha(0.7f));
+    outputWaveform.setColours(juce::Colours::transparentBlack.withAlpha(0.5f), juce::Colours::white.withAlpha(0.7f));
+    
 }
 
 DisplaySection::~DisplaySection()
@@ -43,5 +60,9 @@ void DisplaySection::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
+    inputWaveform.setBounds(470, 50, 400, 100);
+    outputWaveform.setBounds(470, 160, 400, 100);
+    
+    bufferSizeView.setBounds(900, 155, 400, 100);
 
 }

@@ -10,13 +10,10 @@
 
 #include "WaveformVisualizer.h"
 
-WaveformVisualizer::WaveformVisualizer()
+WaveformVisualizer::WaveformVisualizer() : AudioVisualiserComponent(2)
 {
-    
 }
-
 
 WaveformVisualizer::~WaveformVisualizer()
 {
-    
 }
