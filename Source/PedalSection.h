@@ -20,7 +20,10 @@
 //==============================================================================
 /*
 */
-class PedalSection  : public juce::Component
+
+using ComponentVector = std::vector<std::unique_ptr<juce::Component>>;
+
+class PedalSection  : public juce::Component, public juce::ComboBox::Listener
 {
 public:
     PedalSection();
@@ -28,9 +31,19 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
+    void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PedalSection)
+    
+    juce::Rectangle<int> pedalSlot1, pedalSlot2, pedalSlot3, pedalSlot4;
+    juce::Rectangle<int> boxSlot1, boxSlot2, boxSlot3, boxSlot4;
+    
+    ComponentVector activeComponents;
+    
+    void paintDecor(juce::Graphics&);
+    
+    juce::ComboBox      addPedal;
     
     CompressorPedal     compressorPedal;
     ReverbPedal         reverbPedal;
