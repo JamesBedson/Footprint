@@ -33,7 +33,10 @@ void DisplaySection::paint (juce::Graphics& g)
     g.setColour(juce::Colours::salmon);
     g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);*/
     g.setColour(juce::Colours::white);
-    g.setFont (20.0f);
+    juce::Font font(20.0f);
+    font.setTypefaceName("Arial");
+    font.setBold(true);
+    g.setFont(font); // Set the updated font
 
     g.drawText ("Display Section", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text

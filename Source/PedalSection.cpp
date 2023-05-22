@@ -33,7 +33,6 @@ void PedalSection::paint (juce::Graphics& g)
     g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
     g.setColour(juce::Colours::transparentBlack);
     //g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
-    g.setColour (juce::Colours::white);
     g.setFont (14.0f);
     g.setColour(juce::Colours::white);
     juce::Line<float> line1 (juce::Point<float>((getLocalBounds().getWidth() * 0.25f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.25f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
@@ -48,7 +47,7 @@ void PedalSection::paint (juce::Graphics& g)
 
 void PedalSection::resized()
 {
-    auto bounds = getLocalBounds();
+    juce::Rectangle<int> bounds(getLocalBounds().getX(), getLocalBounds().getY(), getLocalBounds().getWidth(), getLocalBounds().getHeight());
     
     compressorPedal.setSlot(1);
     distortionPedal.setSlot(2);

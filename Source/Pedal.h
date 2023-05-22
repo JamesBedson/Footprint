@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PedalLookAndFeel.h"
+#include "GUIAttributes.h"
 
 //==============================================================================
 /*
