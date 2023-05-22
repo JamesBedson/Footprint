@@ -13,8 +13,7 @@
 FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    
-    
+    audioProcessor.setDisplaySection(&displaySection);
     // "Add and make visible" all child components of the editor
     
     addAndMakeVisible(displaySection);
@@ -24,6 +23,8 @@ FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProc
     addAndMakeVisible(levelInMeterRight);
     addAndMakeVisible(levelOutMeterLeft);
     addAndMakeVisible(levelOutMeterRight);
+
+    
     setSize (1100, 700);
     startTimerHz(24);
 }

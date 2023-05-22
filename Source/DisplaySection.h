@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "WaveformVisualizer.h"
 
 //==============================================================================
 /*
@@ -20,12 +21,16 @@ class DisplaySection  : public juce::Component
 public:
     DisplaySection();
     ~DisplaySection() override;
-
+    
     void paint (juce::Graphics&) override;
     void resized() override;
     
     juce::Image displayBackground = juce::ImageCache::getFromMemory(BinaryData::DisplayPanel_png, BinaryData::DisplayPanel_pngSize);
+    
+    WaveformVisualizer inputWaveform, outputWaveform;
+    juce::Slider bufferSizeView;
 
+    
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DisplaySection)
 };
