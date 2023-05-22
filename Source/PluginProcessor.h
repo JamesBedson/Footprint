@@ -77,7 +77,7 @@ private:
     juce::Atomic<float> compressorAttack;
     juce::Atomic<float> compressorRelease;
     juce::Atomic<float> compressorThreshold;
-    juce::Atomic<int> compressorRatio;
+    juce::Atomic<int>   compressorRatio;
     
     Compressor compressor;
     
