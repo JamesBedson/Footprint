@@ -13,18 +13,20 @@
 #include "ControlSection.h"
 #include "DisplaySection.h"
 #include "PedalSection.h"
+#include "LevelMeter.h"
 
 //==============================================================================
 /**
 */
-class FootprintAudioProcessorEditor  : public juce::AudioProcessorEditor
+class FootprintAudioProcessorEditor : public juce::AudioProcessorEditor, public juce::Timer
 {
 public:
     FootprintAudioProcessorEditor (FootprintAudioProcessor&);
     ~FootprintAudioProcessorEditor() override;
 
     //==============================================================================
-    void paint (juce::Graphics&) override;
+    void Timer::timerCallback();
+    void paint (juce::Graphics&)        override;
     void resized() override;
 
 private:
@@ -37,6 +39,7 @@ private:
     
     juce::Image                 background = juce::ImageCache::getFromMemory(BinaryData::backgroundPurpleBlue_png,
                                                                              BinaryData::backgroundPurpleBlue_pngSize);
-    
+    LevelMeter levelMeterLeft, levelMeterRight;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessorEditor)
 };
