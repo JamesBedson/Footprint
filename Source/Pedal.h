@@ -31,7 +31,7 @@ public:
     virtual void resizeChild() = 0;
 
     void buttonClicked(juce::Button* button)            override;
-    void mouseMove(const juce::MouseEvent& event)       override;
+    void mouseEnter(const juce::MouseEvent& event)      override;
     void mouseExit(const juce::MouseEvent& event)       override;
     void setSlot(int slot);
 
@@ -57,7 +57,7 @@ protected:
     
     int slot = 0;
 
-    bool isInside = false;
+    bool isInside = true;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pedal)

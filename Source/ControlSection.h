@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "EditorLookAndFeel.h"
+#include "GUIAttributes.h"
 
 //==============================================================================
 /*

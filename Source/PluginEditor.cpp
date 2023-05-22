@@ -38,6 +38,14 @@ void FootprintAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.drawImage(background, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     g.setColour(juce::Colours::white);
+    juce::Font font;
+    font.setHeight(GUIAttributes::ControlFontSizes::h1);
+    font.setTypefaceName("Futura");
+    g.setFont(font);
+    juce::Rectangle<int> textBounds (getLocalBounds().getX() + 40, getLocalBounds().getY() + 5, getLocalBounds().getWidth() * 0.25f, getLocalBounds().getHeight() * 0.15f);
+    g.drawText("FOOTPRINT", textBounds,
+        juce::Justification::centred, true);
+    //.withX(getWidth() * 0.04f).withY(getHeight() * -0.3f)
     //juce::Line<float> line1(juce::Point<float>((getLocalBounds().getWidth() * 0.25f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.25f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
     //juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.5f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.5f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
     //juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.75f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.75f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
