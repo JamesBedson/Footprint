@@ -20,7 +20,10 @@ FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProc
     addAndMakeVisible(displaySection);
     addAndMakeVisible(pedalSection);
     addAndMakeVisible(controlSection);
+    addAndMakeVisible(levelMeterLeft);
+    addAndMakeVisible(levelMeterRight);
     setSize (1100, 700);
+    startTimerHz(24);
 }
 
 FootprintAudioProcessorEditor::~FootprintAudioProcessorEditor()
@@ -72,4 +75,17 @@ void FootprintAudioProcessorEditor::resized()
 
     controlSection.setSize(controlSectionWidth, controlSectionHeight);
     controlSection.setTopLeftPosition(controlSectionTopLeftX, controlSectionTopLeftY);
+
+    levelMeterLeft.setBounds(350, 50, 15, 210);
+    levelMeterRight.setBounds(370, 50, 15, 210);
+
+}
+
+void FootprintAudioProcessorEditor::timerCallback()
+{
+    levelMeterLeft.setLevel(audioProcessor.getRmsValue(0));
+    levelMeterRight.setLevel(audioProcessor.getRmsValue(1));
+
+    levelMeterLeft.repaint();
+    levelMeterRight.repaint();
 }

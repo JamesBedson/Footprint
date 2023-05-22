@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <juce_audio_utils/juce_audio_utils.h>
 
 //==============================================================================
 FootprintAudioProcessor::FootprintAudioProcessor()
@@ -100,6 +101,12 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 {
     updateParameters();
     compressor.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+    rmsLevelLeft.reset(sampleRate, 0.5);
+    rmsLevelRight.reset(sampleRate, 0.5);
+
+    rmsLevelLeft.setCurrentAndTargetValue(-100.0f);
+    rmsLevelRight.setCurrentAndTargetValue(-100.0f);
+
 }
 
 void FootprintAudioProcessor::releaseResources()
@@ -137,6 +144,28 @@ bool FootprintAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
+    rmsLevelLeft.skip(buffer.getNumSamples());
+    rmsLevelRight.skip(buffer.getNumSamples());
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < rmsLevelLeft.getCurrentValue())
+        {
+            rmsLevelLeft.setTargetValue(value);
+        }
+        else
+            rmsLevelLeft.setCurrentAndTargetValue(value);
+    }
+
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < rmsLevelRight.getCurrentValue())
+        {
+            rmsLevelRight.setTargetValue(value);
+        }
+        else
+            rmsLevelRight.setCurrentAndTargetValue(value);
+    }
+
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -144,9 +173,7 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         buffer.clear (i, 0, buffer.getNumSamples());
     
     updateParameters();
-    compressor.processBlock(buffer, midiMessages);
-    
-    
+    compressor.processBlock(buffer, midiMessages);    
 }
 
 //==============================================================================
@@ -219,5 +246,15 @@ void FootprintAudioProcessor::updateParameters(){
     compressorThreshold.set(apvts.getRawParameterValue("Compressor_Threshold")->load());
     compressorRatio.set(apvts.getRawParameterValue("Compressor_Threshold")->load());
     
+}
+
+float FootprintAudioProcessor::getRmsValue(const int channel) const
+{
+    jassert(channel == 0 || channel == 1);
+    if (channel == 0)
+        return rmsLevelLeft.getCurrentValue();
+    if (channel == 1)
+        return rmsLevelRight.getCurrentValue();
+    return 0.0f;
 }
 
