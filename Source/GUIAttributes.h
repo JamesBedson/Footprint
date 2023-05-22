@@ -23,8 +23,3 @@ namespace GUIAttributes {
         const int h2 = 17; //Sliders
     }
 }
-
-//juce::Font labelFont;
-//labelFont.setTypefaceName("Futura");
-////labelFont.setBold(true);
-//labelFont.setHeight(17);
