@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "CompressorDSP.h"
+#include "WaveformVisualizer.h"
 //==============================================================================
 /**
 */
@@ -63,6 +64,9 @@ public:
     APVTS apvts {*this, nullptr, "Pedal Parameters", createParameters()};
     
     float getRmsValue(const int channel) const;
+    
+    WaveformVisualizer inputWaveform, outputWaveform;
+    
 
 private:
     APVTS::ParameterLayout createParameters();

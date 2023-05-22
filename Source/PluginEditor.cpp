@@ -22,6 +22,11 @@ FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProc
     addAndMakeVisible(controlSection);
     addAndMakeVisible(levelMeterLeft);
     addAndMakeVisible(levelMeterRight);
+    
+    addAndMakeVisible(audioProcessor.inputWaveform);
+    addAndMakeVisible(audioProcessor.outputWaveform);
+    audioProcessor.inputWaveform.setColours(juce::Colours::black.withAlpha(0.7f), juce::Colours::white.withAlpha(0.5f));
+    
     setSize (1100, 700);
     startTimerHz(24);
 }
@@ -78,6 +83,9 @@ void FootprintAudioProcessorEditor::resized()
 
     levelMeterLeft.setBounds(350, 50, 15, 210);
     levelMeterRight.setBounds(370, 50, 15, 210);
+    
+    audioProcessor.inputWaveform.setBounds(390, 50, 300, 50);
+    audioProcessor.outputWaveform.setBounds(390, 100, 300, 50);
 
 }
 
