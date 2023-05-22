@@ -25,10 +25,13 @@ DisplaySection::DisplaySection()
     outputWaveform.setBufferSize(256);
     
     addAndMakeVisible(bufferSizeView);
+    bufferSizeView.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     bufferSizeView.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     bufferSizeView.onValueChange = [this](){
-        inputWaveform.setBufferSize(int(bufferSizeView.getValue())*120);
-        outputWaveform.setBufferSize(int(bufferSizeView.getValue())*120);
+        if ( (1025 > int(bufferSizeView.getValue()*120)) && (int(bufferSizeView.getValue()*120) > 32) ){
+            inputWaveform.setBufferSize(int(bufferSizeView.getValue()*120));
+            outputWaveform.setBufferSize(int(bufferSizeView.getValue()*120));
+        }
     };
     
     inputWaveform.setColours(juce::Colours::white.withBrightness(0.5f), juce::Colours::black);
@@ -55,8 +58,7 @@ void DisplaySection::paint (juce::Graphics& g)
     font.setBold(true);
     g.setFont(font); // Set the updated font
 
-    g.drawText ("Display Section", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    //g.drawText ("Display Section", getLocalBounds(), juce::Justification::centred, true);   // draw some placeholder text
 }
 
 void DisplaySection::resized()
@@ -67,6 +69,6 @@ void DisplaySection::resized()
     outputWaveform.setBounds(140, 125, 500, 100);
     
     
-    bufferSizeView.setBounds(900, 155, 400, 100);
+    bufferSizeView.setBounds(640, 75, 40, 100);
 
 }
