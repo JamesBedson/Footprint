@@ -49,7 +49,6 @@ void Pedal::paint (juce::Graphics& g)
     paintAdditionalComponents(g);
 }
 
-
 void Pedal::resized()
 {
     auto bounds         = getBounds();

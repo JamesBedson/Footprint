@@ -86,7 +86,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
             g.setColour(juce::Colours::black);
             linePath.addLineSegment(line, 2);
             g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.3f).translated(centerX, centerY));
-
+            g.setColour(juce::Colours::white);
             
         }
         
