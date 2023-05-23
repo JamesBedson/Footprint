@@ -52,8 +52,6 @@ void DisplaySection::paint (juce::Graphics& g)
 {
     g.drawImage(displayBackground, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     
-<<<<<<< HEAD
-=======
     /*
     g.setColour(juce::Colours::salmon);
     g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
@@ -71,8 +69,6 @@ void DisplaySection::paint (juce::Graphics& g)
     font.setBold(false);
     g.setFont(font); // Set the updated font
     g.drawText("Zoom", 639, 75, 40, 210, juce::Justification::centred);
->>>>>>> main
-
 }
 
 void DisplaySection::resized()
