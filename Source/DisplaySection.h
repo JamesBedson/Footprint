@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "WaveformVisualizer.h"
+#include "GUIAttributes.h"
 
 //==============================================================================
 /*

@@ -50,25 +50,26 @@ DisplaySection::~DisplaySection()
 
 void DisplaySection::paint (juce::Graphics& g)
 {
-    g.drawImage(displayBackground, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    
-    /*
-    g.setColour(juce::Colours::salmon);
-    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
-    g.setColour(juce::Colours::salmon);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);*/
-    
+    g.drawImage(displayBackground, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);    
     g.setColour(juce::Colours::white.withAlpha(0.5f));
     g.drawRoundedRectangle(140, 18, 500, 100, 10, 2);
     g.drawRoundedRectangle(140, 125, 500, 100, 10, 2);
 
-    
+    juce::Font labelFont;
+
     g.setColour(juce::Colours::white);
-    juce::Font font(12.8f);
+    juce::Font font;
     font.setTypefaceName("Futura");
-    font.setBold(false);
+    font.setHeight(GUIAttributes::DisplayFontSizes::h2);
     g.setFont(font); // Set the updated font
     g.drawText("Zoom", 639, 75, 40, 210, juce::Justification::centred);
+    g.drawText("In", 21, 125, 40, 210, juce::Justification::centred);
+    g.drawText("Out", 71, 125, 40, 210, juce::Justification::centred);
+    g.drawText("Peak RMS", 20, 17, 100, 10, juce::Justification::centred);
+
+    g.setColour(juce::Colours::black.brighter());
+    juce::Line<float> vLine (juce::Point<float>((getLocalBounds().getX()) - 20.f, getLocalBounds().getY() + 17.f), juce::Point<float>((getLocalBounds().getWidth()), getLocalBounds().getHeight()));
+    g.drawLine(vLine, 2.0f);
 }
 
 void DisplaySection::resized()
