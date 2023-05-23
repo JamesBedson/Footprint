@@ -17,5 +17,6 @@ class WaveformVisualizer : public juce::AudioVisualiserComponent
 public:
     WaveformVisualizer();
     ~WaveformVisualizer();
-
+    //void paint (juce::Graphics& g) override;
+    
 };
