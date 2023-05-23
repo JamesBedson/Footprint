@@ -119,16 +119,18 @@ void FootprintAudioProcessorEditor::timerCallback()
 
 void FootprintAudioProcessorEditor::paintDecor(juce::Graphics &g){
     
-    juce::Line<float> line1 (juce::Point<float>((getLocalBounds().getWidth() * 0.03f), getLocalBounds().getHeight() * 0.42f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.42f));
+    juce::Line<float> line1 (juce::Point<float>((getLocalBounds().getWidth() * 0.12f), getLocalBounds().getHeight() * 0.42f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.42f));
     juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.92f), getLocalBounds().getHeight() * 0.7f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.7f));
     juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.03f), getLocalBounds().getHeight() * 0.7f), juce::Point<float>((getLocalBounds().getWidth() * 0.08f), getLocalBounds().getHeight() * 0.7f));
-    /*juce::Line<float> line4(juce::Point<float>((getLocalBounds().getWidth()) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth()) + 50.0f, getLocalBounds().getHeight() * 0.5f));
-    juce::Line<float> line5(juce::Point<float>((getLocalBounds().getWidth() * (-1.0f)), getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth()* 0.02f), getLocalBounds().getHeight() * 0.5f));*/
+    juce::Line<float> line4(juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.42f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.7f));
+    juce::Line<float> line5(juce::Point<float>((getLocalBounds().getWidth() * 0.03), getLocalBounds().getHeight() * 0.20755f), juce::Point<float>((getLocalBounds().getWidth()* 0.076f), getLocalBounds().getHeight() * 0.20755f));
+    juce::Line<float> line6(juce::Point<float>((getLocalBounds().getWidth() * 0.03), getLocalBounds().getHeight() * 0.20755f), juce::Point<float>((getLocalBounds().getWidth()* 0.03f), getLocalBounds().getHeight() * 0.7f));
     
     g.drawLine(line1, 2.0f);
     g.drawLine(line2, 2.0f);
     g.drawLine(line3, 2.0f);
-    /*g.drawLine(line4, 2.0f);
-    g.drawLine(line5, 2.0f);*/
+    g.drawLine(line4, 2.0f);
+    g.drawLine(line5, 2.0f);
+    g.drawLine(line6, 2.0f);
     
 }
