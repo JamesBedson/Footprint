@@ -10,10 +10,13 @@
 
 #include "WaveformVisualizer.h"
 
-WaveformVisualizer::WaveformVisualizer() : AudioVisualiserComponent(1)
+WaveformVisualizer::WaveformVisualizer() : juce::AudioVisualiserComponent(1)
 {
+    // Initialize any additional variables or settings
+    setOpaque(false);
 }
 
 WaveformVisualizer::~WaveformVisualizer()
 {
+    // Clean up any allocated resources
 }

@@ -19,22 +19,27 @@ DisplaySection::DisplaySection()
     addAndMakeVisible(inputWaveform);
     addAndMakeVisible(outputWaveform);
     
-    inputWaveform.setRepaintRate(40);
-    inputWaveform.setBufferSize(256);
-    outputWaveform.setRepaintRate(40);
-    outputWaveform.setBufferSize(256);
+    inputWaveform.setRepaintRate(60);
+    inputWaveform.setBufferSize(1024);
+    outputWaveform.setRepaintRate(60);
+    outputWaveform.setBufferSize(1024);
     
-    addAndMakeVisible(bufferSizeView);
-    bufferSizeView.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-    bufferSizeView.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    bufferSizeView.onValueChange = [this](){
-        if ( (1025 > int(bufferSizeView.getValue()*120)) && (int(bufferSizeView.getValue()*120) > 32) ){
-            inputWaveform.setBufferSize(int(bufferSizeView.getValue()*120));
-            outputWaveform.setBufferSize(int(bufferSizeView.getValue()*120));
+    addAndMakeVisible(WaveformZoom);
+        
+    WaveformZoom.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    WaveformZoom.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    WaveformZoom.onValueChange = [this](){
+        float sliderValue = WaveformZoom.getValue();
+        
+        sliderValue = sliderValue * -1 + 10.f;
+        
+        if ( (1025 > int(sliderValue*120)) && (int(sliderValue*120) > 32) ){
+            inputWaveform.setBufferSize(int(sliderValue*120));
+            outputWaveform.setBufferSize(int(sliderValue*120));
         }
     };
     
-    inputWaveform.setColours(juce::Colours::white.withBrightness(0.5f), juce::Colours::black);
+    inputWaveform.setColours(juce::Colours::white, juce::Colours::black);
     outputWaveform.setColours(juce::Colours::white, juce::Colours::black);
     
 }
@@ -52,13 +57,19 @@ void DisplaySection::paint (juce::Graphics& g)
     g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
     g.setColour(juce::Colours::salmon);
     g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);*/
-    g.setColour(juce::Colours::white);
-    juce::Font font(20.0f);
-    font.setTypefaceName("Arial");
-    font.setBold(true);
-    g.setFont(font); // Set the updated font
+    
+    g.setColour(juce::Colours::white.withAlpha(0.5f));
+    g.drawRoundedRectangle(140, 18, 500, 100, 10, 2);
+    g.drawRoundedRectangle(140, 125, 500, 100, 10, 2);
 
-    //g.drawText ("Display Section", getLocalBounds(), juce::Justification::centred, true);   // draw some placeholder text
+    
+    g.setColour(juce::Colours::white);
+    juce::Font font(12.8f);
+    font.setTypefaceName("Futura");
+    font.setBold(false);
+    g.setFont(font); // Set the updated font
+    g.drawText("Zoom", 639, 75, 40, 210, juce::Justification::centred);
+
 }
 
 void DisplaySection::resized()
@@ -69,6 +80,6 @@ void DisplaySection::resized()
     outputWaveform.setBounds(140, 125, 500, 100);
     
     
-    bufferSizeView.setBounds(640, 75, 40, 100);
+    WaveformZoom.setBounds(639, 75, 40, 100);
 
 }

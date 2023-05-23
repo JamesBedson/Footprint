@@ -28,7 +28,7 @@ public:
     juce::Image displayBackground = juce::ImageCache::getFromMemory(BinaryData::DisplayPanel_png, BinaryData::DisplayPanel_pngSize);
     
     WaveformVisualizer inputWaveform, outputWaveform;
-    juce::Slider bufferSizeView;
+    juce::Slider WaveformZoom;
 
     
 private:
