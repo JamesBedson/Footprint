@@ -33,8 +33,7 @@ DistortionPedal::DistortionPedal()
 
     juce::Font labelFont;
     labelFont.setTypefaceName("Futura");
-    labelFont.setHeight(GUIAttributes::PedalFontSizes::h2);
-    gainLabel.setFont(labelFont);
+    labelFont.setHeight(GUIAttributes::PedalFontSizes::h2);    gainLabel.setFont(labelFont);
     toneLabel.setFont(labelFont);
     levelLabel.setFont(labelFont);
 
@@ -98,11 +97,4 @@ void DistortionPedal::paintBackground(juce::Graphics& g){
     } else {
         return;
     }
-    /*
-    g.setColour(juce::Colours::lightseagreen);
-    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
-    g.setColour(juce::Colours::lightseagreen);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
-    g.setColour(juce::Colours::white);
-    g.setFont(14.0f);*/
 }

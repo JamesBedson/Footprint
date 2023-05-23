@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "CompressorDSP.h"
 #include "DisplaySection.h"
+#include "ProcessingConstants.h"
 //==============================================================================
 /**
 */
@@ -61,7 +62,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    APVTS apvts {*this, nullptr, "Pedal Parameters", createParameters()};
+    APVTS apvts;
     
     float getInRmsValue(const int channel) const;
     float getOutRmsValue(const int channel) const;

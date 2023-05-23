@@ -21,10 +21,6 @@ namespace GUIAttributes {
     namespace DisplayFontSizes {
         const int h1 = 20; //Titles
         const int h2 = 17; //Sliders
+        const int h3 = 19; //Title v2
     }
 }
-
-//juce::Font labelFont;
-//labelFont.setTypefaceName("Futura");
-////labelFont.setBold(true);
-//labelFont.setHeight(17);
