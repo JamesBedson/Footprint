@@ -21,12 +21,13 @@ DeleteSwitchLookandFeel::~DeleteSwitchLookandFeel()
 void DeleteSwitchLookandFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& byPassSwitch, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
 {
     g.setColour(juce::Colours::transparentBlack);
-    g.drawRoundedRectangle(byPassSwitch.getLocalBounds().toFloat(), 5.f, 8.f);
+    juce::Rectangle<float> roundedRectangleButton (byPassSwitch.getLocalBounds().toFloat());
+    g.drawRoundedRectangle(roundedRectangleButton, 5.f, 9.f);
     g.setColour(juce::Colours::white);
-    g.fillRoundedRectangle(byPassSwitch.getLocalBounds().toFloat(), 8.f);
+    g.fillRoundedRectangle(roundedRectangleButton, 9.f);
 
-    juce::Line<float> diagLine1 (juce::Point<float>((byPassSwitch.getLocalBounds().getX() + 2.f), byPassSwitch.getLocalBounds().getY()), juce::Point<float>((byPassSwitch.getLocalBounds().getX()) + byPassSwitch.getLocalBounds().getWidth(), byPassSwitch.getLocalBounds().getY() + byPassSwitch.getLocalBounds().getHeight()));
-    juce::Line<float> diagLine2(juce::Point<float>((byPassSwitch.getLocalBounds().getX() + 2.f) + byPassSwitch.getLocalBounds().getWidth(), byPassSwitch.getLocalBounds().getY()), juce::Point<float>((byPassSwitch.getLocalBounds().getX()), byPassSwitch.getLocalBounds().getY() + byPassSwitch.getLocalBounds().getHeight()));
+    juce::Line<float> diagLine1 (juce::Point<float>((roundedRectangleButton.getX()), roundedRectangleButton.getY()), juce::Point<float>((roundedRectangleButton.getX()) + roundedRectangleButton.getWidth(), roundedRectangleButton.getY() + roundedRectangleButton.getHeight()));
+    juce::Line<float> diagLine2(juce::Point<float>((roundedRectangleButton.getX()) + roundedRectangleButton.getWidth(), roundedRectangleButton.getY()), juce::Point<float>((roundedRectangleButton.getX()), roundedRectangleButton.getY() + roundedRectangleButton.getHeight()));
     g.setColour(juce::Colours::white.darker());
     g.drawLine(diagLine1, 1.0f);
     g.drawLine(diagLine2, 1.0f);
