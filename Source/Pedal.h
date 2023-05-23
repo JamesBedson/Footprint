@@ -12,11 +12,12 @@
 
 #include <JuceHeader.h>
 #include "PedalLookAndFeel.h"
+#include "GUIAttributes.h"
 
 //==============================================================================
 /*
 */
-class Pedal : public juce::Component, public juce::Button::Listener, public juce::MouseListener
+class Pedal : public juce::Component, public juce::Button::Listener
 {
 public:
     Pedal();
@@ -30,9 +31,10 @@ public:
     virtual void resizeChild() = 0;
 
     void buttonClicked(juce::Button* button)            override;
-    void mouseMove(const juce::MouseEvent& event)       override;
+    void mouseEnter(const juce::MouseEvent& event)      override;
     void mouseExit(const juce::MouseEvent& event)       override;
     void setSlot(int slot);
+    bool isDeleted();
 
 protected:
     
@@ -48,6 +50,7 @@ protected:
     int sliderLabelWidth, sliderLabelHeight;
     
     juce::ToggleButton  bypassSwitch;
+    juce::ToggleButton  deleteSwitch;
     PedalLookAndFeel    pedalLookAndFeel;
     
     juce::Image         backgroundSlot1 = juce::ImageCache::getFromMemory(BinaryData::Slot1PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
@@ -56,7 +59,7 @@ protected:
     
     int slot = 0;
 
-    bool isInside = false;
+    bool isInside = true;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pedal)

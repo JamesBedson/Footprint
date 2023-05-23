@@ -31,6 +31,14 @@ ReverbPedal::ReverbPedal()
     lowCutLabel.attachToComponent(&lowCut, false);
     typeLabel.attachToComponent(&type, false);
 
+    juce::Font labelFont;
+    labelFont.setTypefaceName("Futura");
+    labelFont.setHeight(GUIAttributes::PedalFontSizes::h2);
+    mixLabel.setFont(labelFont);
+    highCutLabel.setFont(labelFont);
+    lowCutLabel.setFont(labelFont);
+    typeLabel.setFont(labelFont);
+
     mixLabel.setText("Mix", juce::dontSendNotification);
     highCutLabel.setText("H.Cut", juce::dontSendNotification);
     lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
@@ -46,8 +54,14 @@ ReverbPedal::~ReverbPedal()
 
 void ReverbPedal::paintAdditionalComponents(juce::Graphics& g)
 {
-    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
-    g.drawText ("ReverbPedal", textBounds,
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.38f);
+
+    juce::Font font;
+    font.setTypefaceName("Futura");
+    font.setHeight(GUIAttributes::PedalFontSizes::h1);
+    g.setFont(font); // Set the updated font
+
+    g.drawText ("REVERB", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
 
 }

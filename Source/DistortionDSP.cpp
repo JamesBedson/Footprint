@@ -18,7 +18,7 @@ Distortion::~Distortion(){
     
 }
 
-void Distortion::prepare(double sampleRate, int samplesPerBlock){
+void Distortion::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     
 }
 

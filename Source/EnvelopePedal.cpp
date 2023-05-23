@@ -31,9 +31,16 @@ EnvelopePedal::EnvelopePedal()
     sensitivityLabel.attachToComponent    (&sensitivity, false);
     cutoffThresholdLabel.attachToComponent   (&cutoffThreshold, false);
     
-    qualityFactorLabel.setText      ("QualityFactor", juce::dontSendNotification);
+    juce::Font labelFont;
+    labelFont.setTypefaceName("Futura");
+    labelFont.setHeight(GUIAttributes::PedalFontSizes::h2);
+    qualityFactorLabel.setFont(labelFont);
+    sensitivityLabel.setFont(labelFont);
+    cutoffThresholdLabel.setFont(labelFont);
+
+    qualityFactorLabel.setText      ("Q", juce::dontSendNotification);
     sensitivityLabel.setText      ("Sensitivity", juce::dontSendNotification);
-    cutoffThresholdLabel.setText     ("CutoffThreshold", juce::dontSendNotification);
+    cutoffThresholdLabel.setText     ("Cutoff", juce::dontSendNotification);
 }
 
 EnvelopePedal::~EnvelopePedal()
@@ -69,8 +76,14 @@ void EnvelopePedal::paintBackground(juce::Graphics& g){
 
 void EnvelopePedal::paintAdditionalComponents(juce::Graphics& g)
 {
-    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); // Adjust the vertical position here
-    g.drawText ("EnvelopePedal", textBounds,
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.38f);
+
+    juce::Font font;
+    font.setTypefaceName("Futura");
+    font.setHeight(GUIAttributes::PedalFontSizes::h1);
+    g.setFont(font); // Set the updated font
+
+    g.drawText ("ENVELOPE FILTER", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
 }
 

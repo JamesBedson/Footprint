@@ -86,7 +86,7 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
             g.setColour(juce::Colours::black);
             linePath.addLineSegment(line, 2);
             g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.3f).translated(centerX, centerY));
-
+            g.setColour(juce::Colours::white);
             
         }
         
@@ -115,21 +115,3 @@ void PedalLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& b
     g.setColour(juce::Colours::white);
     g.fillEllipse(byPassSwitch.getLocalBounds().toFloat());
 }
-
-//OTHER LINES TRIALS:
-            //g.fillPath(ellipsePath, juce::AffineTransform::rotation(angle).translated(centerX - innerRadius, centerY - innerRadius));
-            //juce::Path linePath;
-            //linePath.startNewSubPath(centerX, centerY);
-            ////linePath.addLineSegment();
-            ////linePath.lineTo(centerX + (radius * 0.75f) * std::cos(angle), centerY + (radius * 0.75f) * std::sin(angle));
-            ////linePath.lineTo(centerX + radius * std::cos(angle), centerY + radius * std::sin(angle));
-            //linePath.lineTo(centerX - (radius * 0.75f) * std::sin(angle), centerY + (radius * 0.75f) * std::cos(angle));
-            //g.setColour(juce::Colours::black);
-            //g.strokePath(linePath, juce::PathStrokeType(2.0f));
-            //g.fillPath(linePath, juce::AffineTransform::rotation(angle - 90.0f).translated(centerX, centerY));
-
-            //juce::Path linePath;
-            //linePath.startNewSubPath(centerX, centerY);
-            //linePath.addLineSegment();
-            //linePath.lineTo(centerX + (radius * 0.75f) * std::cos(angle), centerY + (radius * 0.75f) * std::sin(angle));
-            //linePath.lineTo(centerX + radius * std::cos(angle), centerY + radius * std::sin(angle));

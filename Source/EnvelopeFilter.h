@@ -19,7 +19,7 @@ public:
     EnvelopeFilter();
     ~EnvelopeFilter() override;
 
-    void prepare(double sampleRate, int samplePerBlock) override;
+    void prepare(double sampleRate, int samplePerBlock, int numChannels) override;
     void processBlock(juce::AudioBuffer<float>& buffer,
         juce::MidiBuffer& midiMessages) override;
 

@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <juce_audio_utils/juce_audio_utils.h>
 
 //==============================================================================
 FootprintAudioProcessor::FootprintAudioProcessor()
@@ -22,6 +23,12 @@ FootprintAudioProcessor::FootprintAudioProcessor()
                        )
 #endif
 {
+    updateParameters();
+    compressor.setRatio(&compressorRatio);
+    compressor.setAttack(&compressorAttack);
+    compressor.setRelease(&compressorRelease);
+    compressor.setThreshold(&compressorThreshold);
+
 }
 
 FootprintAudioProcessor::~FootprintAudioProcessor()
@@ -93,8 +100,18 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    updateParameters();
+    compressor.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+    rmsInLevelLeft.reset(sampleRate, 0.5);
+    rmsInLevelRight.reset(sampleRate, 0.5);
+    rmsOutLevelLeft.reset(sampleRate, 0.5);
+    rmsOutLevelRight.reset(sampleRate, 0.5);
+
+    rmsInLevelLeft.setCurrentAndTargetValue(-100.0f);
+    rmsInLevelRight.setCurrentAndTargetValue(-100.0f);
+    rmsOutLevelLeft.setCurrentAndTargetValue(-100.0f);
+    rmsOutLevelRight.setCurrentAndTargetValue(-100.0f);
+
 }
 
 void FootprintAudioProcessor::releaseResources()
@@ -131,14 +148,79 @@ bool FootprintAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 
 void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    juce::ScopedNoDenormals noDenormals;
+    //////////////////////////////////////////////// input WAVEFORM VIEWER //////////////////////////////////////////////////
+    if (displaySection != nullptr){
+        displaySection->inputWaveform.pushBuffer(buffer);
+    }
+
+    /////////////////////////////////////////////INPUT RMS LEVEL METER//////////////////////////////////////////////////
+    juce::ScopedNoDenormals noInDenormals;
+    rmsInLevelLeft.skip(buffer.getNumSamples());
+    rmsInLevelRight.skip(buffer.getNumSamples());
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < rmsInLevelLeft.getCurrentValue())
+        {
+            rmsInLevelLeft.setTargetValue(value);
+        }
+        else
+            rmsInLevelLeft.setCurrentAndTargetValue(value);
+    }
+
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < rmsInLevelRight.getCurrentValue())
+        {
+            rmsInLevelRight.setTargetValue(value);
+        }
+        else
+            rmsInLevelRight.setCurrentAndTargetValue(value);
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    
+    updateParameters();
+    compressor.processBlock(buffer, midiMessages);
+
+
+    //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
+
+    /////////////////////////////////////////////OUTPUT RMS LEVEL METER//////////////////////////////////////////////////
+    juce::ScopedNoDenormals noOutDenormals;
+    rmsOutLevelLeft.skip(buffer.getNumSamples());
+    rmsOutLevelRight.skip(buffer.getNumSamples());
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < rmsOutLevelLeft.getCurrentValue())
+        {
+            rmsOutLevelLeft.setTargetValue(value);
+        }
+        else
+            rmsOutLevelLeft.setCurrentAndTargetValue(value);
+    }
+
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        if (value < rmsOutLevelRight.getCurrentValue())
+        {
+            rmsOutLevelRight.setTargetValue(value);
+        }
+        else
+            rmsOutLevelRight.setCurrentAndTargetValue(value);
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////// output WAVEFORM VIEWER //////////////////////////////////////////////////
+    if (displaySection != nullptr){
+        displaySection->outputWaveform.pushBuffer(buffer);
+    }
+
 }
 
 //==============================================================================
@@ -171,4 +253,69 @@ void FootprintAudioProcessor::setStateInformation (const void* data, int sizeInB
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new FootprintAudioProcessor();
+}
+
+APVTS::ParameterLayout FootprintAudioProcessor::createParameters(){
+    
+    auto attack = std::make_unique<juce::AudioParameterFloat>
+    (juce::ParameterID {"Compressor_Attack", 1},
+     "Compressor_Attack",
+     juce::NormalisableRange<float>(0.001f, 0.5f, 0.002f, 1.f),
+     0.01f);
+    
+    auto release = std::make_unique<juce::AudioParameterFloat>
+    (juce::ParameterID {"Compressor_Release", 2},
+     "Compressor_Release",
+     juce::NormalisableRange<float>(0.001f, 0.5f, 0.002f, 1.f),
+     0.01f);
+    
+    auto threshold = std::make_unique<juce::AudioParameterFloat>
+    (juce::ParameterID {"Compressor_Threshold", 3},
+     "Compressor_Threshold",
+     juce::NormalisableRange<float>(-80.f, 20.f, 0.1f, 1.f),
+     -35.f);
+    
+    auto ratio = std::make_unique<juce::AudioParameterInt>
+    (juce::ParameterID {"Compressor_Ratio", 4},
+     "Compressor_Ratio",
+     1,
+     15,
+     10);
+    
+    return {std::move(attack), std::move(release), std::move(threshold), std::move(ratio)};
+}
+
+
+void FootprintAudioProcessor::updateParameters(){
+    
+    compressorAttack.set(apvts.getRawParameterValue("Compressor_Attack")->load());
+    compressorRelease.set(apvts.getRawParameterValue("Compressor_Release")->load());
+    compressorThreshold.set(apvts.getRawParameterValue("Compressor_Threshold")->load());
+    compressorRatio.set(apvts.getRawParameterValue("Compressor_Threshold")->load());
+    
+}
+
+float FootprintAudioProcessor::getInRmsValue(const int channel) const
+{
+    jassert(channel == 0 || channel == 1);
+    if (channel == 0)
+        return rmsInLevelLeft.getCurrentValue();
+    if (channel == 1)
+        return rmsInLevelRight.getCurrentValue();
+    return 0.0f;
+}
+
+float FootprintAudioProcessor::getOutRmsValue(const int channel) const
+{
+    jassert(channel == 0 || channel == 1);
+    if (channel == 0)
+        return rmsOutLevelLeft.getCurrentValue();
+    if (channel == 1)
+        return rmsOutLevelRight.getCurrentValue();
+    return 0.0f;
+}
+
+void FootprintAudioProcessor::setDisplaySection(DisplaySection* section)
+{
+    this->displaySection = section;
 }

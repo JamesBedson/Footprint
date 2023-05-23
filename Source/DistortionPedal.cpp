@@ -30,6 +30,14 @@ DistortionPedal::DistortionPedal()
     gainLabel.attachToComponent    (&gain, false);
     levelLabel.attachToComponent   (&level, false);
     
+
+    juce::Font labelFont;
+    labelFont.setTypefaceName("Futura");
+    labelFont.setHeight(GUIAttributes::PedalFontSizes::h2);
+    gainLabel.setFont(labelFont);
+    toneLabel.setFont(labelFont);
+    levelLabel.setFont(labelFont);
+
     gainLabel.setText      ("Gain", juce::dontSendNotification);
     toneLabel.setText      ("Tone", juce::dontSendNotification);
     levelLabel.setText     ("Level", juce::dontSendNotification);
@@ -44,9 +52,14 @@ DistortionPedal::~DistortionPedal()
 
 void DistortionPedal::paintAdditionalComponents(juce::Graphics& g)
 {
+    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.38f);
 
-    juce::Rectangle<int> textBounds = getLocalBounds().withY(getHeight() * -0.43f); 
-    g.drawText("DistortionPedal", textBounds,
+    juce::Font font;
+    font.setTypefaceName("Futura");
+    font.setHeight(GUIAttributes::PedalFontSizes::h1);
+    g.setFont(font); // Set the updated font
+
+    g.drawText("DISTORTION", textBounds,
         juce::Justification::centred, true);
 }
 

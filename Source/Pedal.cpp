@@ -15,31 +15,36 @@
 Pedal::Pedal()
 {
     addAndMakeVisible(bypassSwitch);
-
     bypassSwitch.setLookAndFeel(&pedalLookAndFeel);
     bypassSwitch.addListener(this);
+    
+    addAndMakeVisible(deleteSwitch);
+    deleteSwitch.setLookAndFeel(&pedalLookAndFeel);
+    deleteSwitch.setToggleState(false, juce::dontSendNotification);
+    
 }
 
 Pedal::~Pedal()
 {
     bypassSwitch.setLookAndFeel(nullptr);
+    deleteSwitch.setLookAndFeel(nullptr);
 }
 
 void Pedal::paint (juce::Graphics& g)
 {
     paintBackground(g);
-    if (isInside)
+
+    if (isMouseOver(true))
     {
         auto bounds = getLocalBounds().reduced(6.0f, 6.0f);
         g.setColour(juce::Colours::white.darker());
         g.drawRoundedRectangle(bounds.toFloat(), 10.0f, 1.0f);
         g.setColour(juce::Colours::black);
-
     }
 
     juce::Rectangle<float> led;
     led.setSize(7, 7);
-    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.08f * getHeight());
+    led.setCentre(sliderCol2CentreX, bypassSwitch.getBounds().getY() - 0.05f * getHeight());
     if (bypassSwitch.getToggleState())
     {
         g.setColour(juce::Colours::darkorange);
@@ -49,20 +54,19 @@ void Pedal::paint (juce::Graphics& g)
     paintAdditionalComponents(g);
 }
 
-
 void Pedal::resized()
 {
-    auto bounds         = getBounds();
-    auto width          = getWidth();
-    auto height         = getHeight();
-    sliderCol1CentreX   = getX() + width * 0.2f;
-    sliderRow1CentreY   = getY() + height * 0.2f;
+    auto bounds         = getLocalBounds();
+    auto width          = bounds.getWidth();
+    auto height         = bounds.getHeight();
+    sliderCol1CentreX   = bounds.getX() + width * 0.2f;
+    sliderRow1CentreY   = bounds.getY() + height * 0.2f + 22.f;
     
-    sliderCol3CentreX   = getX() + width * 0.8f;
+    sliderCol3CentreX   = bounds.getX() + width * 0.8f;
     sliderCol2CentreX   = bounds.getCentreX();
-    sliderRow2CentreY   = bounds.getCentreY();
+    sliderRow2CentreY   = bounds.getCentreY() + 22.f;
     
-    sliderRow3CentreY   = bounds.getCentreY() + 53;
+    sliderRow3CentreY   = bounds.getCentreY() + 53 + 22.f;
     
     auto buttonWidth    = 20;
     auto buttonHeight   = 20;
@@ -74,6 +78,8 @@ void Pedal::resized()
     sliderLabelHeight   = 15;
     bypassSwitch.setSize(buttonWidth, buttonHeight);
     bypassSwitch.setCentrePosition(bounds.getCentreX(), bounds.getCentreY() + width * 0.6f);
+    
+    deleteSwitch.setBounds(bounds.getX(), bounds.getY(), buttonWidth, buttonHeight);
     
     resizeChild();
 
@@ -87,7 +93,7 @@ void Pedal::buttonClicked(juce::Button* button)
     }
 }
 
-void Pedal::mouseMove(const juce::MouseEvent& event)
+void Pedal::mouseEnter(const juce::MouseEvent& event)
 {
     isInside = true;
     repaint();
@@ -103,4 +109,9 @@ void Pedal::setSlot(int slot){
     
     jassert(slot >= 1 & slot <= 4);
     this->slot = slot;
+}
+
+bool Pedal::isDeleted(){
+    
+    return deleteSwitch.getToggleState();
 }
