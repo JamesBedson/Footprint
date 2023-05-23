@@ -4,16 +4,16 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{1732951E-82A5-3A2C-CB2C-33985A771FC2}" name="Assets">
-      <FILE id="NKOMBV" name="backgroundPurpleBlue.png" compile="0" resource="1"
-            file="../../../../../Downloads/Assets/backgroundPurpleBlue.png"/>
-      <FILE id="SibXma" name="DisplayPanel.png" compile="0" resource="1"
-            file="../../../../../Downloads/Assets/DisplayPanel.png"/>
-      <FILE id="cM5VhT" name="Slot1PurpleBlue.png" compile="0" resource="1"
-            file="../../../../../Downloads/Assets/Slot1PurpleBlue.png"/>
-      <FILE id="Tr2f44" name="Slot2PurpleBlue.png" compile="0" resource="1"
-            file="../../../../../Downloads/Assets/Slot2PurpleBlue.png"/>
-      <FILE id="ZMEXzV" name="Slot3PurpleBlue.png" compile="0" resource="1"
-            file="../../../../../Downloads/Assets/Slot3PurpleBlue.png"/>
+      <FILE id="xAV9Dq" name="backgroundPurpleBlue.png" compile="0" resource="1"
+            file="../../../Downloads/Assets/backgroundPurpleBlue.png"/>
+      <FILE id="uQEDSx" name="DisplayPanel.png" compile="0" resource="1"
+            file="../../../Downloads/Assets/DisplayPanel.png"/>
+      <FILE id="irKhnc" name="Slot1PurpleBlue.png" compile="0" resource="1"
+            file="../../../Downloads/Assets/Slot1PurpleBlue.png"/>
+      <FILE id="DkhEqU" name="Slot2PurpleBlue.png" compile="0" resource="1"
+            file="../../../Downloads/Assets/Slot2PurpleBlue.png"/>
+      <FILE id="s1T8QM" name="Slot3PurpleBlue.png" compile="0" resource="1"
+            file="../../../Downloads/Assets/Slot3PurpleBlue.png"/>
     </GROUP>
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
       <GROUP id="{C23AE629-B8F6-997A-3B6D-29BBBBA3E068}" name="DSP">
@@ -90,6 +90,10 @@
       <FILE id="zBUoi3" name="GUIAttributes.h" compile="0" resource="0" file="Source/GUIAttributes.h"/>
       <FILE id="EmjRjn" name="ProcessingConstants.h" compile="0" resource="0"
             file="Source/ProcessingConstants.h"/>
+      <FILE id="Ebnk2I" name="DeleteSwitchLookandFeel.cpp" compile="1" resource="0"
+            file="Source/DeleteSwitchLookandFeel.cpp"/>
+      <FILE id="td9bsl" name="DeleteSwitchLookandFeel.h" compile="0" resource="0"
+            file="Source/DeleteSwitchLookandFeel.h"/>
     </GROUP>
     <FILE id="wivgJ8" name="Parametres.h" compile="0" resource="0" file="Source/Parametres.h"/>
   </MAINGROUP>

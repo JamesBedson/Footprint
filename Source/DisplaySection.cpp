@@ -63,12 +63,14 @@ void DisplaySection::paint (juce::Graphics& g)
     font.setHeight(GUIAttributes::DisplayFontSizes::h2);
     g.setFont(font); // Set the updated font
     g.drawText("Zoom", 639, 75, 40, 210, juce::Justification::centred);
-    g.drawText("In", 21, 125, 40, 210, juce::Justification::centred);
-    g.drawText("Out", 71, 125, 40, 210, juce::Justification::centred);
-    g.drawText("Peak RMS", 20, 17, 100, 10, juce::Justification::centred);
+    g.drawText("In", 20, 118, 40, 210, juce::Justification::centred);
+    g.drawText("Out", 71, 118, 40, 210, juce::Justification::centred);
+    font.setHeight(GUIAttributes::DisplayFontSizes::h3);
+    g.setFont(font); // Set the updated font
+    g.drawText("Peak RMS", 17, 19, 100, 10, juce::Justification::centred);
 
     g.setColour(juce::Colours::black.brighter());
-    juce::Line<float> vLine (juce::Point<float>((getLocalBounds().getX()) - 20.f, getLocalBounds().getY() + 17.f), juce::Point<float>((getLocalBounds().getWidth()), getLocalBounds().getHeight()));
+    juce::Line<float> vLine (juce::Point<float>((getLocalBounds().getX()) + 125.f, getLocalBounds().getY() + 30.f), juce::Point<float>((getLocalBounds().getX()) + 125.f, getLocalBounds().getY() + 220.f));
     g.drawLine(vLine, 2.0f);
 }
 

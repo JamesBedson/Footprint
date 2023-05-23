@@ -92,11 +92,11 @@ void FootprintAudioProcessorEditor::resized()
     controlSection.setSize(controlSectionWidth, controlSectionHeight);
     controlSection.setTopLeftPosition(controlSectionTopLeftX, controlSectionTopLeftY);
 
-    levelInMeterLeft.setBounds(365, 75, 9, 180);
-    levelInMeterRight.setBounds(380, 75, 9, 180);
+    levelInMeterLeft.setBounds(365, 80, 9, 165);
+    levelInMeterRight.setBounds(380, 80, 9, 165);
 
-    levelOutMeterLeft.setBounds(415, 75, 9, 180);
-    levelOutMeterRight.setBounds(430, 75, 9, 180);
+    levelOutMeterLeft.setBounds(415, 80, 9, 165);
+    levelOutMeterRight.setBounds(430, 80, 9, 165);
 }
 
 void FootprintAudioProcessorEditor::timerCallback()
