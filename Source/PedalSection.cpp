@@ -35,11 +35,11 @@ PedalSection::~PedalSection()
 
 void PedalSection::paint (juce::Graphics& g)
 {
-    g.setColour (juce::Colours::white.darker().darker());
-    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
-    g.setColour(juce::Colours::transparentBlack);
-    //g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
-    g.setFont (14.0f);
+    //g.setColour (juce::Colours::white.darker().darker());
+    //g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    //g.setColour(juce::Colours::transparentBlack);
+    ////g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    //g.setFont (14.0f);
     g.setColour(juce::Colours::white);
     
     paintDecor(g);
