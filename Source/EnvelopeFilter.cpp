@@ -20,7 +20,7 @@ EnvelopeFilter::~EnvelopeFilter() {
 
 }
 
-void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock) {
+void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChannels) {
 
     this->sampleRate = sampleRate;
 
