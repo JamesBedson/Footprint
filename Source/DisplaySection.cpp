@@ -19,18 +19,23 @@ DisplaySection::DisplaySection()
     addAndMakeVisible(inputWaveform);
     addAndMakeVisible(outputWaveform);
     
-    inputWaveform.setRepaintRate(40);
-    inputWaveform.setBufferSize(256);
-    outputWaveform.setRepaintRate(40);
-    outputWaveform.setBufferSize(256);
+    inputWaveform.setRepaintRate(60);
+    inputWaveform.setBufferSize(1024);
+    outputWaveform.setRepaintRate(60);
+    outputWaveform.setBufferSize(1024);
     
     addAndMakeVisible(WaveformZoom);
+        
     WaveformZoom.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     WaveformZoom.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     WaveformZoom.onValueChange = [this](){
-        if ( (1025 > int(WaveformZoom.getValue()*120)) && (int(WaveformZoom.getValue()*120) > 32) ){
-            inputWaveform.setBufferSize(int(WaveformZoom.getValue()*120));
-            outputWaveform.setBufferSize(int(WaveformZoom.getValue()*120));
+        float sliderValue = WaveformZoom.getValue();
+        
+        sliderValue = sliderValue * -1 + 10.f;
+        
+        if ( (1025 > int(sliderValue*120)) && (int(sliderValue*120) > 32) ){
+            inputWaveform.setBufferSize(int(sliderValue*120));
+            outputWaveform.setBufferSize(int(sliderValue*120));
         }
     };
     
@@ -59,12 +64,11 @@ void DisplaySection::paint (juce::Graphics& g)
 
     
     g.setColour(juce::Colours::white);
-    juce::Font font(9.0f);
-    font.setTypefaceName("Arial");
-    font.setBold(true);
+    juce::Font font(12.8f);
+    font.setTypefaceName("Futura");
+    font.setBold(false);
     g.setFont(font); // Set the updated font
-
-    g.drawText("Zoom", 640, 75, 40, 210, juce::Justification::centred);
+    g.drawText("Zoom", 639, 75, 40, 210, juce::Justification::centred);
 
 }
 
@@ -76,6 +80,6 @@ void DisplaySection::resized()
     outputWaveform.setBounds(140, 125, 500, 100);
     
     
-    WaveformZoom.setBounds(640, 75, 40, 100);
+    WaveformZoom.setBounds(639, 75, 40, 100);
 
 }
