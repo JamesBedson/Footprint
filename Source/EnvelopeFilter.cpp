@@ -149,12 +149,16 @@ juce::AudioBuffer<float> EnvelopeFilter::applyLPF(juce::AudioBuffer<float> buffe
 
 
 
-void EnvelopeFilter::setQualityFactor(juce::Atomic<float>* q) {
-    if (q->get() >= 0.f) { this->qualityFactor = q; }
+void EnvelopeFilter::setQualityFactor(std::atomic<float>* q) {
+    if (q->load() >= 0.f) { this->qualityFactor = q; }
 }
 
-void EnvelopeFilter::setSensitivity(juce::Atomic<float>* s) {
-    if (s->get() >= 0) { this->sensitivity = s; }
+void EnvelopeFilter::setSensitivity(std::atomic<float>* s) {
+    if (s->load() >= 0) { this->sensitivity = s; }
+}
+
+void EnvelopeFilter::setMinCutoffFreq(std::atomic<double>* m) {
+    if (m->load() >= 0) { this->minCutoffFrequency = m; }
 }
 
 void EnvelopeFilter::setSampleRate(double s) {
