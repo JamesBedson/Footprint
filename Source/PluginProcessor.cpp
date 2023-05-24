@@ -448,3 +448,45 @@ void FootprintAudioProcessor::initCompressorParameters(const int &slotIdx){
 void FootprintAudioProcessor::initEnvelopeFilterParameters(const int &slotIdx){
     
 }
+
+void FootprintAudioProcessor::initDistortionParameters(const int &slotIdx){
+    
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            distortionVector[slotIdx]->setGain(distGain1);
+            distortionVector[slotIdx]->setLevel(level1);
+            distortionVector[slotIdx]->setTone(tone1);
+        }
+            break;
+            
+        case 1: {
+            
+            distortionVector[slotIdx]->setGain(distGain2);
+            distortionVector[slotIdx]->setLevel(level2);
+            distortionVector[slotIdx]->setTone(tone2);
+        }
+            break;
+            
+        case 2: {
+            
+            distortionVector[slotIdx]->setGain(distGain2);
+            distortionVector[slotIdx]->setLevel(level2);
+            distortionVector[slotIdx]->setTone(tone2);
+        }
+            break;
+        
+        case 4:{
+            
+            compressorVector[slotIdx]->setAttack(attack4);
+            compressorVector[slotIdx]->setRelease(release4);
+            compressorVector[slotIdx]->setThreshold(threshold4);
+            compressorVector[slotIdx]->setRatio(ratio4);
+        }
+            break;
+    }
+    
+    
+    
+}
