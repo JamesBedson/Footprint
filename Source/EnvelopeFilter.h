@@ -30,7 +30,7 @@ public:
 
     void setQualityFactor(std::atomic<float>* q);
     void setSensitivity(std::atomic<float>* s);
-    void setMinCutoffFreq(std::atomic<double>* m);
+    void setMinCutoffFreq(std::atomic<float>* m);
     void setSampleRate(double s);
     void setCutoff(double c);
     void setThresholdMinFreq(double t);
