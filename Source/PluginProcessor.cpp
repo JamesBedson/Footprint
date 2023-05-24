@@ -26,19 +26,25 @@ apvts(*this, nullptr, "Parameters",
 #include "Parametres.h"
 )
 {
-    
+    initParameters();
     compressorVector.resize(4);
     reverbVector.resize(4);
     envelopeFilterVector.resize(4);
     distortionVector.resize(4);
     
-    for (int moduleIdx = 0; moduleIdx < 4; moduleIdx++){
+    for (int slotIdx = 0; slotIdx < 4; slotIdx++){
         
-        compressorVector[moduleIdx] = std::make_unique<Compressor>();
-        initCompressorParameters(moduleIdx);
+        compressorVector[slotIdx] = std::make_unique<Compressor>();
+        initCompressorParameters(slotIdx);
         
-        envelopeFilterVector[moduleIdx] = std::make_unique<EnvelopeFilter>();
-        initEnvelopeFilterParameters(moduleIdx);
+        envelopeFilterVector[slotIdx] = std::make_unique<EnvelopeFilter>();
+        initEnvelopeFilterParameters(slotIdx);
+        
+        reverbVector[slotIdx] = std::make_unique<Reverb>();
+        initReverbParameters(slotIdx);
+        
+        distortionVector[slotIdx] = std::make_unique<Distortion>();
+        initDistortionParameters(slotIdx);
     }
     
 }
@@ -432,7 +438,7 @@ void FootprintAudioProcessor::initCompressorParameters(const int &slotIdx){
         }
             break;
         
-        case 4:{
+        case 3:{
             
             compressorVector[slotIdx]->setAttack(attack4);
             compressorVector[slotIdx]->setRelease(release4);
@@ -471,7 +477,7 @@ void FootprintAudioProcessor::initEnvelopeFilterParameters(const int &slotIdx){
         }
             break;
         
-        case 4:{
+        case 3:{
             
             envelopeFilterVector[slotIdx]->setQualityFactor(quality4);
             envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold4);
@@ -510,11 +516,50 @@ void FootprintAudioProcessor::initDistortionParameters(const int &slotIdx){
         }
             break;
         
-        case 4:{
+        case 3:{
             
             distortionVector[slotIdx]->setGain(distGain4);
             distortionVector[slotIdx]->setLevel(level4);
             distortionVector[slotIdx]->setTone(tone4);
+        }
+            break;
+    }
+}
+
+void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
+    
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix1);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass1);
+        }
+            break;
+            
+        case 1: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix2);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass2);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass2);
+            
+        }
+            break;
+            
+        case 2: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix3);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass3);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass3);
+        }
+            break;
+        
+        case 3:{
+            
+            reverbVector[slotIdx]->setWet(wetDryMix1);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass4);
         }
             break;
     }
