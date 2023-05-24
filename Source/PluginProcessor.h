@@ -145,7 +145,7 @@ private:
     std::atomic<float>* cutoffThreshold3;
     std::atomic<float>* cutoffThreshold4;
     
-    Compressor compressor;
+    //Compressor compressor;
     
     //==============================================================================
     juce::LinearSmoothedValue<float> rmsInLevelLeft, rmsInLevelRight;

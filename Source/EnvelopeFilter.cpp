@@ -20,7 +20,7 @@ EnvelopeFilter::~EnvelopeFilter() {
 
 }
 
-void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock) {
+void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChannels) {
 
     this->sampleRate = sampleRate;
 
@@ -147,11 +147,11 @@ juce::AudioBuffer<float> EnvelopeFilter::applyLPF(juce::AudioBuffer<float> buffe
 
 
 void EnvelopeFilter::setQualityFactor(juce::Atomic<float>* q) {
-    if (q >= 0) { this->qualityFactor = q; }
+    if (q->get() >= 0.f) { this->qualityFactor = q; }
 }
 
 void EnvelopeFilter::setSensitivity(juce::Atomic<float>* s) {
-    if (s >= 0) { this->sensitivity = s; }
+    if (s->get() >= 0) { this->sensitivity = s; }
 }
 
 void EnvelopeFilter::setSampleRate(double s) {
@@ -173,3 +173,4 @@ void EnvelopeFilter::setThresholdMinFreq(double t) {
 void EnvelopeFilter::setWindowSize(int w) {
     if (w > 0) { windowSize = w; }
 }
+

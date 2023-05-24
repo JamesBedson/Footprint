@@ -13,7 +13,7 @@
 #include "AudioProcessingModule.h"
 #define MIN_TIME_CONST 0.000001
 
-class ARAverager : public AudioProcessingModule{
+class ARAverager : AudioProcessingModule{
     
 public:
     
