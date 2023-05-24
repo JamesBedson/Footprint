@@ -20,7 +20,7 @@
 class DistortionPedal  : public Pedal
 {
 public:
-    DistortionPedal();
+    DistortionPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs);
     ~DistortionPedal()                                  override;
 
     void paintBackground(juce::Graphics&)               override;
@@ -31,6 +31,8 @@ private:
     
     juce::Slider tone, gain, level;
     std::vector<juce::Slider*> sliders {&tone, &gain, &level};
+    
+    SliderAttachment gainAttachment, levelAttachment, toneAttachment;
     
     juce::Label toneLabel, gainLabel, levelLabel;
     std::vector<juce::Label*> sliderLabels {&toneLabel, &gainLabel, &levelLabel};
