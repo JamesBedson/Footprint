@@ -48,6 +48,7 @@ ControlSection::~ControlSection()
 
 void ControlSection::paint(juce::Graphics& g)
 {
+    g.setColour(juce::Colours::white);
     paintDecor(g);
 }
 
