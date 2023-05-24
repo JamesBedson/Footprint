@@ -23,6 +23,7 @@ EnvelopeFilter::~EnvelopeFilter() {
 void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChannels) {
 
     this->sampleRate = sampleRate;
+    isFirst = false;
 
     window.resize(numChannels);
     for (int ch = 0; ch < numChannels; ch++) {
@@ -42,6 +43,7 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
     Matrix coefficients;
     std::vector<float> previousX;
     float xN, xN1, xN2, yN1, yN2;
+    int times = 1;
 
     for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
 
@@ -51,28 +53,24 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
 
         for (int n = 0; n < buffer.getNumSamples(); n++) {
             
-            currentCutoff = thresholdMinFreq + sensitivity->get() * envelopeDataRead[n] * (sampleRate / 2 - thresholdMinFreq);
+            currentCutoff = static_cast<double>(minCutoffFrequency->load()) + static_cast<double>(sensitivity->load()) * envelopeDataRead[n] * (sampleRate / 2 - static_cast<double>(minCutoffFrequency->load()));
             std::rotate(window[ch].begin(), window[ch].begin() + 1, window[ch].end());
             window[ch][windowSize - 1] = currentCutoff;
 
-            if (window[ch].size() > windowSize) { window[ch].erase(window[ch].begin()); }
-            for (double value : window[ch])
-                averageCutoffFreq += value;
-            averageCutoffFreq /= windowSize; //CANVI?
+            for (double value : window[ch]) averageCutoffFreq += value;
 
-            coefficients = getLPFCoefficients(averageCutoffFreq, qualityFactor->get());
+            if (!isFirst) {
+                averageCutoffFreq /= times;
+                times += 1;
+            }
+            else { averageCutoffFreq /= windowSize;}
+
+            coefficients = getLPFCoefficients(averageCutoffFreq, static_cast<double>(qualityFactor->load()));
 
             if (n == 0 || n == 1) {
                 previousX = { channelDataWrite[0], channelDataWrite[1] }; //CANVI?
             }
             else {
-
-                /*xN = chann
-                xN1 = buffer.getSample(ch, n - 1);
-                xN2 = buffer.getSample(ch, n - 2);
-
-                yN1 = envelopeBuffer.getSample(ch, n - 1);
-                yN2 = envelopeBuffer.getSample(ch, n - 2);
 
                 /*xN = chann
                 xN1 = buffer.getSample(ch, n - 1);
@@ -87,9 +85,10 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
             averageCutoffFreq = 0.0;
         }
     }
+    if (!isFirst) isFirst = true;
 }
 
-Matrix EnvelopeFilter::getLPFCoefficients(double cutoffFreq, float qualityFactor) {
+Matrix EnvelopeFilter::getLPFCoefficients(double cutoffFreq, double qualityFactor) {
 
     double w              = 2.0 * juce::MathConstants<double>::pi * cutoffFreq / sampleRate;
     double alpha          = std::sin(w) / (2.0 * qualityFactor);
@@ -118,7 +117,7 @@ juce::AudioBuffer<float> EnvelopeFilter::getAmplitudeEnvelope(const juce::AudioB
         for (int n = 0; n < ampBuffer.getNumSamples(); n++) { ampBuffer.setSample(ch, n, std::abs(ampBuffer.getSample(ch, n))); }
     }
 
-    Matrix ba = getLPFCoefficients(cutoff1, 1.0f); // qualityFactor = 1
+    Matrix ba = getLPFCoefficients(static_cast<double>(minCutoffFrequency->load()), 1.0); // qualityFactor = 1
 
     return applyLPF(ampBuffer, ba);
 }
@@ -160,30 +159,27 @@ void EnvelopeFilter::setSensitivity(std::atomic<float>* s) {
     if (s->load() >= 0) { this->sensitivity = s; }
 }
 
-void EnvelopeFilter::setMinCutoffFreq(std::atomic<double>* m) {
+void EnvelopeFilter::setMinCutoffFreq(std::atomic<float>* m) {
     if (m->load() >= 0) { this->minCutoffFrequency = m; }
-
-void EnvelopeFilter::setSensitivity(juce::Atomic<float>* s) {
-    if (s->get() >= 0) { this->sensitivity = s; }
 }
 
-void EnvelopeFilter::setSampleRate(double s) {
-    if (s > 0) { sampleRate = s; }
-}
+//void EnvelopeFilter::setSampleRate(double s) {
+//    if (s > 0) { sampleRate = s; }
+//}
 
-void EnvelopeFilter::setCutoff(double c) {
-    if (c > 0) { cutoff1 = c; }
-}
+//void EnvelopeFilter::setCutoff(double c) {
+//    if (c > 0) { cutoff1 = c; }
+//}
 
-void EnvelopeFilter::setThresholdMinFreq(double t) {
-    if (t > 0) { thresholdMinFreq = t; }
-}
+//void EnvelopeFilter::setThresholdMinFreq(double t) {
+//    if (t > 0) { thresholdMinFreq = t; }
+//}
 
 //void EnvelopeFilter::setNyquist() {
 //    nyquist = sampleRate / 2;
 //}
 
-void EnvelopeFilter::setWindowSize(int w) {
-    if (w > 0) { windowSize = w; }
-}
+//void EnvelopeFilter::setWindowSize(int w) {
+//    if (w > 0) { windowSize = w; }
+//}
 
