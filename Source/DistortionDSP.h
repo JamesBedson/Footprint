@@ -12,7 +12,7 @@
 #include "AudioProcessingModule.h"
 #include <JuceHeader.h>
 
-class Distortion : AudioProcessingModule {
+class Distortion : public AudioProcessingModule {
     
 public:
     Distortion();

@@ -48,6 +48,7 @@ void ARAverager::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
             if (previousOuts[ch] > channelReadPtr[n]) alphaToUse = alphaA;
             else alphaToUse = alphaR;
             
+            
             channelWritePTR[n] = (1 - alphaToUse) * channelReadPtr[n] + alphaToUse * previousOuts[ch];
         }
     }

@@ -31,7 +31,6 @@ void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChann
             window[ch][n] = 0.0;
     }
 
-
 }
 
 void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
@@ -53,10 +52,10 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
         for (int n = 0; n < buffer.getNumSamples(); n++) {
             
             currentCutoff = thresholdMinFreq + sensitivity->get() * envelopeDataRead[n] * (sampleRate / 2 - thresholdMinFreq);
-                        
             std::rotate(window[ch].begin(), window[ch].begin() + 1, window[ch].end());
             window[ch][windowSize - 1] = currentCutoff;
 
+            if (window[ch].size() > windowSize) { window[ch].erase(window[ch].begin()); }
             for (double value : window[ch])
                 averageCutoffFreq += value;
             averageCutoffFreq /= windowSize; //CANVI?
@@ -80,10 +79,7 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
             }
             averageCutoffFreq = 0.0;
         }
-        
     }
-
-
 }
 
 Matrix EnvelopeFilter::getLPFCoefficients(double cutoffFreq, float qualityFactor) {
@@ -152,11 +148,11 @@ juce::AudioBuffer<float> EnvelopeFilter::applyLPF(juce::AudioBuffer<float> buffe
 
 
 void EnvelopeFilter::setQualityFactor(juce::Atomic<float>* q) {
-    if (q >= 0) { this->qualityFactor = q; }
+    if (q->get() >= 0.f) { this->qualityFactor = q; }
 }
 
 void EnvelopeFilter::setSensitivity(juce::Atomic<float>* s) {
-    if (s >= 0) { this->sensitivity = s; }
+    if (s->get() >= 0) { this->sensitivity = s; }
 }
 
 void EnvelopeFilter::setSampleRate(double s) {
@@ -178,3 +174,4 @@ void EnvelopeFilter::setThresholdMinFreq(double t) {
 void EnvelopeFilter::setWindowSize(int w) {
     if (w > 0) { windowSize = w; }
 }
+
