@@ -60,6 +60,8 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
                 averageCutoffFreq += value;
             averageCutoffFreq /= windowSize; //CANVI?
 
+            //letsgo
+
             coefficients = getLPFCoefficients(averageCutoffFreq, qualityFactor->get());
 
             if (n == 0 || n == 1) {
