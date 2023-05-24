@@ -48,6 +48,8 @@ ControlSection::~ControlSection()
 
 void ControlSection::paint(juce::Graphics& g)
 {
+    g.setColour(juce::Colours::white);
+    paintDecor(g);
 }
 
 void ControlSection::resized()
@@ -83,4 +85,17 @@ void ControlSection::resized()
 
     }
 
+}
+void ControlSection::paintDecor(juce::Graphics &g){
+    
+    juce::Line<float> line1 (juce::Point<float>((getLocalBounds().getWidth() * (-1.0f)), getLocalBounds().getHeight() * 0.45f), juce::Point<float>((getLocalBounds().getWidth() * (0.07f)), getLocalBounds().getHeight() * 0.45f));
+    /*juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.5f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.5f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
+    juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.75f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.75f) + 20.0f, getLocalBounds().getHeight() * 0.5f));*/
+    
+    
+    g.drawLine(line1, 2.0f);
+    /*g.drawLine(line2, 2.0f);
+    g.drawLine(line3, 2.0f);*/
+
+    
 }

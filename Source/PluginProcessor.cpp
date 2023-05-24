@@ -20,14 +20,17 @@ FootprintAudioProcessor::FootprintAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif
+apvts(*this, nullptr, "Parameters",
+#include "Parametres.h"
+)
 {
-    updateParameters();
-    compressor.setRatio(&compressorRatio);
-    compressor.setAttack(&compressorAttack);
-    compressor.setRelease(&compressorRelease);
-    compressor.setThreshold(&compressorThreshold);
+    //updateParameters();
+    //compressor.setRatio(&compressorRatio);
+    //compressor.setAttack(&compressorAttack);
+    //compressor.setRelease(&compressorRelease);
+    //compressor.setThreshold(&compressorThreshold);
 
 }
 
@@ -100,8 +103,8 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    updateParameters();
-    compressor.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+    //updateParameters();
+    //compressor.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
     rmsInLevelLeft.reset(sampleRate, 0.5);
     rmsInLevelRight.reset(sampleRate, 0.5);
     rmsOutLevelLeft.reset(sampleRate, 0.5);
@@ -185,8 +188,8 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    updateParameters();
-    compressor.processBlock(buffer, midiMessages);
+    //updateParameters();
+    //compressor.processBlock(buffer, midiMessages);
 
 
     //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE

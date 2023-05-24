@@ -21,8 +21,8 @@ public:
 	{
 		auto bounds = getLocalBounds().toFloat();
 
-		g.setColour(juce::Colours::white.withBrightness(0.4f));
-		g.fillRoundedRectangle(bounds, 5.f);
+		g.setColour(juce::Colours::white.withBrightness(0.5f));
+		g.fillRoundedRectangle(bounds, 3.f);
 		//map level will go from -60 / 6 to 0/width
 		g.setColour(juce::Colours::white);
 		const auto scaledX = juce::jmap(level, -60.f, 6.f, 0.f, static_cast<float>(getHeight()));

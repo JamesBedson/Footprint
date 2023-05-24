@@ -63,14 +63,6 @@ void EnvelopePedal::paintBackground(juce::Graphics& g){
     } else {
         return;
     }
-    
-    /*
-    g.setColour(juce::Colours::indianred);
-    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
-    g.setColour(juce::Colours::indianred);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
-    g.setColour(juce::Colours::white);
-    g.setFont(14.0f);*/
 }
 
 

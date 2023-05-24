@@ -115,3 +115,4 @@ void PedalLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& b
     g.setColour(juce::Colours::white);
     g.fillEllipse(byPassSwitch.getLocalBounds().toFloat());
 }
+
