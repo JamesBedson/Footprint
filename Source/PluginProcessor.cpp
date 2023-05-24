@@ -376,29 +376,6 @@ void FootprintAudioProcessor::initParameters(){
     
 }
 
-void FootprintAudioProcessor::initParameters(){
-    
-    attack1     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack1);
-    attack2     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack2);
-    attack3     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack3);
-    attack4     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack4);
-    
-    release1    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease1);
-    release2    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease2);
-    release3    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease3);
-    release4    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease4);
-    
-    threshold1  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold1);
-    threshold2  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold2);
-    threshold3  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold3);
-    threshold4  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold4);
-    
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-}
-
 float FootprintAudioProcessor::getInRmsValue(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
@@ -468,6 +445,41 @@ void FootprintAudioProcessor::initCompressorParameters(const int &slotIdx){
 
 void FootprintAudioProcessor::initEnvelopeFilterParameters(const int &slotIdx){
     
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality1);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold1);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity1);
+        }
+            break;
+            
+        case 1: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality2);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold2);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity2);
+        }
+            break;
+            
+        case 2: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality3);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold3);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity3);
+        }
+            break;
+        
+        case 4:{
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality4);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold4);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity4);
+        }
+            break;
+    }
+    
 }
 
 void FootprintAudioProcessor::initDistortionParameters(const int &slotIdx){
@@ -492,22 +504,18 @@ void FootprintAudioProcessor::initDistortionParameters(const int &slotIdx){
             
         case 2: {
             
-            distortionVector[slotIdx]->setGain(distGain2);
-            distortionVector[slotIdx]->setLevel(level2);
-            distortionVector[slotIdx]->setTone(tone2);
+            distortionVector[slotIdx]->setGain(distGain3);
+            distortionVector[slotIdx]->setLevel(level3);
+            distortionVector[slotIdx]->setTone(tone3);
         }
             break;
         
         case 4:{
             
-            compressorVector[slotIdx]->setAttack(attack4);
-            compressorVector[slotIdx]->setRelease(release4);
-            compressorVector[slotIdx]->setThreshold(threshold4);
-            compressorVector[slotIdx]->setRatio(ratio4);
+            distortionVector[slotIdx]->setGain(distGain4);
+            distortionVector[slotIdx]->setLevel(level4);
+            distortionVector[slotIdx]->setTone(tone4);
         }
             break;
     }
-    
-    
-    
 }
