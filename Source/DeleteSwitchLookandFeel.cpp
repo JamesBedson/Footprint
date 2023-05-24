@@ -26,8 +26,9 @@ void DeleteSwitchLookandFeel::drawToggleButton(juce::Graphics& g, juce::ToggleBu
     g.setColour(juce::Colours::white);
     g.fillRoundedRectangle(roundedRectangleButton, 9.f);
 
-    juce::Line<float> diagLine1 (juce::Point<float>((roundedRectangleButton.getX()), roundedRectangleButton.getY()), juce::Point<float>((roundedRectangleButton.getX()) + roundedRectangleButton.getWidth(), roundedRectangleButton.getY() + roundedRectangleButton.getHeight()));
-    juce::Line<float> diagLine2(juce::Point<float>((roundedRectangleButton.getX()) + roundedRectangleButton.getWidth(), roundedRectangleButton.getY()), juce::Point<float>((roundedRectangleButton.getX()), roundedRectangleButton.getY() + roundedRectangleButton.getHeight()));
+    auto n = 2;
+    juce::Line<float> diagLine1 (juce::Point<float>((roundedRectangleButton.getX()) + n, roundedRectangleButton.getY() + n), juce::Point<float>((roundedRectangleButton.getX()) + roundedRectangleButton.getWidth() - n, roundedRectangleButton.getY() + roundedRectangleButton.getHeight() - n));
+    juce::Line<float> diagLine2(juce::Point<float>((roundedRectangleButton.getX()) + roundedRectangleButton.getWidth() + n, roundedRectangleButton.getY() + n), juce::Point<float>((roundedRectangleButton.getX() - n), roundedRectangleButton.getY() + roundedRectangleButton.getHeight() - n));
     g.setColour(juce::Colours::white.darker());
     g.drawLine(diagLine1, 1.0f);
     g.drawLine(diagLine2, 1.0f);
