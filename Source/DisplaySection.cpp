@@ -83,5 +83,9 @@ void DisplaySection::resized()
     
     
     WaveformZoom.setBounds(639, 75, 40, 100);
+    
+    inputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
+    outputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
+
 
 }
