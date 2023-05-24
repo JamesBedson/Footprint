@@ -46,6 +46,7 @@ private:
     ComponentVector activeComponents;
     
     void paintDecor(juce::Graphics&);
+
     std::unique_ptr<juce::ComboBox> createComboBox();
     
     juce::ComboBox      addPedal;
