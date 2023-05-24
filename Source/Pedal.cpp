@@ -19,8 +19,8 @@ Pedal::Pedal()
     bypassSwitch.addListener(this);
     
     addAndMakeVisible(deleteSwitch);
-    //deleteSwitch.setLookAndFeel(&deleteSwitchLookandFeel);
-    //deleteSwitch.setToggleState(false, juce::dontSendNotification);
+    deleteSwitch.setLookAndFeel(&deleteSwitchLookandFeel);
+    deleteSwitch.setToggleState(false, juce::dontSendNotification);
     
 }
 
