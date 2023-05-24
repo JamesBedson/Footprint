@@ -19,7 +19,7 @@ Pedal::Pedal()
     bypassSwitch.addListener(this);
     
     addAndMakeVisible(deleteSwitch);
-    deleteSwitch.setLookAndFeel(&deleteSwitchLookandFeel);
+    deleteSwitch.setLookAndFeel(&pedalLookAndFeel);
     deleteSwitch.setToggleState(false, juce::dontSendNotification);
     
 }
@@ -79,7 +79,7 @@ void Pedal::resized()
     bypassSwitch.setSize(buttonWidth, buttonHeight);
     bypassSwitch.setCentrePosition(bounds.getCentreX(), bounds.getCentreY() + width * 0.6f);
     
-    deleteSwitch.setBounds(bounds.getX() + 15, bounds.getY() + 15, buttonWidth * 0.6f, buttonHeight * 0.6f);
+    deleteSwitch.setBounds(bounds.getX(), bounds.getY(), buttonWidth, buttonHeight);
     
     resizeChild();
 

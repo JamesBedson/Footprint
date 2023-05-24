@@ -23,30 +23,53 @@ public:
     void processBlock(juce::AudioBuffer<float>& buffer,
         juce::MidiBuffer& midiMessages) override;
 
-    Matrix getLPFCoefficients(double cutoffFreq, float qFactor);
+    void setSampleRate(double s) {
+        if (s > 0) { sampleRate = s; }
+    }
+
+    void setQualityFactor(float q) {
+        if (q >= 0) { qualityFactor = q; }
+    }
+
+    void setSensitivity(float s) {
+        if (s >= 0) { sensitivity = s; }
+    }
+
+    void setCutoff1(double c) {
+        if (c > 0) { cutoff1 = c; }
+    }
+
+    void setThresholdMinFreq(double t) {
+        if (t > 0) { thresholdMinFreq = t; }
+    }
+
+    void setNyquist() {
+        nyquist = sampleRate / 2;
+    }
+
+    void setWindowSize(int w) {
+        if (w > 0) { windowSize = w; }
+    }
+
+    //void setWindow() {
+    //for (int i = 0; i < windowSize; i++) { window[i] = 0.0; }
+    //}
+
+    Matrix getLPFCoefficients();
     juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer);
     juce::AudioBuffer<float> applyLPF(juce::AudioBuffer<float> buffer, Matrix ba);
 
-    void setQualityFactor(juce::Atomic<float>* q);
-    void setSensitivity(juce::Atomic<float>* s);
-    void setSampleRate(double s);
-    void setCutoff(double c);
-    void setThresholdMinFreq(double t);
-    //void setNyquist(double n);
-    void setWindowSize(int w);
-
-
 private:
-    
-    juce::Atomic<float>* qualityFactor;
-    juce::Atomic<float>* sensitivity;
-    juce::Atomic<double>* cutoffFrequency;
 
     double sampleRate;
+    float qualityFactor;
+    float sensitivity;
+
+
     double cutoff1;
     double thresholdMinFreq;
-    //double nyquist;
+    double nyquist;
     int windowSize;
-    Matrix window;
+    //std::vector<double>& window;
 
 };

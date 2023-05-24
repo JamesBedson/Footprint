@@ -86,7 +86,9 @@ void CompressorPedal::resizeChild(){
         auto bottomY        = sliderBounds.getBottomLeft().getY();
         
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
+        
     }
+    
 }
 
 void CompressorPedal::paintBackground(juce::Graphics &g){
@@ -101,5 +103,15 @@ void CompressorPedal::paintBackground(juce::Graphics &g){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else {
         return;
-    }   
+    }
+    
+    /*
+    g.setColour(juce::Colours::sandybrown);
+    g.drawRoundedRectangle(getLocalBounds().toFloat(), 15.0f, 1.0f);
+    g.setColour(juce::Colours::sandybrown);
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 15.0f);
+    g.setColour(juce::Colours::white);
+    g.setFont(14.0f);*/
+
+    
 }

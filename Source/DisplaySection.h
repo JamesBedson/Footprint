@@ -12,7 +12,6 @@
 
 #include <JuceHeader.h>
 #include "WaveformVisualizer.h"
-#include "GUIAttributes.h"
 
 //==============================================================================
 /*
@@ -29,10 +28,9 @@ public:
     juce::Image displayBackground = juce::ImageCache::getFromMemory(BinaryData::DisplayPanel_png, BinaryData::DisplayPanel_pngSize);
     
     WaveformVisualizer inputWaveform, outputWaveform;
-
-    juce::Slider bufferSizeView;
     juce::Slider WaveformZoom;
 
+    
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DisplaySection)
 };

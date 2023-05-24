@@ -12,7 +12,6 @@
 
 #include <JuceHeader.h>
 #include "PedalLookAndFeel.h"
-#include "DeleteSwitchLookandFeel.h"
 #include "GUIAttributes.h"
 
 //==============================================================================
@@ -53,7 +52,6 @@ protected:
     juce::ToggleButton  bypassSwitch;
     juce::ToggleButton  deleteSwitch;
     PedalLookAndFeel    pedalLookAndFeel;
-    DeleteSwitchLookandFeel deleteSwitchLookandFeel;
     
     juce::Image         backgroundSlot1 = juce::ImageCache::getFromMemory(BinaryData::Slot1PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
     juce::Image         backgroundSlot2 = juce::ImageCache::getFromMemory(BinaryData::Slot2PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
