@@ -75,8 +75,6 @@ public:
     
 
 private:
-    APVTS::ParameterLayout createParameters();
-    void updateParameters();
     void initParameters();
     
     // Compressor Parameters

@@ -14,10 +14,14 @@
 #include "PedalLookAndFeel.h"
 #include "DeleteSwitchLookandFeel.h"
 #include "GUIAttributes.h"
+#include "PluginProcessor.h"
 
 //==============================================================================
 /*
 */
+
+using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+
 class Pedal : public juce::Component, public juce::Button::Listener
 {
 public:
