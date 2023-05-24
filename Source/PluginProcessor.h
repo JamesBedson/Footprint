@@ -10,6 +10,9 @@
 
 #include <JuceHeader.h>
 #include "CompressorDSP.h"
+#include "ReverbDSP.h"
+#include "DistortionDSP.h"
+#include "EnvelopeFilter.h"
 #include "DisplaySection.h"
 #include "ProcessingConstants.h"
 //==============================================================================
@@ -77,11 +80,12 @@ private:
     void initParameters();
     
     // Compressor Parameters
+
     std::atomic<float>* attack1;
     std::atomic<float>* attack2;
     std::atomic<float>* attack3;
     std::atomic<float>* attack4;
-    
+   
     std::atomic<float>* release1;
     std::atomic<float>* release2;
     std::atomic<float>* release3;
@@ -145,11 +149,19 @@ private:
     std::atomic<float>* cutoffThreshold3;
     std::atomic<float>* cutoffThreshold4;
     
-    //Compressor compressor;
+    std::vector<std::unique_ptr<Compressor>>        compressorVector;
+    std::vector<std::unique_ptr<EnvelopeFilter>>    envelopeFilterVector;
+    std::vector<std::unique_ptr<Distortion>>        distortionVector;
+    std::vector<std::unique_ptr<Reverb>>            reverbVector;
     
     //==============================================================================
     juce::LinearSmoothedValue<float> rmsInLevelLeft, rmsInLevelRight;
     juce::LinearSmoothedValue<float> rmsOutLevelLeft, rmsOutLevelRight;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessor)
+    
+    void initCompressorParameters(const int& slotIdx);
+    void initReverbParameters(const int& slotIdx);
+    void initEnvelopeFilterParameters(const int& slotIdx);
+    void initDistortionParameters(const int& slotIdx);
     
 };

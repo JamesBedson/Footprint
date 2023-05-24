@@ -42,7 +42,7 @@ private:
     
     std::atomic<float>* qualityFactor;
     std::atomic<float>* sensitivity;
-    std::atomic<double>* minCutoffFrequency;
+    std::atomic<float>* minCutoffFrequency;
 
     double sampleRate;
     double cutoff1;

@@ -59,8 +59,8 @@ void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
 }
 
 void Compressor::computeStaticCurve(juce::AudioBuffer<float>& envelope){
-    float slope     = 1 - 1/ratio->get();
-    float th        = threshold->get();
+    float slope     = 1 - 1/static_cast<int>(ratio->load());
+    float th        = threshold->load();
     
     for (int ch = 0; ch < envelope.getNumChannels(); ch++){
         
@@ -80,19 +80,19 @@ void Compressor::computeStaticCurve(juce::AudioBuffer<float>& envelope){
     }
 }
 
-void Compressor::setAttack(juce::Atomic<float> *attackPtr){
+void Compressor::setAttack(std::atomic<float> *attackPtr){
     this->attack = attackPtr;
 }
 
-void Compressor::setRelease(juce::Atomic<float> *releasePtr){
+void Compressor::setRelease(std::atomic<float> *releasePtr){
     this->release = releasePtr;
 }
 
-void Compressor::setRatio(juce::Atomic<int> *ratioPtr){
+void Compressor::setRatio(std::atomic<float> *ratioPtr){
     this->ratio = ratioPtr;
 }
 
-void Compressor::setThreshold(juce::Atomic<float> *thresholdPtr){
+void Compressor::setThreshold(std::atomic<float> *thresholdPtr){
     this->threshold = thresholdPtr;
 }
 

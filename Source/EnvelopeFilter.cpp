@@ -60,14 +60,19 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
                 averageCutoffFreq += value;
             averageCutoffFreq /= windowSize; //CANVI?
 
-            //letsgo
-
             coefficients = getLPFCoefficients(averageCutoffFreq, qualityFactor->get());
 
             if (n == 0 || n == 1) {
                 previousX = { channelDataWrite[0], channelDataWrite[1] }; //CANVI?
             }
             else {
+
+                /*xN = chann
+                xN1 = buffer.getSample(ch, n - 1);
+                xN2 = buffer.getSample(ch, n - 2);
+
+                yN1 = envelopeBuffer.getSample(ch, n - 1);
+                yN2 = envelopeBuffer.getSample(ch, n - 2);
 
                 /*xN = chann
                 xN1 = buffer.getSample(ch, n - 1);
@@ -147,8 +152,6 @@ juce::AudioBuffer<float> EnvelopeFilter::applyLPF(juce::AudioBuffer<float> buffe
 }
 
 
-
-
 void EnvelopeFilter::setQualityFactor(std::atomic<float>* q) {
     if (q->load() >= 0.f) { this->qualityFactor = q; }
 }
@@ -159,6 +162,9 @@ void EnvelopeFilter::setSensitivity(std::atomic<float>* s) {
 
 void EnvelopeFilter::setMinCutoffFreq(std::atomic<double>* m) {
     if (m->load() >= 0) { this->minCutoffFrequency = m; }
+
+void EnvelopeFilter::setSensitivity(juce::Atomic<float>* s) {
+    if (s->get() >= 0) { this->sensitivity = s; }
 }
 
 void EnvelopeFilter::setSampleRate(double s) {
