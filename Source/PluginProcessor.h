@@ -80,12 +80,12 @@ private:
     void initParameters();
     
     // Compressor Parameters
-    
+
     std::atomic<float>* attack1;
     std::atomic<float>* attack2;
     std::atomic<float>* attack3;
     std::atomic<float>* attack4;
-    
+   
     std::atomic<float>* release1;
     std::atomic<float>* release2;
     std::atomic<float>* release3;

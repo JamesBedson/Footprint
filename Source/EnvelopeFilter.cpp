@@ -74,6 +74,13 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
                 yN1 = envelopeBuffer.getSample(ch, n - 1);
                 yN2 = envelopeBuffer.getSample(ch, n - 2);
 
+                /*xN = chann
+                xN1 = buffer.getSample(ch, n - 1);
+                xN2 = buffer.getSample(ch, n - 2);
+
+                yN1 = envelopeBuffer.getSample(ch, n - 1);
+                yN2 = envelopeBuffer.getSample(ch, n - 2);
+
                 y = ba[0][0] * xN + ba[0][1] * xN1 + ba[0][2] * xN2 - ba[1][1] * yN1 - ba[1][2] * yN2;
                 envelopeBuffer.setSample(ch, n, y);*/
             }
@@ -145,11 +152,16 @@ juce::AudioBuffer<float> EnvelopeFilter::applyLPF(juce::AudioBuffer<float> buffe
 }
 
 
-
-
-void EnvelopeFilter::setQualityFactor(juce::Atomic<float>* q) {
-    if (q->get() >= 0.f) { this->qualityFactor = q; }
+void EnvelopeFilter::setQualityFactor(std::atomic<float>* q) {
+    if (q->load() >= 0.f) { this->qualityFactor = q; }
 }
+
+void EnvelopeFilter::setSensitivity(std::atomic<float>* s) {
+    if (s->load() >= 0) { this->sensitivity = s; }
+}
+
+void EnvelopeFilter::setMinCutoffFreq(std::atomic<double>* m) {
+    if (m->load() >= 0) { this->minCutoffFrequency = m; }
 
 void EnvelopeFilter::setSensitivity(juce::Atomic<float>* s) {
     if (s->get() >= 0) { this->sensitivity = s; }

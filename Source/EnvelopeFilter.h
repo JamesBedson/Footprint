@@ -28,8 +28,9 @@ public:
     juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer);
     juce::AudioBuffer<float> applyLPF(juce::AudioBuffer<float> buffer, Matrix ba);
 
-    void setQualityFactor(juce::Atomic<float>* q);
-    void setSensitivity(juce::Atomic<float>* s);
+    void setQualityFactor(std::atomic<float>* q);
+    void setSensitivity(std::atomic<float>* s);
+    void setMinCutoffFreq(std::atomic<double>* m);
     void setSampleRate(double s);
     void setCutoff(double c);
     void setThresholdMinFreq(double t);
@@ -39,9 +40,9 @@ public:
 
 private:
     
-    juce::Atomic<float>* qualityFactor;
-    juce::Atomic<float>* sensitivity;
-    juce::Atomic<double>* cutoffFrequency;
+    std::atomic<float>* qualityFactor;
+    std::atomic<float>* sensitivity;
+    std::atomic<float>* minCutoffFrequency;
 
     double sampleRate;
     double cutoff1;
