@@ -53,11 +53,13 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
 
         for (int n = 0; n < buffer.getNumSamples(); n++) {
             
+
             currentCutoff = static_cast<double>(minCutoffFrequency->load()) + static_cast<double>(sensitivity->load()) * envelopeDataRead[n] * (sampleRate / 2 - static_cast<double>(minCutoffFrequency->load()));
             std::rotate(window[ch].begin(), window[ch].begin() + 1, window[ch].end());
             window[ch][windowSize - 1] = currentCutoff;
 
             for (double value : window[ch]) averageCutoffFreq += value;
+
 
             if (!isFirst) {
                 averageCutoffFreq /= times;
@@ -66,6 +68,7 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
             else { averageCutoffFreq /= windowSize;}
 
             coefficients = getLPFCoefficients(averageCutoffFreq, static_cast<double>(qualityFactor->load()));
+
 
             if (n == 0 || n == 1) {
                 previousX = { channelDataWrite[0], channelDataWrite[1] }; //CANVI?

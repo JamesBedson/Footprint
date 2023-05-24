@@ -20,7 +20,7 @@
 class ReverbPedal  : public Pedal
 {
 public:
-    ReverbPedal();
+    ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs);
     ~ReverbPedal()                                      override;
 
     void paintBackground(juce::Graphics&)               override;
@@ -31,6 +31,8 @@ private:
 
     juce::Slider mix, highCut, lowCut, type;
     std::vector<juce::Slider*> sliders {&mix, &highCut, &lowCut, &type};
+    
+    SliderAttachment mixAttachment, lowpassAttachment, highpassAttachment;
     
     juce::Label mixLabel, highCutLabel, lowCutLabel, typeLabel;
     std::vector<juce::Label*> sliderLabels{ &mixLabel, &highCutLabel, &lowCutLabel, &typeLabel };

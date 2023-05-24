@@ -26,19 +26,25 @@ apvts(*this, nullptr, "Parameters",
 #include "Parametres.h"
 )
 {
-    
+    initParameters();
     compressorVector.resize(4);
     reverbVector.resize(4);
     envelopeFilterVector.resize(4);
     distortionVector.resize(4);
     
-    for (int moduleIdx = 0; moduleIdx < 4; moduleIdx++){
+    for (int slotIdx = 0; slotIdx < 4; slotIdx++){
         
-        compressorVector[moduleIdx] = std::make_unique<Compressor>();
-        initCompressorParameters(moduleIdx);
+        compressorVector[slotIdx] = std::make_unique<Compressor>();
+        initCompressorParameters(slotIdx);
         
-        envelopeFilterVector[moduleIdx] = std::make_unique<EnvelopeFilter>();
-        initEnvelopeFilterParameters(moduleIdx);
+        envelopeFilterVector[slotIdx] = std::make_unique<EnvelopeFilter>();
+        initEnvelopeFilterParameters(slotIdx);
+        
+        reverbVector[slotIdx] = std::make_unique<Reverb>();
+        initReverbParameters(slotIdx);
+        
+        distortionVector[slotIdx] = std::make_unique<Distortion>();
+        initDistortionParameters(slotIdx);
     }
     
 }
@@ -112,8 +118,7 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    //updateParameters();
-    //compressor.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+
     rmsInLevelLeft.reset(sampleRate, 0.5);
     rmsInLevelRight.reset(sampleRate, 0.5);
     rmsOutLevelLeft.reset(sampleRate, 0.5);
@@ -267,41 +272,6 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new FootprintAudioProcessor();
 }
 
-APVTS::ParameterLayout FootprintAudioProcessor::createParameters(){
-    
-    auto attack = std::make_unique<juce::AudioParameterFloat>
-    (juce::ParameterID {"Compressor_Attack", 1},
-     "Compressor_Attack",
-     juce::NormalisableRange<float>(0.001f, 0.5f, 0.002f, 1.f),
-     0.01f);
-    
-    auto release = std::make_unique<juce::AudioParameterFloat>
-    (juce::ParameterID {"Compressor_Release", 2},
-     "Compressor_Release",
-     juce::NormalisableRange<float>(0.001f, 0.5f, 0.002f, 1.f),
-     0.01f);
-    
-    auto threshold = std::make_unique<juce::AudioParameterFloat>
-    (juce::ParameterID {"Compressor_Threshold", 3},
-     "Compressor_Threshold",
-     juce::NormalisableRange<float>(-80.f, 20.f, 0.1f, 1.f),
-     -35.f);
-    
-    auto ratio = std::make_unique<juce::AudioParameterInt>
-    (juce::ParameterID {"Compressor_Ratio", 4},
-     "Compressor_Ratio",
-     1,
-     15,
-     10);
-    
-    return {std::move(attack), std::move(release), std::move(threshold), std::move(ratio)};
-}
-
-
-void FootprintAudioProcessor::updateParameters(){
-    
-}
-
 void FootprintAudioProcessor::initParameters(){
     
     // Compressor
@@ -376,29 +346,6 @@ void FootprintAudioProcessor::initParameters(){
     
 }
 
-void FootprintAudioProcessor::initParameters(){
-    
-    attack1     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack1);
-    attack2     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack2);
-    attack3     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack3);
-    attack4     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack4);
-    
-    release1    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease1);
-    release2    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease2);
-    release3    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease3);
-    release4    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease4);
-    
-    threshold1  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold1);
-    threshold2  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold2);
-    threshold3  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold3);
-    threshold4  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold4);
-    
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-}
-
 float FootprintAudioProcessor::getInRmsValue(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
@@ -455,7 +402,7 @@ void FootprintAudioProcessor::initCompressorParameters(const int &slotIdx){
         }
             break;
         
-        case 4:{
+        case 3:{
             
             compressorVector[slotIdx]->setAttack(attack4);
             compressorVector[slotIdx]->setRelease(release4);
@@ -467,6 +414,41 @@ void FootprintAudioProcessor::initCompressorParameters(const int &slotIdx){
 }
 
 void FootprintAudioProcessor::initEnvelopeFilterParameters(const int &slotIdx){
+    
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality1);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold1);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity1);
+        }
+            break;
+            
+        case 1: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality2);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold2);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity2);
+        }
+            break;
+            
+        case 2: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality3);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold3);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity3);
+        }
+            break;
+        
+        case 3:{
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality4);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold4);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity4);
+        }
+            break;
+    }
     
 }
 
@@ -492,22 +474,57 @@ void FootprintAudioProcessor::initDistortionParameters(const int &slotIdx){
             
         case 2: {
             
-            distortionVector[slotIdx]->setGain(distGain2);
-            distortionVector[slotIdx]->setLevel(level2);
-            distortionVector[slotIdx]->setTone(tone2);
+            distortionVector[slotIdx]->setGain(distGain3);
+            distortionVector[slotIdx]->setLevel(level3);
+            distortionVector[slotIdx]->setTone(tone3);
         }
             break;
         
-        case 4:{
+        case 3:{
             
-            compressorVector[slotIdx]->setAttack(attack4);
-            compressorVector[slotIdx]->setRelease(release4);
-            compressorVector[slotIdx]->setThreshold(threshold4);
-            compressorVector[slotIdx]->setRatio(ratio4);
+            distortionVector[slotIdx]->setGain(distGain4);
+            distortionVector[slotIdx]->setLevel(level4);
+            distortionVector[slotIdx]->setTone(tone4);
         }
             break;
     }
+}
+
+void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
     
-    
-    
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix1);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass1);
+        }
+            break;
+            
+        case 1: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix2);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass2);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass2);
+            
+        }
+            break;
+            
+        case 2: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix3);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass3);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass3);
+        }
+            break;
+        
+        case 3:{
+            
+            reverbVector[slotIdx]->setWet(wetDryMix1);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass4);
+        }
+            break;
+    }
 }

@@ -12,7 +12,10 @@
 #include "EnvelopePedal.h"
 
 //==============================================================================
-EnvelopePedal::EnvelopePedal()
+EnvelopePedal::EnvelopePedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs)
+: qualityAttachment(processor->apvts, parameterIDs[0], qualityFactor),
+sensitivityAttachment(processor->apvts, parameterIDs[1], sensitivity),
+cutoffThreshAttachment(processor->apvts, parameterIDs[2], cutoffThreshold)
 {
     for (auto& slider : sliders){
         addAndMakeVisible(slider);
