@@ -53,3 +53,16 @@ juce::dsp::AudioBlock<float> Reverb::processMono(juce::dsp::AudioBlock<float> ch
     
     return channelData;
 }
+
+void Reverb::setWet(std::atomic<float>* wetParam){
+    
+    this->wet = wetParam;
+}
+
+void Reverb::setLowpassCutoff(std::atomic<float>* lowpassCutoff){
+    this->lowpassCutoff = lowpassCutoff;
+}
+
+void Reverb::setHighpassCutoff(std::atomic<float>* highpassCutoff){
+    this->highpassCutoff = highpassCutoff;
+}
