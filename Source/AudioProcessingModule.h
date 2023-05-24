@@ -11,13 +11,13 @@
 #pragma once
 
 #include <JuceHeader.h>
+
 //==============================================================================
 /*
 */
 class AudioProcessingModule
 {
 public:
-    
     AudioProcessingModule();
     virtual ~AudioProcessingModule() = 0;
     

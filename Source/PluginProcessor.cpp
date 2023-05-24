@@ -26,7 +26,12 @@ apvts(*this, nullptr, "Parameters",
 #include "Parametres.h"
 )
 {
-    
+    //updateParameters();
+    //compressor.setRatio(&compressorRatio);
+    //compressor.setAttack(&compressorAttack);
+    //compressor.setRelease(&compressorRelease);
+    //compressor.setThreshold(&compressorThreshold);
+
 }
 
 FootprintAudioProcessor::~FootprintAudioProcessor()
@@ -286,30 +291,11 @@ APVTS::ParameterLayout FootprintAudioProcessor::createParameters(){
 
 void FootprintAudioProcessor::updateParameters(){
     
+    compressorAttack.set(apvts.getRawParameterValue("Compressor_Attack")->load());
+    compressorRelease.set(apvts.getRawParameterValue("Compressor_Release")->load());
+    compressorThreshold.set(apvts.getRawParameterValue("Compressor_Threshold")->load());
+    compressorRatio.set(apvts.getRawParameterValue("Compressor_Threshold")->load());
     
-}
-
-void FootprintAudioProcessor::initParameters(){
-    
-    attack1     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack1);
-    attack2     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack2);
-    attack3     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack3);
-    attack4     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack4);
-    
-    release1    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease1);
-    release2    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease2);
-    release3    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease3);
-    release4    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease4);
-    
-    threshold1  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold1);
-    threshold2  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold2);
-    threshold3  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold3);
-    threshold4  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold4);
-    
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
 }
 
 float FootprintAudioProcessor::getInRmsValue(const int channel) const

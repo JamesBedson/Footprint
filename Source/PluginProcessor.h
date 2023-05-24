@@ -74,76 +74,11 @@ public:
 private:
     APVTS::ParameterLayout createParameters();
     void updateParameters();
-    void initParameters();
     
-    // Compressor Parameters
-    std::atomic<float>* attack1;
-    std::atomic<float>* attack2;
-    std::atomic<float>* attack3;
-    std::atomic<float>* attack4;
-    
-    std::atomic<float>* release1;
-    std::atomic<float>* release2;
-    std::atomic<float>* release3;
-    std::atomic<float>* release4;
-    
-    std::atomic<float>* threshold1;
-    std::atomic<float>* threshold2;
-    std::atomic<float>* threshold3;
-    std::atomic<float>* threshold4;
-    
-    std::atomic<float>* ratio1;
-    std::atomic<float>* ratio2;
-    std::atomic<float>* ratio3;
-    std::atomic<float>* ratio4;
-    
-    // Reverb Parameters
-    std::atomic<float>* wetDryMix1;
-    std::atomic<float>* wetDryMix2;
-    std::atomic<float>* wetDryMix3;
-    std::atomic<float>* wetDryMix4;
-    
-    std::atomic<float>* cutoffLowpass1;
-    std::atomic<float>* cutoffLowpass2;
-    std::atomic<float>* cutoffLowpass3;
-    std::atomic<float>* cutoffLowpass4;
-    
-    std::atomic<float>* cutoffHighpass1;
-    std::atomic<float>* cutoffHighpass2;
-    std::atomic<float>* cutoffHighpass3;
-    std::atomic<float>* cutoffHighpass4;
-    
-    // Distortion Parameters
-    std::atomic<float>* distGain1;
-    std::atomic<float>* distGain2;
-    std::atomic<float>* distGain3;
-    std::atomic<float>* distGain4;
-    
-    std::atomic<float>* level1;
-    std::atomic<float>* level2;
-    std::atomic<float>* level3;
-    std::atomic<float>* level4;
-    
-    std::atomic<float>* tone1;
-    std::atomic<float>* tone2;
-    std::atomic<float>* tone3;
-    std::atomic<float>* tone4;
-    
-    // Envelope Filter Parameters
-    std::atomic<float>* quality1;
-    std::atomic<float>* quality2;
-    std::atomic<float>* quality3;
-    std::atomic<float>* quality4;
-    
-    std::atomic<float>* sensitivity1;
-    std::atomic<float>* sensitivity2;
-    std::atomic<float>* sensitivity3;
-    std::atomic<float>* sensitivity4;
-    
-    std::atomic<float>* cutoffThreshold1;
-    std::atomic<float>* cutoffThreshold2;
-    std::atomic<float>* cutoffThreshold3;
-    std::atomic<float>* cutoffThreshold4;
+    juce::Atomic<float> compressorAttack;
+    juce::Atomic<float> compressorRelease;
+    juce::Atomic<float> compressorThreshold;
+    juce::Atomic<int>   compressorRatio;
     
     Compressor compressor;
     
