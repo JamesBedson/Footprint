@@ -23,17 +23,17 @@ public:
     
     void prepare(double sampleRate, int samplesPerBlock, int numChannels) override;
     void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) override;
-    void setAttack(juce::Atomic<float>* attackPtr);
-    void setRelease(juce::Atomic<float>* releasePtr);
-    void setThreshold(juce::Atomic<float>* thresholdPtr);
-    void setRatio(juce::Atomic<int>* ratioPtr);
+    void setAttack(std::atomic<float>* attackPtr);
+    void setRelease(std::atomic<float>* releasePtr);
+    void setThreshold(std::atomic<float>* thresholdPtr);
+    void setRatio(std::atomic<float>* ratioPtr);
 
 private:
     
-    juce::Atomic<float>* attack;
-    juce::Atomic<float>* release;
-    juce::Atomic<float>* threshold;
-    juce::Atomic<int>* ratio;
+    std::atomic<float>* attack;
+    std::atomic<float>* release;
+    std::atomic<float>* threshold;
+    std::atomic<float>* ratio;
     ARAverager attackReleaseAverager;
     
     void computeStaticCurve(juce::AudioBuffer<float>&);

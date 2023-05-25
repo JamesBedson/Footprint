@@ -26,6 +26,26 @@ apvts(*this, nullptr, "Parameters",
 #include "Parametres.h"
 )
 {
+    initParameters();
+    compressorVector.resize(4);
+    reverbVector.resize(4);
+    envelopeFilterVector.resize(4);
+    distortionVector.resize(4);
+    
+    for (int slotIdx = 0; slotIdx < 4; slotIdx++){
+        
+        compressorVector[slotIdx] = std::make_unique<Compressor>();
+        initCompressorParameters(slotIdx);
+        
+        envelopeFilterVector[slotIdx] = std::make_unique<EnvelopeFilter>();
+        initEnvelopeFilterParameters(slotIdx);
+        
+        reverbVector[slotIdx] = std::make_unique<Reverb>();
+        initReverbParameters(slotIdx);
+        
+        distortionVector[slotIdx] = std::make_unique<Distortion>();
+        initDistortionParameters(slotIdx);
+    }
     
 }
 
@@ -98,8 +118,7 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    //updateParameters();
-    //compressor.prepare(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+
     rmsInLevelLeft.reset(sampleRate, 0.5);
     rmsInLevelRight.reset(sampleRate, 0.5);
     rmsOutLevelLeft.reset(sampleRate, 0.5);
@@ -253,44 +272,9 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new FootprintAudioProcessor();
 }
 
-APVTS::ParameterLayout FootprintAudioProcessor::createParameters(){
-    
-    auto attack = std::make_unique<juce::AudioParameterFloat>
-    (juce::ParameterID {"Compressor_Attack", 1},
-     "Compressor_Attack",
-     juce::NormalisableRange<float>(0.001f, 0.5f, 0.002f, 1.f),
-     0.01f);
-    
-    auto release = std::make_unique<juce::AudioParameterFloat>
-    (juce::ParameterID {"Compressor_Release", 2},
-     "Compressor_Release",
-     juce::NormalisableRange<float>(0.001f, 0.5f, 0.002f, 1.f),
-     0.01f);
-    
-    auto threshold = std::make_unique<juce::AudioParameterFloat>
-    (juce::ParameterID {"Compressor_Threshold", 3},
-     "Compressor_Threshold",
-     juce::NormalisableRange<float>(-80.f, 20.f, 0.1f, 1.f),
-     -35.f);
-    
-    auto ratio = std::make_unique<juce::AudioParameterInt>
-    (juce::ParameterID {"Compressor_Ratio", 4},
-     "Compressor_Ratio",
-     1,
-     15,
-     10);
-    
-    return {std::move(attack), std::move(release), std::move(threshold), std::move(ratio)};
-}
-
-
-void FootprintAudioProcessor::updateParameters(){
-    
-    
-}
-
 void FootprintAudioProcessor::initParameters(){
     
+    // Compressor
     attack1     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack1);
     attack2     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack2);
     attack3     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack3);
@@ -307,9 +291,59 @@ void FootprintAudioProcessor::initParameters(){
     threshold4  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold4);
     
     ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
+    ratio2      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio2);
+    ratio3      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio3);
+    ratio4      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio4);
+    
+    // Reverb
+    wetDryMix1      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMix1);
+    wetDryMix2      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMix2);
+    wetDryMix3      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMix3);
+    wetDryMix4      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMix4);
+    
+    cutoffLowpass1  = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass1);
+    cutoffLowpass2  = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass2);
+    cutoffLowpass3  = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass3);
+    cutoffLowpass4  = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass4);
+    
+    cutoffHighpass1 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass1);
+    cutoffHighpass2 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass2);
+    cutoffHighpass3 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass3);
+    cutoffHighpass4 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass4);
+    
+    // Distortion
+    distGain1   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain1);
+    distGain2   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain2);
+    distGain3   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain3);
+    distGain4   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain4);
+    
+    level1      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevel1);
+    level2      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevel2);
+    level3      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevel3);
+    level4      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevel4);
+    
+    tone1       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionTone1);
+    tone2       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionTone2);
+    tone3       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionTone3);
+    tone4       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionTone4);
+    
+    
+    // Envelope Filter
+    quality1            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality1);
+    quality2            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality2);
+    quality3            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality3);
+    quality4            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality4);
+    
+    sensitivity1        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity1);
+    sensitivity2        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity2);
+    sensitivity3        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity3);
+    sensitivity4        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity4);
+    
+    cutoffThreshold1    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold1);
+    cutoffThreshold2    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold2);
+    cutoffThreshold3    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold3);
+    cutoffThreshold4    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold4);
+    
 }
 
 float FootprintAudioProcessor::getInRmsValue(const int channel) const
@@ -335,4 +369,162 @@ float FootprintAudioProcessor::getOutRmsValue(const int channel) const
 void FootprintAudioProcessor::setDisplaySection(DisplaySection* section)
 {
     this->displaySection = section;
+}
+
+void FootprintAudioProcessor::initCompressorParameters(const int &slotIdx){
+    
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            compressorVector[slotIdx]->setAttack(attack1);
+            compressorVector[slotIdx]->setRelease(release1);
+            compressorVector[slotIdx]->setThreshold(threshold1);
+            compressorVector[slotIdx]->setRatio(ratio1);
+        }
+            break;
+            
+        case 1: {
+            
+            compressorVector[slotIdx]->setAttack(attack2);
+            compressorVector[slotIdx]->setRelease(release2);
+            compressorVector[slotIdx]->setThreshold(threshold2);
+            compressorVector[slotIdx]->setRatio(ratio2);
+        }
+            break;
+            
+        case 2: {
+            
+            compressorVector[slotIdx]->setAttack(attack3);
+            compressorVector[slotIdx]->setRelease(release3);
+            compressorVector[slotIdx]->setThreshold(threshold3);
+            compressorVector[slotIdx]->setRatio(ratio3);
+        }
+            break;
+        
+        case 3:{
+            
+            compressorVector[slotIdx]->setAttack(attack4);
+            compressorVector[slotIdx]->setRelease(release4);
+            compressorVector[slotIdx]->setThreshold(threshold4);
+            compressorVector[slotIdx]->setRatio(ratio4);
+        }
+            break;
+    }
+}
+
+void FootprintAudioProcessor::initEnvelopeFilterParameters(const int &slotIdx){
+    
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality1);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold1);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity1);
+        }
+            break;
+            
+        case 1: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality2);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold2);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity2);
+        }
+            break;
+            
+        case 2: {
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality3);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold3);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity3);
+        }
+            break;
+        
+        case 3:{
+            
+            envelopeFilterVector[slotIdx]->setQualityFactor(quality4);
+            envelopeFilterVector[slotIdx]->setMinCutoffFreq(cutoffThreshold4);
+            envelopeFilterVector[slotIdx]->setSensitivity(sensitivity4);
+        }
+            break;
+    }
+    
+}
+
+void FootprintAudioProcessor::initDistortionParameters(const int &slotIdx){
+    
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            distortionVector[slotIdx]->setGain(distGain1);
+            distortionVector[slotIdx]->setLevel(level1);
+            distortionVector[slotIdx]->setTone(tone1);
+        }
+            break;
+            
+        case 1: {
+            
+            distortionVector[slotIdx]->setGain(distGain2);
+            distortionVector[slotIdx]->setLevel(level2);
+            distortionVector[slotIdx]->setTone(tone2);
+        }
+            break;
+            
+        case 2: {
+            
+            distortionVector[slotIdx]->setGain(distGain3);
+            distortionVector[slotIdx]->setLevel(level3);
+            distortionVector[slotIdx]->setTone(tone3);
+        }
+            break;
+        
+        case 3:{
+            
+            distortionVector[slotIdx]->setGain(distGain4);
+            distortionVector[slotIdx]->setLevel(level4);
+            distortionVector[slotIdx]->setTone(tone4);
+        }
+            break;
+    }
+}
+
+void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
+    
+    switch (slotIdx) {
+        
+        case 0: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix1);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass1);
+        }
+            break;
+            
+        case 1: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix2);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass2);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass2);
+            
+        }
+            break;
+            
+        case 2: {
+            
+            reverbVector[slotIdx]->setWet(wetDryMix3);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass3);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass3);
+        }
+            break;
+        
+        case 3:{
+            
+            reverbVector[slotIdx]->setWet(wetDryMix1);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
+            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass4);
+        }
+            break;
+    }
 }

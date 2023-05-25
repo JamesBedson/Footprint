@@ -15,6 +15,7 @@
 Pedal::Pedal()
 {
     addAndMakeVisible(bypassSwitch);
+    bypassSwitch.setToggleState(true, juce::dontSendNotification);
     bypassSwitch.setLookAndFeel(&pedalLookAndFeel);
     bypassSwitch.addListener(this);
     

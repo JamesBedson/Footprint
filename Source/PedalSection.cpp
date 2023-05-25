@@ -12,8 +12,9 @@
 #include "PedalSection.h"
 
 //==============================================================================
-PedalSection::PedalSection()
+PedalSection::PedalSection(FootprintAudioProcessor* processor)
 {
+    processorPtr = processor;
     activeComponents.resize(4);
     
     for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++){
@@ -147,7 +148,7 @@ void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
 
                 if (optionSelected == 1) { // Compressor
                     this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<CompressorPedal>();
+                    activeComponents[componentIdx] = std::make_unique<CompressorPedal>(this->processorPtr, getCompressorParameterIDs(componentIdx));
                     auto* pedal = dynamic_cast<CompressorPedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
                     pedal->setSlot(componentIdx + 1);
@@ -156,7 +157,7 @@ void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
                 }
                 else if (optionSelected == 2) { // Distortion
                     this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<DistortionPedal>();
+                    activeComponents[componentIdx] = std::make_unique<DistortionPedal>(this->processorPtr, getDistortionParameterIDs(componentIdx));
                     auto* pedal = dynamic_cast<DistortionPedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
                     pedal->setSlot(componentIdx + 1);
@@ -164,15 +165,17 @@ void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
                 }
                 else if (optionSelected == 3) { // Envelope Filter
                     this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<EnvelopePedal>();
+                    activeComponents[componentIdx] = std::make_unique<EnvelopePedal>(this->processorPtr, getEnvelopeFilterParameterIDs(componentIdx));
+                    
                     auto* pedal = dynamic_cast<EnvelopePedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
+                    
                     pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
                 }
                 else if (optionSelected == 4) { // Reverb
                     this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<ReverbPedal>();
+                    activeComponents[componentIdx] = std::make_unique<ReverbPedal>(this->processorPtr, getReverbParameterIDs(componentIdx));
                     auto* pedal = dynamic_cast<ReverbPedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
                     pedal->setSlot(componentIdx + 1);
@@ -181,4 +184,149 @@ void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
             }
         }
     }
+}
+
+juce::StringArray PedalSection::getCompressorParameterIDs(const int &idx){
+    
+    switch (idx) {
+            
+        case 0:
+            return {
+                ProcessingConstants::Compressor::Identifiers::compressorAttack1,
+                ProcessingConstants::Compressor::Identifiers::compressorRelease1,
+                ProcessingConstants::Compressor::Identifiers::compressorThreshold1,
+                ProcessingConstants::Compressor::Identifiers::compressorRatio1
+            };
+            
+        case 1:
+            return {
+                ProcessingConstants::Compressor::Identifiers::compressorAttack2,
+                ProcessingConstants::Compressor::Identifiers::compressorRelease2,
+                ProcessingConstants::Compressor::Identifiers::compressorThreshold2,
+                ProcessingConstants::Compressor::Identifiers::compressorRatio2
+            };
+            
+        case 2:
+            return {
+                ProcessingConstants::Compressor::Identifiers::compressorAttack3,
+                ProcessingConstants::Compressor::Identifiers::compressorRelease3,
+                ProcessingConstants::Compressor::Identifiers::compressorThreshold3,
+                ProcessingConstants::Compressor::Identifiers::compressorRatio3
+            };
+            
+        case 3:
+            return {
+                ProcessingConstants::Compressor::Identifiers::compressorAttack4,
+                ProcessingConstants::Compressor::Identifiers::compressorRelease4,
+                ProcessingConstants::Compressor::Identifiers::compressorThreshold4,
+                ProcessingConstants::Compressor::Identifiers::compressorRatio4
+            };
+    }
+    return {};
+}
+
+juce::StringArray PedalSection::getReverbParameterIDs(const int &idx){
+    
+    switch (idx) {
+            
+        case 0:
+            return {
+                ProcessingConstants::Reverb::Identifiers::reverbWetMix1,
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass1,
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass1
+            };
+            
+        case 1:
+            return {
+                ProcessingConstants::Reverb::Identifiers::reverbWetMix2,
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass2,
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass2
+            };
+            
+        case 2:
+            return {
+                ProcessingConstants::Reverb::Identifiers::reverbWetMix3,
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass3,
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass3
+            };
+            
+        case 3:
+            return {
+                ProcessingConstants::Reverb::Identifiers::reverbWetMix4,
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass4,
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass4
+            };
+    }
+    return {};
+}
+
+juce::StringArray PedalSection::getDistortionParameterIDs(const int &idx){
+    
+    switch (idx) {
+            
+        case 0:
+            return {
+                ProcessingConstants::Distortion::Identifiers::distortionGain1,
+                ProcessingConstants::Distortion::Identifiers::distortionLevel1,
+                ProcessingConstants::Distortion::Identifiers::distortionTone1
+            };
+            
+        case 1:
+            return {
+                ProcessingConstants::Distortion::Identifiers::distortionGain2,
+                ProcessingConstants::Distortion::Identifiers::distortionLevel2,
+                ProcessingConstants::Distortion::Identifiers::distortionTone2
+            };
+            
+        case 2:
+            return {
+                ProcessingConstants::Distortion::Identifiers::distortionGain3,
+                ProcessingConstants::Distortion::Identifiers::distortionLevel3,
+                ProcessingConstants::Distortion::Identifiers::distortionTone3
+            };
+            
+        case 3:
+            return {
+                ProcessingConstants::Distortion::Identifiers::distortionGain4,
+                ProcessingConstants::Distortion::Identifiers::distortionLevel4,
+                ProcessingConstants::Distortion::Identifiers::distortionTone4
+            };
+    }
+    return {};
+    
+}
+
+juce::StringArray PedalSection::getEnvelopeFilterParameterIDs(const int &idx){
+    
+    switch (idx) {
+            
+        case 0:
+            return {
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality1,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity1,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold1
+            };
+            
+        case 1:
+            return {
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality2,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity2,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold2
+            };
+            
+        case 2:
+            return {
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality3,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity3,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold3
+            };
+            
+        case 3:
+            return {
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality4,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity4,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold4
+            };
+    }
+    return {};
 }

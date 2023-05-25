@@ -12,7 +12,10 @@
 #include "DistortionPedal.h"
 
 //==============================================================================
-DistortionPedal::DistortionPedal()
+DistortionPedal::DistortionPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs)
+: gainAttachment(processor->apvts, parameterIDs[0], gain),
+levelAttachment(processor->apvts, parameterIDs[1], level),
+toneAttachment(processor->apvts, parameterIDs[2], tone)
 {
     for (auto& slider : sliders) {
         addAndMakeVisible(slider);
