@@ -49,7 +49,6 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
     juce::AudioBuffer<float> ampBuffer = getAmplitudeEnvelope(buffer);
     double currentCutoff;
     double averageCutoffFreq = 0.0;
-    double xN, xN1, xN2, yN1, yN2, b0, b1, b2, a0, a1, a2;
     int times = 1;
 
     for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
@@ -69,11 +68,7 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
 
             averageCutoffFreq /= windowSize;
 
-            //applyLPF(channelDataRead, channelDataWrite, ch, n, averageCutoffFreq);
-
-
-
-
+            applyLPF(channelDataRead, channelDataWrite, ch, n, averageCutoffFreq);
 
             averageCutoffFreq = 0.0;
         }
@@ -143,7 +138,7 @@ juce::AudioBuffer<float> EnvelopeFilter::applySimpleLPF(juce::AudioBuffer<float>
     return envelopeBuffer;
 }
 
-void EnvelopeFilter::applyLPF(float& read, float& write, int ch, int n, double cutoff) {
+void EnvelopeFilter::applyLPF(const float* read, float* write, int ch, int n, double cutoff) {
     float xN1, xN2, yN1, yN2, b0, b1, b2, a1, a2;
 
     DMatrix coefficients = getLPFCoefficients(cutoff, static_cast<double>(qualityFactor->load()));
