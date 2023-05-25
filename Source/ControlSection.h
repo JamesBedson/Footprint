@@ -35,12 +35,18 @@ private:
     int sliderRow2CentreY;
 
     int sliderWidth, sliderHeight;
+    int toggleWidth, toggleHeight;
     int sliderLabelWidth, sliderLabelHeight;
+    int toggleLabelWidth, toggleLabelHeight;
 
     juce::Slider input, output;
     std::vector<juce::Slider*> sliders{&input, &output};
     juce::Label inputLabel, outputLabel;
     std::vector<juce::Label*> sliderLabels{ &inputLabel, &outputLabel};
+    
+    juce::ToggleButton toggle;
+    
+    juce::Label switchLabel;
     
     void paintDecor(juce::Graphics&);
 
