@@ -26,16 +26,16 @@ void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChann
     isFirst = true;
     this->windowSize = 500;
 
-    window.resize(numChannels);
+    windowCutoffs.resize(numChannels);
     previousX.resize(numChannels);
     previousY.resize(numChannels);
 
     for (int ch = 0; ch < numChannels; ch++) {
-        window[ch].resize(windowSize);
+        windowCutoffs[ch].resize(windowSize);
         previousX[ch].resize(2);
         previousY[ch].resize(2);
 
-        for (int n = 0; n < windowSize; n++) window[ch][n] = 0.0;
+        for (int n = 0; n < windowSize; n++) windowCutoffs[ch][n] = 0.0;
         for (int n : {0, 1}) {
             previousX[ch][n] = 0.f;
             previousY[ch][n] = 0.f;
@@ -50,6 +50,9 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
     double currentCutoff;
     double averageCutoffFreq = 0.0;
     int times = 1;
+    double minCutoff = static_cast<double>(minCutoffFrequency->load());
+    double sens = static_cast<double>(sensitivity->load());
+    double amplitude;
 
     for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
 
@@ -59,21 +62,27 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
 
         for (int n = 0; n < buffer.getNumSamples(); n++) {
             
+            amplitude = static_cast<double>(envelopeDataRead[n]);
+            currentCutoff = minCutoff + sens * amplitude * (sampleRate / 2.0 - minCutoff);
+            std::rotate(windowCutoffs[ch].begin(), windowCutoffs[ch].begin() + 1, windowCutoffs[ch].end());
+            windowCutoffs[ch][windowSize - 1] = currentCutoff;
 
-            currentCutoff = static_cast<double>(minCutoffFrequency->load()) + static_cast<double>(sensitivity->load()) * static_cast<double>(envelopeDataRead[n]) * (sampleRate / 2 - static_cast<double>(minCutoffFrequency->load()));
-            std::rotate(window[ch].begin(), window[ch].begin() + 1, window[ch].end());
-            window[ch][windowSize - 1] = currentCutoff;
+            for (double value : windowCutoffs[ch]) averageCutoffFreq += value;
 
-            for (double value : window[ch]) averageCutoffFreq += value;
-
-            averageCutoffFreq /= windowSize;
-
+            if (isFirst) {
+                averageCutoffFreq /= times;
+                times++;
+            }
+            else {
+                averageCutoffFreq /= windowSize;
+            }
+            
             applyLPF(channelDataRead, channelDataWrite, ch, n, averageCutoffFreq);
 
             averageCutoffFreq = 0.0;
         }
     }
-    if (!isFirst) isFirst = false;
+    if (isFirst) isFirst = false;
 }
 
 DMatrix EnvelopeFilter::getLPFCoefficients(double cutoffFreq, double qualityFactor) {

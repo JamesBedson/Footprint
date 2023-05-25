@@ -42,7 +42,7 @@ private:
 
     double sampleRate;
     int windowSize;
-    DMatrix window;
+    DMatrix windowCutoffs;
     FMatrix previousX;
     FMatrix previousY;
     bool isFirst;
