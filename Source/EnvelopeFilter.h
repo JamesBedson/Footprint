@@ -12,7 +12,8 @@
 #pragma once
 #include "AudioProcessingModule.h"
 #include <JuceHeader.h>
-using Matrix = std::vector<std::vector<double>>;
+using DMatrix = std::vector<std::vector<double>>;
+using FMatrix = std::vector<std::vector<float>>;
 
 class EnvelopeFilter : AudioProcessingModule {
 
@@ -24,21 +25,13 @@ public:
     void processBlock(juce::AudioBuffer<float>& buffer,
         juce::MidiBuffer& midiMessages) override;
 
-    Matrix getLPFCoefficients(double cutoffFreq, double qFactor);
+    DMatrix getLPFCoefficients(double cutoffFreq, double qFactor);
     juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer);
-    juce::AudioBuffer<float> applyLPF(juce::AudioBuffer<float> buffer, Matrix ba);
+    void applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, double qFactor, FMatrix& previousX, FMatrix& previousY);
 
     void setQualityFactor(std::atomic<float>* q);
     void setSensitivity(std::atomic<float>* s);
     void setMinCutoffFreq(std::atomic<float>* m);
-
-    //void setSampleRate(double s);
-    //void setCutoff(double c);
-    //void setThresholdMinFreq(double t);
-
-    //void setNyquist(double n);
-    //void setWindowSize(int w);
-
 
 private:
     
@@ -47,12 +40,12 @@ private:
     std::atomic<float>* minCutoffFrequency;
 
     double sampleRate;
-    //double cutoff1;
-    //double thresholdMinFreq;
-    //double nyquist;
     int windowSize;
-    Matrix window;
-    Matrix previousX;
+    DMatrix windowCutoffs;
+    FMatrix previousXamplitude;
+    FMatrix previousYamplitude;
+    FMatrix previousXsignal;
+    FMatrix previousYsignal;
     bool isFirst;
 
 };

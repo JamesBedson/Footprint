@@ -28,7 +28,7 @@ namespace ProcessingConstants {
         const float releaseSkew         = 1.f;
         
         const float thresholdMin        = -64.f;
-        const float thresholdMax        = 10.f;
+        const float thresholdMax        = 10.f; 
         const float thresholdIncrement  = 0.5f;
         const float thresholdSkew       = 1.f;
         
