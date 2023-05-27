@@ -23,14 +23,31 @@ EnvelopeFilter::~EnvelopeFilter() {
 void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChannels) {
 
     this->sampleRate = sampleRate;
+    isFirst = true;
+    this->windowSize = 500;
 
-    window.resize(numChannels);
+    windowCutoffs.resize(numChannels);
+    previousXamplitude.resize(numChannels);
+    previousYamplitude.resize(numChannels);
+    previousXsignal.resize(numChannels);
+    previousYsignal.resize(numChannels);
+
     for (int ch = 0; ch < numChannels; ch++) {
-        window[ch].resize(windowSize);
-        for (int n = 0; n < windowSize; n++)
-            window[ch][n] = 0.0;
-    }
 
+        windowCutoffs[ch].resize(windowSize);
+        previousXamplitude[ch].resize(2);
+        previousYamplitude[ch].resize(2);
+        previousXsignal[ch].resize(2);
+        previousYsignal[ch].resize(2);
+
+        for (int n = 0; n < windowSize; n++) windowCutoffs[ch][n] = 0.0;
+        for (int n : {0, 1}) {
+            previousXamplitude[ch][n] = 0.f;
+            previousYamplitude[ch][n] = 0.f;
+            previousXsignal[ch][n] = 0.f;
+            previousYsignal[ch][n] = 0.f;
+        }
+    }
 }
 
 void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
@@ -39,50 +56,41 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
     juce::AudioBuffer<float> ampBuffer = getAmplitudeEnvelope(buffer);
     double currentCutoff;
     double averageCutoffFreq = 0.0;
-    Matrix coefficients;
-    std::vector<float> previousX;
-    float xN, xN1, xN2, yN1, yN2;
+    int times = 1;
+    double minCutoff = static_cast<double>(minCutoffFrequency->load());
+    double sens = static_cast<double>(sensitivity->load());
+    double amplitude;
 
     for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
 
-        auto* channelDataWrite = buffer.getWritePointer(ch);
-        //auto* channelDataRead = buffer.getReadPointer(ch);
         auto* envelopeDataRead = ampBuffer.getReadPointer(ch);
 
         for (int n = 0; n < buffer.getNumSamples(); n++) {
             
-            currentCutoff = thresholdMinFreq + sensitivity->get() * envelopeDataRead[n] * (sampleRate / 2 - thresholdMinFreq);
-            std::rotate(window[ch].begin(), window[ch].begin() + 1, window[ch].end());
-            window[ch][windowSize - 1] = currentCutoff;
+            amplitude = static_cast<double>(envelopeDataRead[n]);
+            currentCutoff = minCutoff + sens * amplitude * ((sampleRate / 2.0) - minCutoff);
+            std::rotate(windowCutoffs[ch].begin(), windowCutoffs[ch].begin() + 1, windowCutoffs[ch].end());
+            windowCutoffs[ch][windowSize - 1] = currentCutoff;
 
-            if (window[ch].size() > windowSize) { window[ch].erase(window[ch].begin()); }
-            for (double value : window[ch])
-                averageCutoffFreq += value;
-            averageCutoffFreq /= windowSize; //CANVI?
+            for (double value : windowCutoffs[ch]) averageCutoffFreq += value;
 
-            coefficients = getLPFCoefficients(averageCutoffFreq, qualityFactor->get());
-
-            if (n == 0 || n == 1) {
-                previousX = { channelDataWrite[0], channelDataWrite[1] }; //CANVI?
+            /*if (isFirst) {
+                averageCutoffFreq /= times;
+                times++;
             }
             else {
+                averageCutoffFreq /= windowSize;
+            }*/
+            averageCutoffFreq /= windowSize;
+            applyLPF(buffer, ch, n, averageCutoffFreq, static_cast<double>(qualityFactor->load()), previousXsignal, previousYsignal);
 
-                /*xN = chann
-                xN1 = buffer.getSample(ch, n - 1);
-                xN2 = buffer.getSample(ch, n - 2);
-
-                yN1 = envelopeBuffer.getSample(ch, n - 1);
-                yN2 = envelopeBuffer.getSample(ch, n - 2);
-
-                y = ba[0][0] * xN + ba[0][1] * xN1 + ba[0][2] * xN2 - ba[1][1] * yN1 - ba[1][2] * yN2;
-                envelopeBuffer.setSample(ch, n, y);*/
-            }
             averageCutoffFreq = 0.0;
         }
     }
+    if (isFirst) isFirst = false;
 }
 
-Matrix EnvelopeFilter::getLPFCoefficients(double cutoffFreq, float qualityFactor) {
+DMatrix EnvelopeFilter::getLPFCoefficients(double cutoffFreq, double qualityFactor) {
 
     double w              = 2.0 * juce::MathConstants<double>::pi * cutoffFreq / sampleRate;
     double alpha          = std::sin(w) / (2.0 * qualityFactor);
@@ -94,7 +102,7 @@ Matrix EnvelopeFilter::getLPFCoefficients(double cutoffFreq, float qualityFactor
     double a1             = -2.0 * std::cos(w);
     double a2             = 1.0 - alpha;
 
-    Matrix ba = { { b0, b1, b2 }, { a0, a1, a2 } };
+    DMatrix ba = { { b0, b1, b2 }, { a0, a1, a2 } };
 
     // Normalisation:
     for (int i = 0; i < ba.size(); i++) { for (int j = 0; j < ba[0].size(); j++) { ba[i][j] /= a0; } }
@@ -107,71 +115,56 @@ juce::AudioBuffer<float> EnvelopeFilter::getAmplitudeEnvelope(const juce::AudioB
     juce::AudioBuffer<float> ampBuffer;
     ampBuffer.makeCopyOf(buffer);
 
-    for (int ch = 0; ch < ampBuffer.getNumChannels(); ch++) {
-        for (int n = 0; n < ampBuffer.getNumSamples(); n++) { ampBuffer.setSample(ch, n, std::abs(ampBuffer.getSample(ch, n))); }
-    }
+    for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
 
-    Matrix ba = getLPFCoefficients(cutoff1, 1.0f); // qualityFactor = 1
-
-    return applyLPF(ampBuffer, ba);
-}
-
-juce::AudioBuffer<float> EnvelopeFilter::applyLPF(juce::AudioBuffer<float> buffer, Matrix ba) {
-
-    juce::AudioBuffer<float> envelopeBuffer;
-    envelopeBuffer.makeCopyOf(buffer);
-
-    float xN, xN1, xN2, yN1, yN2, y;
-
-    for (int ch = 0; ch < envelopeBuffer.getNumChannels(); ch++) {
-        for (int n = 0; n < envelopeBuffer.getNumSamples(); n++) {
-            if (n == 0 || n == 1) { envelopeBuffer.setSample(ch, n, 0.f); }
-            else {
-
-                xN  = buffer.getSample(ch, n);
-                xN1 = buffer.getSample(ch, n - 1);
-                xN2 = buffer.getSample(ch, n - 2);
-
-                yN1 = envelopeBuffer.getSample(ch, n - 1);
-                yN2 = envelopeBuffer.getSample(ch, n - 2);
-
-                y   = ba[0][0] * xN + ba[0][1] * xN1 + ba[0][2] * xN2 - ba[1][1] * yN1 - ba[1][2] * yN2;
-                envelopeBuffer.setSample(ch, n, y);
-            }
+        auto* channelDataWrite = ampBuffer.getWritePointer(ch);
+        auto* channelDataRead = ampBuffer.getReadPointer(ch);
+        for (int n = 0; n < buffer.getNumSamples(); n++) {
+            channelDataWrite[n] = std::abs(channelDataRead[n]);
+            applyLPF(ampBuffer, ch, n, 1000.0, 1.0, previousXamplitude, previousYamplitude);
         }
     }
+        
+    return ampBuffer;
+}
 
-    return envelopeBuffer;
+void EnvelopeFilter::applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, double qFactor, FMatrix& previousX, FMatrix& previousY) {
+    
+    auto* channelDataWrite = buffer.getWritePointer(ch);
+    auto* channelDataRead = buffer.getReadPointer(ch);
+    
+    float xN1, xN2, yN1, yN2, b0, b1, b2, a1, a2;
+
+    DMatrix coefficients = getLPFCoefficients(cutoff, qFactor);
+
+    xN1 = previousX[ch][0];
+    xN2 = previousX[ch][1];
+    yN1 = previousY[ch][0];
+    yN2 = previousY[ch][1];
+    b0 = static_cast<float>(coefficients[0][0]);
+    b1 = static_cast<float>(coefficients[0][1]);
+    b2 = static_cast<float>(coefficients[0][2]);
+    a1 = static_cast<float>(coefficients[1][1]);
+    a2 = static_cast<float>(coefficients[1][2]);
+
+    previousX[ch][0] = previousX[ch][1];
+    previousX[ch][1] = channelDataRead[n];
+
+    channelDataWrite[n] = b0 * channelDataRead[n] + b1 * xN2 + b2 * xN1 - a1 * yN2 - a2 * yN1;
+
+    previousY[ch][0] = previousY[ch][1];
+    previousY[ch][1] = channelDataRead[n];
 }
 
 
-
-
-void EnvelopeFilter::setQualityFactor(juce::Atomic<float>* q) {
-    if (q->get() >= 0.f) { this->qualityFactor = q; }
+void EnvelopeFilter::setQualityFactor(std::atomic<float>* q) {
+    if (q->load() >= 0.f) { this->qualityFactor = q; }
 }
 
-void EnvelopeFilter::setSensitivity(juce::Atomic<float>* s) {
-    if (s->get() >= 0) { this->sensitivity = s; }
+void EnvelopeFilter::setSensitivity(std::atomic<float>* s) {
+    if (s->load() >= 0) { this->sensitivity = s; }
 }
 
-void EnvelopeFilter::setSampleRate(double s) {
-    if (s > 0) { sampleRate = s; }
+void EnvelopeFilter::setMinCutoffFreq(std::atomic<float>* m) {
+    if (m->load() >= 0) { this->minCutoffFrequency = m; }
 }
-
-void EnvelopeFilter::setCutoff(double c) {
-    if (c > 0) { cutoff1 = c; }
-}
-
-void EnvelopeFilter::setThresholdMinFreq(double t) {
-    if (t > 0) { thresholdMinFreq = t; }
-}
-
-//void EnvelopeFilter::setNyquist() {
-//    nyquist = sampleRate / 2;
-//}
-
-void EnvelopeFilter::setWindowSize(int w) {
-    if (w > 0) { windowSize = w; }
-}
-

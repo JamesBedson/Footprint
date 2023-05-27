@@ -12,7 +12,10 @@
 #include "ReverbPedal.h"
 
 //==============================================================================
-ReverbPedal::ReverbPedal()
+ReverbPedal::ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs)
+: mixAttachment(processor->apvts, parameterIDs[0], mix),
+lowpassAttachment(processor->apvts, parameterIDs[1], lowCut),
+highpassAttachment(processor->apvts, parameterIDs[2], highCut)
 {
     for (auto& slider : sliders){
         addAndMakeVisible(slider);

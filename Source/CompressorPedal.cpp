@@ -12,7 +12,11 @@
 #include "CompressorPedal.h"
 
 //==============================================================================
-CompressorPedal::CompressorPedal()
+CompressorPedal::CompressorPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs)
+: attackAttachment(processor->apvts, parameterIDs[0], attack),
+releaseAttachment(processor->apvts, parameterIDs[1], release),
+thresholdAttachment(processor->apvts, parameterIDs[2], threshold),
+ratioAttachment(processor->apvts, parameterIDs[3], ratio)
 {
     for (auto& slider : sliders) {
         addAndMakeVisible(slider);
