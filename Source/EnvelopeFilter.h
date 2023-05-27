@@ -27,8 +27,7 @@ public:
 
     DMatrix getLPFCoefficients(double cutoffFreq, double qFactor);
     juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer);
-    juce::AudioBuffer<float> applySimpleLPF(juce::AudioBuffer<float> buffer, DMatrix ba);
-    void applyLPF(const float* read, float* write, int ch, int n, double cutoff);
+    void applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, double qFactor, FMatrix& previousX, FMatrix& previousY);
 
     void setQualityFactor(std::atomic<float>* q);
     void setSensitivity(std::atomic<float>* s);
@@ -43,8 +42,10 @@ private:
     double sampleRate;
     int windowSize;
     DMatrix windowCutoffs;
-    FMatrix previousX;
-    FMatrix previousY;
+    FMatrix previousXamplitude;
+    FMatrix previousYamplitude;
+    FMatrix previousXsignal;
+    FMatrix previousYsignal;
     bool isFirst;
 
 };
