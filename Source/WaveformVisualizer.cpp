@@ -13,7 +13,7 @@
 WaveformVisualizer::WaveformVisualizer() : juce::AudioVisualiserComponent(1)
 {
     // Initialize any additional variables or settings
-    setOpaque(false);    
+    setOpaque(false);
 }
 
 WaveformVisualizer::~WaveformVisualizer()
