@@ -28,10 +28,24 @@ public:
 private:
     juce::dsp::AudioBlock<float> monoChannel;
     juce::dsp::AudioBlock<float> processedMonoChannel;
-    juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, juce::MidiBuffer& midiMessages, double sampleRate);
-    
+    juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock);
+    //juce::AudioBuffer<float> H_IR;
+    //juce::dsp::Complex<float>* input;
+    //juce::dsp::Complex<float>* inputSpectrum;
+    //
+    //static constexpr auto fftOrder = 10;                // [1]
+    //static constexpr auto fftSize = 1 << fftOrder;      // [2]
+    //juce::dsp::FFT forwardFFT;
+    //std::array<float, fftSize> fifo;                    // [4]
+    //std::array<float, fftSize * 2> fftData;             // [5]
+    //int fifoIndex = 0;                                  // [6]
+    //bool nextFFTBlockReady = false;                     // [7]
+
     std::atomic<float>* wet;
     std::atomic<float>* lowpassCutoff;
     std::atomic<float>* highpassCutoff;
+
+    double sampleRate;
+    int samplesPerBlock;
     
 };
