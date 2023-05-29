@@ -117,7 +117,7 @@ void Reverb::loadIR(std::string filePath) {
     juce::AudioFormatReader* reader = formatManager.createReaderFor(IR_file);
 
     if (reader != nullptr){
-        
+
     }
 
 
