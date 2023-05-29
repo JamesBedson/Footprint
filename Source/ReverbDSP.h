@@ -20,7 +20,13 @@ public:
     
     void prepare(double sampleRate, int samplesPerBlock, int numChannels) override;
     void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) override;
-    
+
+    void processStereo(float* const left, float* const right, const int numSamples);
+
+    void loadIR(std::string filePath);
+
+
+
     void setWet(std::atomic<float>*);
     void setLowpassCutoff(std::atomic<float>*);
     void setHighpassCutoff(std::atomic<float>*);
@@ -28,7 +34,7 @@ public:
 private:
     juce::dsp::AudioBlock<float> monoChannel;
     juce::dsp::AudioBlock<float> processedMonoChannel;
-    juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock);
+    //juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock);
     //juce::AudioBuffer<float> H_IR;
     //juce::dsp::Complex<float>* input;
     //juce::dsp::Complex<float>* inputSpectrum;
@@ -42,7 +48,12 @@ private:
     //bool nextFFTBlockReady = false;                     // [7]
     
     //juce::dsp::Reverb::Parameters params;
-    juce::Reverb reverb;
+    
+    
+    //juce::Reverb reverb;
+
+    //juce::dsp::Convolution convolution;
+
     std::atomic<float>* wet;
     std::atomic<float>* lowpassCutoff;
     std::atomic<float>* highpassCutoff;
