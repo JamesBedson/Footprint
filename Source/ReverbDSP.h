@@ -41,8 +41,8 @@ private:
     //int fifoIndex = 0;                                  // [6]
     //bool nextFFTBlockReady = false;                     // [7]
     
-    juce::dsp::Reverb::Parameters params;
-    juce::dsp::Reverb reverb;
+    //juce::dsp::Reverb::Parameters params;
+    juce::Reverb reverb;
     std::atomic<float>* wet;
     std::atomic<float>* lowpassCutoff;
     std::atomic<float>* highpassCutoff;

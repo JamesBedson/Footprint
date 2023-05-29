@@ -22,29 +22,11 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     //Setup before execution. Executed when play is pressed
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
+
+    loadIR("aaa");
     
-    /*for (int ch = 0; ch < numChannels; ch++) {
-
-	}*/
-    juce::dsp::ProcessSpec spec;
-
-    spec.sampleRate = sampleRate;
-    spec.maximumBlockSize = static_cast<juce::uint32> (samplesPerBlock);
-    spec.numChannels = static_cast<juce::uint32> (numChannels);
-
-    reverb.prepare(spec);
-
-    params.roomSize = 1.0f;
-    params.damping = 0.01f;
-    params.width = 1.0f;
-    params.wetLevel = 1.0f;
-    params.dryLevel = 1.0f - params.wetLevel;
-    params.freezeMode = false;
-    
+    //reverb.setSampleRate(sampleRate);
     //reverb.setParameters({0.9f, 0.9f, 0.9f, false});
-    reverb.setParameters(params);
-
-    //juce::Reverb().setSampleRate(sampleRate);
 }
 
 void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
@@ -72,23 +54,76 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     //    processedMonoChannel.copyTo(buffer);
     //}
 
-    juce::dsp::AudioBlock<float> block(buffer);
-    juce::dsp::ProcessContextReplacing<float> ctx(block);
-    reverb.process(ctx);
-    //juce::Reverb().processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
 }
 
-juce::dsp::AudioBlock<float> Reverb::processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock) {
-    
-    //input = channelData;
-    //juce::dsp::FFT::perform(input, inputSpectrum, false); //Perform FFT
-    
+//juce::dsp::AudioBlock<float> Reverb::processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock) {
+//    
+//    //input = channelData;
+//    //juce::dsp::FFT::perform(input, inputSpectrum, false); //Perform FFT
+//    
+//
+//    return channelData;
+//}
 
-    return channelData;
+void Reverb::processStereo(float* const left, float* const right, const int numSamples)
+{
+
+    for (auto i = 0; i < numSamples; i++) {
+        for (auto j = 0; j < IRnumSamples; j++) {
+            left[i]...
+            right[i]...
+        }
+    }
+    //JUCE_BEGIN_IGNORE_WARNINGS_MSVC(6011)
+    //jassert(left != nullptr && right != nullptr);
+
+    //for (int i = 0; i < numSamples; ++i)
+    //{
+    //    const float input = (left[i] + right[i]) * gain;
+    //    float outL = 0, outR = 0;
+
+    //    const float damp = damping.getNextValue();
+    //    const float feedbck = feedback.getNextValue();
+
+    //    for (int j = 0; j < numCombs; ++j)  // accumulate the comb filters in parallel
+    //    {
+    //        outL += comb[0][j].process(input, damp, feedbck);
+    //        outR += comb[1][j].process(input, damp, feedbck);
+    //    }
+
+    //    for (int j = 0; j < numAllPasses; ++j)  // run the allpass filters in series
+    //    {
+    //        outL = allPass[0][j].process(outL);
+    //        outR = allPass[1][j].process(outR);
+    //    }
+
+    //    const float dry = dryGain.getNextValue();
+    //    const float wet1 = wetGain1.getNextValue();
+    //    const float wet2 = wetGain2.getNextValue();
+
+    //    left[i] = outL * wet1 + outR * wet2 + left[i] * dry;
+    //    right[i] = outR * wet1 + outL * wet2 + right[i] * dry;
+    //}
+    //JUCE_END_IGNORE_WARNINGS_MSVC
+}
+
+void Reverb::loadIR(std::string filePath) {
+
+    juce::File IR_file(filePath);
+
+    juce::AudioFormatManager formatManager;
+    formatManager.registerBasicFormats();
+    juce::AudioFormatReader* reader = formatManager.createReaderFor(IR_file);
+
+    if (reader != nullptr){
+        
+    }
+
+
 }
 
 void Reverb::setWet(std::atomic<float>* wetParam){
-    
     this->wet = wetParam;
 }
 
