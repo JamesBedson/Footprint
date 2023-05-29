@@ -23,8 +23,10 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
 
-    loadIR("aaa");
-    
+    loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
+
+    revBuffer.setSize(numChannels, 1500*samplesPerBlock);
+
     //reverb.setSampleRate(sampleRate);
     //reverb.setParameters({0.9f, 0.9f, 0.9f, false});
 }
@@ -54,7 +56,30 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     //    processedMonoChannel.copyTo(buffer);
     //}
 
-    processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    auto* channelDataWrite = buffer.getWritePointer(0);
+    auto* channelDataRead = buffer.getReadPointer(0);
+
+    //revBlock.copyFrom(buffer, samplesPerBlock, samplesPerBlock*2, samplesPerBlock);
+    auto* revBufferWrite = revBuffer.getWritePointer(0);
+    auto* revBufferRead = revBuffer.getReadPointer(0);
+
+    if (count > 1) {
+        revBuffer.clear();
+        count = 0;
+    }
+    
+    for (int n = 0;  n < samplesPerBlock;  n++)
+    {
+        //revBufferWrite[n+(2*samplesPerBlock)] = channelDataRead[n];
+        revBufferWrite[n+(samplesPerBlock*100)] = channelDataRead[n];
+        //channelDataRead[n];
+        //revBlock.add(channelDataRead[n]);
+        //revBufferWrite[n+3*10000*buffer.getNumSamples()] = channelDataRead[n];
+        channelDataWrite[n] = revBufferRead[n];
+    }
+    count += 1;
+
+    //processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
 }
 
 //juce::dsp::AudioBlock<float> Reverb::processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock) {
@@ -69,12 +94,14 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 void Reverb::processStereo(float* const left, float* const right, const int numSamples)
 {
 
-    for (auto i = 0; i < numSamples; i++) {
+    /*for (auto i = 0; i < numSamples; i++) {
         for (auto j = 0; j < IRnumSamples; j++) {
             left[i]...
             right[i]...
         }
-    }
+    }*/
+
+
     //JUCE_BEGIN_IGNORE_WARNINGS_MSVC(6011)
     //jassert(left != nullptr && right != nullptr);
 
