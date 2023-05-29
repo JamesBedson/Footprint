@@ -40,7 +40,9 @@ private:
     //std::array<float, fftSize * 2> fftData;             // [5]
     //int fifoIndex = 0;                                  // [6]
     //bool nextFFTBlockReady = false;                     // [7]
-
+    
+    juce::dsp::Reverb::Parameters params;
+    juce::dsp::Reverb reverb;
     std::atomic<float>* wet;
     std::atomic<float>* lowpassCutoff;
     std::atomic<float>* highpassCutoff;

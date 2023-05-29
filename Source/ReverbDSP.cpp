@@ -26,7 +26,25 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     /*for (int ch = 0; ch < numChannels; ch++) {
 
 	}*/
-    juce::Reverb().setSampleRate(sampleRate);
+    juce::dsp::ProcessSpec spec;
+
+    spec.sampleRate = sampleRate;
+    spec.maximumBlockSize = static_cast<juce::uint32> (samplesPerBlock);
+    spec.numChannels = static_cast<juce::uint32> (numChannels);
+
+    reverb.prepare(spec);
+
+    params.roomSize = 1.0f;
+    params.damping = 0.01f;
+    params.width = 1.0f;
+    params.wetLevel = 1.0f;
+    params.dryLevel = 1.0f - params.wetLevel;
+    params.freezeMode = false;
+    
+    //reverb.setParameters({0.9f, 0.9f, 0.9f, false});
+    reverb.setParameters(params);
+
+    //juce::Reverb().setSampleRate(sampleRate);
 }
 
 void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
@@ -54,7 +72,10 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     //    processedMonoChannel.copyTo(buffer);
     //}
 
-    juce::Reverb().processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    juce::dsp::AudioBlock<float> block(buffer);
+    juce::dsp::ProcessContextReplacing<float> ctx(block);
+    reverb.process(ctx);
+    //juce::Reverb().processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
 }
 
 juce::dsp::AudioBlock<float> Reverb::processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock) {
