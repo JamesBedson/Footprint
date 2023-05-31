@@ -35,6 +35,7 @@ private:
     juce::dsp::AudioBlock<float> monoChannel;
     juce::dsp::AudioBlock<float> processedMonoChannel;
     int count = 0;
+    int blocksIR;
     juce::AudioBuffer<float> revBuffer;
     juce::dsp::AudioBlock<float> revBlock;
     juce::AudioBuffer<float> impulseResponse;

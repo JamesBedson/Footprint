@@ -70,22 +70,23 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
         count = 0;
     }
 
-    for (int n = 0;  n < samplesPerBlock;  n++)
+    for (int sample = 0;  sample < samplesPerBlock;  sample++)
     {
         //revBufferWrite[n+(2*samplesPerBlock)] = channelDataRead[n];
         //if (count == 0)
         //{
-            for (int i = 0; i <= blocksIR; i++)
+            for (int block = 0; block <= blocksIR; block++)
             {
-                int pos = count * samplesPerBlock + n + (i * samplesPerBlock);
-                revBufferWrite[pos] = revBufferRead[pos] + channelDataRead[n]; //channelDataRead[n] 
+                int pos = count * samplesPerBlock + sample + (block * samplesPerBlock); // offset + sample + block
+                revBufferWrite[pos] = revBufferRead[pos] + channelDataRead[sample]; //DELETE! testing only 
+                //revBufferWrite[pos] = revBufferRead[pos] + reverbBlock[sample + (block * samplesPerBlock)]; //THIS is the line
             }
         //}
         //revBufferWrite[n+(samplesPerBlock*100)] = channelDataRead[n];
         //channelDataRead[n];
         //revBlock.add(channelDataRead[n]);
         //revBufferWrite[n+3*10000*buffer.getNumSamples()] = channelDataRead[n];
-        channelDataWrite[n] = channelDataRead[n] + revBufferRead[count * samplesPerBlock + n];
+        channelDataWrite[sample] = channelDataRead[sample] + revBufferRead[count * samplesPerBlock + sample];
     }
     count += 1;
 
