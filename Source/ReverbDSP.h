@@ -28,6 +28,8 @@ public:
     void fft_block(juce::AudioBuffer<float> &buffer_IR);
 
     int calculateLog2(int x);
+    juce::AudioBuffer<float> zero_pad( juce::AudioBuffer<float> buffer_to_pad, int num_samples_to_pad);
+
 
     void setWet(std::atomic<float>*);
     void setLowpassCutoff(std::atomic<float>*);
@@ -38,6 +40,11 @@ private:
     juce::dsp::AudioBlock<float> processedMonoChannel;
     juce::AudioBuffer<float> impulseResponse;
     juce::AudioBuffer<float> impulseResponse_fft;
+    
+    juce::AudioBuffer<float> reverbBlock;
+
+    
+    int num_samples_fft_ir;
     
     juce::AudioBuffer<float> intermediateBuffer;
     int blockSize;

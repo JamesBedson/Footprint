@@ -45,7 +45,7 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
 void Reverb::fft_IR(juce::AudioBuffer<float> &buffer_IR){
     // Get the audio buffer information
-    const int numSamples = buffer_IR.getNumSamples();
+    num_samples_fft_ir = buffer_IR.getNumSamples();
 
    
     // Get the channel data
@@ -54,8 +54,8 @@ void Reverb::fft_IR(juce::AudioBuffer<float> &buffer_IR){
 
     
     // Create a temporary buffer for FFT
-    juce::dsp::FFT fft_L (calculateLog2(numSamples/2)) ;
-    juce::dsp::FFT fft_R (calculateLog2(numSamples/2)) ;
+    juce::dsp::FFT fft_L (calculateLog2(num_samples_fft_ir/2)) ;
+    juce::dsp::FFT fft_R (calculateLog2(num_samples_fft_ir/2)) ;
 
     // Perform the FFT
     fft_L.performRealOnlyForwardTransform(channelData_L);
@@ -150,3 +150,14 @@ int Reverb::calculateLog2(int x)
 
     return log2Value;
 }
+
+juce::AudioBuffer<float> Reverb::zero_pad( juce::AudioBuffer<float> buffer_to_pad, int num_samples_to_pad){
+    
+    juce::AudioBuffer<float> concatenated (1, buffer_to_pad.getNumSamples() + num_samples_to_pad);
+    juce::AudioBuffer<float> empty (1, num_samples_to_pad);
+    
+    concatenated.addFrom(0, 0, buffer_to_pad.getReadPointer(0), 0);
+    
+    return concatenated;
+}
+
