@@ -37,6 +37,7 @@ private:
     int count = 0;
     juce::AudioBuffer<float> revBuffer;
     juce::dsp::AudioBlock<float> revBlock;
+    juce::AudioBuffer<float> impulseResponse;
     //juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock);
     //juce::AudioBuffer<float> H_IR;
     //juce::dsp::Complex<float>* input;

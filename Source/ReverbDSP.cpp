@@ -24,8 +24,10 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->samplesPerBlock = samplesPerBlock;
 
     loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
-
-    revBuffer.setSize(numChannels, 1500*samplesPerBlock);
+    blocksIR = 150;
+    revBuffer.setSize(numChannels, (blocksIR * blocksIR + 1)*samplesPerBlock);
+    revBuffer.clear();
+    count = 0;
 
     //reverb.setSampleRate(sampleRate);
     //reverb.setParameters({0.9f, 0.9f, 0.9f, false});
@@ -63,19 +65,27 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     auto* revBufferWrite = revBuffer.getWritePointer(0);
     auto* revBufferRead = revBuffer.getReadPointer(0);
 
-    if (count > 1) {
+    if (count >= blocksIR) {
         revBuffer.clear();
         count = 0;
     }
-    
+
     for (int n = 0;  n < samplesPerBlock;  n++)
     {
         //revBufferWrite[n+(2*samplesPerBlock)] = channelDataRead[n];
-        revBufferWrite[n+(samplesPerBlock*100)] = channelDataRead[n];
+        //if (count == 0)
+        //{
+            for (int i = 0; i <= blocksIR; i++)
+            {
+                int pos = count * samplesPerBlock + n + (i * samplesPerBlock);
+                revBufferWrite[pos] = revBufferRead[pos] + channelDataRead[n]; //channelDataRead[n] 
+            }
+        //}
+        //revBufferWrite[n+(samplesPerBlock*100)] = channelDataRead[n];
         //channelDataRead[n];
         //revBlock.add(channelDataRead[n]);
         //revBufferWrite[n+3*10000*buffer.getNumSamples()] = channelDataRead[n];
-        channelDataWrite[n] = revBufferRead[n];
+        channelDataWrite[n] = channelDataRead[n] + revBufferRead[count * samplesPerBlock + n];
     }
     count += 1;
 
@@ -143,11 +153,14 @@ void Reverb::loadIR(std::string filePath) {
     formatManager.registerBasicFormats();
     juce::AudioFormatReader* reader = formatManager.createReaderFor(IR_file);
 
-    if (reader != nullptr){
+    if (reader != nullptr) {
+        const int numSamples = reader->lengthInSamples;
+        const int numChannelsIR = reader->numChannels;
+        impulseResponse.setSize(numChannelsIR, numSamples);
 
+        reader->read(&impulseResponse, 0, numSamples, 0, true, true);
+        //delete reader;
     }
-
-
 }
 
 void Reverb::setWet(std::atomic<float>* wetParam){
