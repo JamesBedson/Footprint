@@ -25,7 +25,7 @@ public:
 
     void loadIR(std::string filePath);
     void fft_IR(juce::AudioBuffer<float> &buffer_IR);
-    void fft_block(juce::AudioBuffer<float> &buffer_IR;
+    void fft_block(juce::AudioBuffer<float> &buffer_IR);
 
     int calculateLog2(int x);
 
