@@ -31,6 +31,10 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     revBuffer.clear();
     count = 0;
 
+    // Get reverb buffer pointers
+    revBufferWrite = revBuffer.getWritePointer(0);
+    revBufferRead = revBuffer.getReadPointer(0);
+
     //reverb.setSampleRate(sampleRate);
     //reverb.setParameters({0.9f, 0.9f, 0.9f, false});
 }
@@ -63,10 +67,6 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     // Get input data pointers
     auto* channelDataWrite = buffer.getWritePointer(0);
     auto* channelDataRead = buffer.getReadPointer(0);
-
-    // Get reverb buffer pointers
-    auto* revBufferWrite = revBuffer.getWritePointer(0);
-    auto* revBufferRead = revBuffer.getReadPointer(0);
 
     // Calculate reverbBlock -> IFFT( FFT(channelDataRead) * FFT(IR) )
 

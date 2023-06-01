@@ -34,10 +34,16 @@ public:
 private:
     juce::dsp::AudioBlock<float> monoChannel;
     juce::dsp::AudioBlock<float> processedMonoChannel;
+    
+    // Reverb buffer related variables
+    juce::AudioBuffer<float> revBuffer;
     int count = 0;
     int blocksIR;
-    juce::AudioBuffer<float> revBuffer;
-    juce::dsp::AudioBlock<float> revBlock;
+    float* revBufferWrite;
+    const float* revBufferRead;
+
+
+    //juce::dsp::AudioBlock<float> revBlock;
     juce::AudioBuffer<float> impulseResponse;
     //juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock);
     //juce::AudioBuffer<float> H_IR;
