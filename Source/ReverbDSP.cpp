@@ -24,13 +24,17 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->samplesPerBlock = samplesPerBlock;
 
     //loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
-    loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
+    //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
+    loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
 
     blockSize = samplesPerBlock;
 
     num_samples_ir = impulseResponse.getNumSamples();
-    fft_IR(impulseResponse);
-    num_samples_fft_ir = impulseResponse.getNumSamples();
+
+    impulseResponse_fft.makeCopyOf(impulseResponse);
+    fft_IR(impulseResponse_fft);
+
+    num_samples_fft_ir = impulseResponse_fft.getNumSamples();
     
     // Reverb buffer setup
     

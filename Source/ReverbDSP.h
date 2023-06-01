@@ -39,7 +39,7 @@ private:
     juce::dsp::AudioBlock<float> processedMonoChannel;
 
     juce::AudioBuffer<float> impulseResponse;
-    //juce::AudioBuffer<float> impulseResponse_fft;
+    juce::AudioBuffer<float> impulseResponse_fft;
 
     juce::AudioBuffer<float> block_fft;
     juce::AudioBuffer<float> reverbBlock;
