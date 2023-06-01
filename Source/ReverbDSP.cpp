@@ -64,21 +64,29 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     auto* revBufferWrite = revBuffer.getWritePointer(0);
     auto* revBufferRead = revBuffer.getReadPointer(0);
 
-    if (count >= blocksIR) {
-        revBuffer.clear();
+    // Calculate reverbBlock -> IFFT( FFT(channelDataRead) * FFT(IR) )
+
+    if (count >= blocksIR - 1) {
+        revBuffer.clear();  // PENDING! Clear buffer samples in samples traverse below.
+                            // Clear the block that has to be renewed sample by sample.
         count = 0;
     }
 
     for (int sample = 0;  sample < samplesPerBlock;  sample++)
     {
 
-        for (int block = 0; block <= blocksIR; block++)
+        for (int block = 0; block < blocksIR; block++)
         {
-            int pos = count * samplesPerBlock + sample + (block * samplesPerBlock); // offset + sample + block
-            revBufferWrite[pos] = revBufferRead[pos] + channelDataRead[sample]; //DELETE! testing only 
-            //revBufferWrite[pos] = revBufferRead[pos] + reverbBlock[sample + (block * samplesPerBlock)]; //THIS is the line
+            //int pos = count * samplesPerBlock + sample + (block * samplesPerBlock); // offset + sample + block
+            int offset = count * samplesPerBlock;
+            int channelPos = sample + (block * samplesPerBlock);
+            int blockPos = sample + (((count + block) % blocksIR) * samplesPerBlock);
+            int bufferPos = offset + blockPos;
+            revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
+            //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + reverbBlock[channelPos]; //THIS is the line
         }
 
+        // Maybe fix this line
         channelDataWrite[sample] = channelDataRead[sample] + revBufferRead[count * samplesPerBlock + sample];
     }
     count += 1;
