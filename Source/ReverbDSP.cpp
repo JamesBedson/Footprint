@@ -24,8 +24,10 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->samplesPerBlock = samplesPerBlock;
 
     loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
+    
+    // Reverb buffer setup
     blocksIR = 50;
-    revBuffer.setSize(numChannels, (blocksIR * blocksIR + 1)*samplesPerBlock);
+    revBuffer.setSize(numChannels, blocksIR * samplesPerBlock);
     revBuffer.clear();
     count = 0;
 
@@ -58,9 +60,11 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     //    processedMonoChannel.copyTo(buffer);
     //}
 
+    // Get input data pointers
     auto* channelDataWrite = buffer.getWritePointer(0);
     auto* channelDataRead = buffer.getReadPointer(0);
 
+    // Get reverb buffer pointers
     auto* revBufferWrite = revBuffer.getWritePointer(0);
     auto* revBufferRead = revBuffer.getReadPointer(0);
 
