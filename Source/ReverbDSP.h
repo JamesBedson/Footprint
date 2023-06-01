@@ -28,7 +28,7 @@ public:
     juce::AudioBuffer<float> fft_block(juce::AudioBuffer<float>& buffer_IR);
 
     int calculateLog2(int x);
-    juce::AudioBuffer<float> zero_pad(juce::AudioBuffer<float> buffer_to_pad, int num_samples_to_pad);
+    void zero_pad(juce::AudioBuffer<float>& buffer_to_pad, int num_samples_to_pad);
 
     void setWet(std::atomic<float>*);
     void setLowpassCutoff(std::atomic<float>*);
