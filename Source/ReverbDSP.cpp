@@ -23,7 +23,8 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
 
-    loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
+    //loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
+    loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
     blockSize = samplesPerBlock;
 
     num_samples_ir = impulseResponse.getNumSamples();
@@ -77,6 +78,11 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     auto* channelDataRead = buffer.getReadPointer(0);
 
     // Calculate reverbBlock -> IFFT( FFT(channelDataRead) * FFT(IR) )
+    reverbBlock = fft_block(buffer);
+    impulseResponse_fft;
+
+    auto* reverbBlockWrite = reverbBlock.getWritePointer(0);
+    auto* reverbBlockRead = reverbBlock.getReadPointer(0);
 
     // Counter for the ciruclar offset.
     if (count >= blocksIR) {
@@ -101,7 +107,7 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
             // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
             revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
-            //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + reverbBlock[channelPos]; //THIS is the line
+            //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + reverbBlockRead[channelPos]; //THIS is the line
         }
 
         // Output addition.
@@ -166,7 +172,7 @@ juce::AudioBuffer<float> Reverb::fft_block(juce::AudioBuffer<float>& buffer_bloc
     return padded_block;
 }
 
-void Reverb::loadIR(std::string filePath) {
+void Reverb::loadIR(const char* filePath) {
 
     juce::File IR_file(filePath);
 
@@ -187,10 +193,10 @@ void Reverb::loadIR(std::string filePath) {
 int Reverb::calculateLog2(int x)
 {
     // Calculate the log base e (natural logarithm) of x
-    int logE = std::log(x);
+    float logE = std::log(x);
 
     // Calculate the log base e of 2
-    int log2E = std::log(2);
+    float log2E = std::log(2);
 
     // Calculate the log base 2 of x by dividing logE by log2E
     int log2Value = logE / log2E;

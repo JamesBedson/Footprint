@@ -23,7 +23,7 @@ public:
 
     void processStereo(const juce::AudioBuffer<float>& inputBuffer, juce::AudioBuffer<float>& outputBuffer);
 
-    void loadIR(std::string filePath);
+    void loadIR(const char* filePath);
     void fft_IR(juce::AudioBuffer<float>& buffer_IR);
     juce::AudioBuffer<float> fft_block(juce::AudioBuffer<float>& buffer_IR);
 
