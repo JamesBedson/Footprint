@@ -24,7 +24,7 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->samplesPerBlock = samplesPerBlock;
 
     loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
-    blocksIR = 150;
+    blocksIR = 50;
     revBuffer.setSize(numChannels, (blocksIR * blocksIR + 1)*samplesPerBlock);
     revBuffer.clear();
     count = 0;
@@ -66,28 +66,36 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
     // Calculate reverbBlock -> IFFT( FFT(channelDataRead) * FFT(IR) )
 
-    if (count >= blocksIR - 1) {
-        revBuffer.clear();  // PENDING! Clear buffer samples in samples traverse below.
-                            // Clear the block that has to be renewed sample by sample.
+    if (count >= blocksIR) {
         count = 0;
     }
 
+    //Traversal of samples
     for (int sample = 0;  sample < samplesPerBlock;  sample++)
+    //for (int sample = 0; sample < 1; sample++)
     {
-
+        // Traversal of blocks. Blocks go always 0-blocksIR. An offset is set to the reverbBuffer
         for (int block = 0; block < blocksIR; block++)
         {
-            //int pos = count * samplesPerBlock + sample + (block * samplesPerBlock); // offset + sample + block
-            int offset = count * samplesPerBlock;
-            int channelPos = sample + (block * samplesPerBlock);
-            int blockPos = sample + (((count + block) % blocksIR) * samplesPerBlock);
-            int bufferPos = offset + blockPos;
+            //int offset = count * samplesPerBlock;
+            int channelPos = sample + (block * samplesPerBlock); //OK
+            //int modulo = (block - count) % blocksIR;
+            //int a = block + count;
+            //int modulo = (a % blocksIR + blocksIR) % blocksIR;
+            int offset = (block + count) % blocksIR;
+            int bufferPos = sample + (offset * samplesPerBlock); //OK
+            //blockPos = sample + block * samplesPerBlock;
+            //int bufferPos = offset + blockPos;
+            //int bufferPos = blockPos;
             revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
             //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + reverbBlock[channelPos]; //THIS is the line
         }
 
-        // Maybe fix this line
-        channelDataWrite[sample] = channelDataRead[sample] + revBufferRead[count * samplesPerBlock + sample];
+        // Output addition (maybe fix)
+        channelDataWrite[sample] = channelDataRead[sample] + revBufferRead[sample + (count * samplesPerBlock)];
+        
+        // Buffer clearance
+        revBuffer.setSample(0, sample + (count * samplesPerBlock), 0);  // Clear buffer at block #0. This is the block that will be renewed in the next iteration
     }
     count += 1;
 
