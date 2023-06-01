@@ -131,7 +131,7 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     //compressorVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
     //envelopeFilterVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
-    reverbVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
+    //reverbVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
 
 }
 
@@ -208,7 +208,7 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
     //compressorVector[0]->processBlock(buffer, midiMessages);                            // AQUIIIIIIIIIIIIIIIIIII
     //envelopeFilterVector[0]->processBlock(buffer, midiMessages);
-    reverbVector[0]->processBlock(buffer, midiMessages);
+    //reverbVector[0]->processBlock(buffer, midiMessages);
 
     //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
 
