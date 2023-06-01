@@ -23,13 +23,12 @@ public:
 
     void processStereo(const juce::AudioBuffer<float>& inputBuffer, juce::AudioBuffer<float>& outputBuffer);
 
-    void loadIR(std::string filePath);
-    void fft_IR(juce::AudioBuffer<float> &buffer_IR);
-    void fft_block(juce::AudioBuffer<float> &buffer_IR);
+    void loadIR(const char* filePath);
+    void fft_IR(juce::AudioBuffer<float>& buffer_IR);
+    juce::AudioBuffer<float> fft_block(juce::AudioBuffer<float>& buffer_IR);
 
     int calculateLog2(int x);
-    juce::AudioBuffer<float> zero_pad( juce::AudioBuffer<float> buffer_to_pad, int num_samples_to_pad);
-
+    juce::AudioBuffer<float> zero_pad(juce::AudioBuffer<float> buffer_to_pad, int num_samples_to_pad);
 
     void setWet(std::atomic<float>*);
     void setLowpassCutoff(std::atomic<float>*);
@@ -38,17 +37,28 @@ public:
 private:
     juce::dsp::AudioBlock<float> monoChannel;
     juce::dsp::AudioBlock<float> processedMonoChannel;
+
     juce::AudioBuffer<float> impulseResponse;
     juce::AudioBuffer<float> impulseResponse_fft;
-    
+
+    juce::AudioBuffer<float> block_fft;
     juce::AudioBuffer<float> reverbBlock;
 
-    
+    int num_samples_ir;
     int num_samples_fft_ir;
-    
-    juce::AudioBuffer<float> intermediateBuffer;
+
     int blockSize;
     
+    // Reverb buffer related variables
+    juce::AudioBuffer<float> revBuffer;
+    int count = 0;
+    int blocksIR;
+    float* revBufferWrite;
+    const float* revBufferRead;
+
+
+    //juce::dsp::AudioBlock<float> revBlock;
+    //juce::AudioBuffer<float> impulseResponse;
     //juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock);
     //juce::AudioBuffer<float> H_IR;
     //juce::dsp::Complex<float>* input;
