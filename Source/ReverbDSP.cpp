@@ -24,6 +24,14 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->samplesPerBlock = samplesPerBlock;
 
     loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
+    blockSize = samplesPerBlock;
+
+    num_samples_ir = impulseResponse.getNumSamples();
+
+    impulseResponse_fft.makeCopyOf(impulseResponse);
+    fft_IR(impulseResponse_fft);
+
+    num_samples_fft_ir = impulseResponse_fft.getNumSamples();
     
     // Reverb buffer setup
     blocksIR = 50;
@@ -109,57 +117,53 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     //processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
 }
 
-//juce::dsp::AudioBlock<float> Reverb::processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock) {
-//    
-//    //input = channelData;
-//    //juce::dsp::FFT::perform(input, inputSpectrum, false); //Perform FFT
-//    
-//
-//    return channelData;
-//}
-
-void Reverb::processStereo(float* const left, float* const right, const int numSamples)
-{
-
-    /*for (auto i = 0; i < numSamples; i++) {
-        for (auto j = 0; j < IRnumSamples; j++) {
-            left[i]...
-            right[i]...
-        }
-    }*/
+void Reverb::fft_IR(juce::AudioBuffer<float>& buffer_IR) {
+    // Get the audio buffer information
+    num_samples_fft_ir = buffer_IR.getNumSamples();
 
 
-    //JUCE_BEGIN_IGNORE_WARNINGS_MSVC(6011)
-    //jassert(left != nullptr && right != nullptr);
+    // Get the channel data
+    float* channelData_L = buffer_IR.getWritePointer(0);
+    float* channelData_R = buffer_IR.getWritePointer(1);
 
-    //for (int i = 0; i < numSamples; ++i)
-    //{
-    //    const float input = (left[i] + right[i]) * gain;
-    //    float outL = 0, outR = 0;
 
-    //    const float damp = damping.getNextValue();
-    //    const float feedbck = feedback.getNextValue();
+    // Create a temporary buffer for FFT
+    juce::dsp::FFT fft_L(calculateLog2(num_samples_fft_ir / 2));
+    juce::dsp::FFT fft_R(calculateLog2(num_samples_fft_ir / 2));
 
-    //    for (int j = 0; j < numCombs; ++j)  // accumulate the comb filters in parallel
-    //    {
-    //        outL += comb[0][j].process(input, damp, feedbck);
-    //        outR += comb[1][j].process(input, damp, feedbck);
-    //    }
+    // Perform the FFT
+    fft_L.performRealOnlyForwardTransform(channelData_L);
+    fft_R.performRealOnlyForwardTransform(channelData_R);
 
-    //    for (int j = 0; j < numAllPasses; ++j)  // run the allpass filters in series
-    //    {
-    //        outL = allPass[0][j].process(outL);
-    //        outR = allPass[1][j].process(outR);
-    //    }
+    juce::AudioBuffer<float> test = impulseResponse_fft;
+    // Process the frequency domain data here (e.g., magnitude calculation, spectral processing)
 
-    //    const float dry = dryGain.getNextValue();
-    //    const float wet1 = wetGain1.getNextValue();
-    //    const float wet2 = wetGain2.getNextValue();
+    // Perform the inverse FFT (if needed)
+    //fft.performRealOnlyInverseTransform(channelData);
+}
 
-    //    left[i] = outL * wet1 + outR * wet2 + left[i] * dry;
-    //    right[i] = outR * wet1 + outL * wet2 + right[i] * dry;
-    //}
-    //JUCE_END_IGNORE_WARNINGS_MSVC
+juce::AudioBuffer<float> Reverb::fft_block(juce::AudioBuffer<float>& buffer_block) {
+
+    juce::AudioBuffer<float> padded_block(2, buffer_block.getNumSamples());
+    padded_block.makeCopyOf(buffer_block);
+
+    padded_block = zero_pad(padded_block, num_samples_ir);
+
+    // Get the channel data
+    float* channelData_L = padded_block.getWritePointer(0);
+    float* channelData_R = padded_block.getWritePointer(1);
+
+    const int numSamples = padded_block.getNumSamples();
+
+    // Create a temporary buffer for FFT
+    juce::dsp::FFT fft_L(calculateLog2(numSamples / 2));
+    juce::dsp::FFT fft_R(calculateLog2(numSamples / 2));
+
+    // Perform the FFT
+    fft_L.performRealOnlyForwardTransform(channelData_L);
+    fft_R.performRealOnlyForwardTransform(channelData_R);
+
+    return padded_block;
 }
 
 void Reverb::loadIR(std::string filePath) {
@@ -179,6 +183,36 @@ void Reverb::loadIR(std::string filePath) {
         //delete reader;
     }
 }
+
+int Reverb::calculateLog2(int x)
+{
+    // Calculate the log base e (natural logarithm) of x
+    int logE = std::log(x);
+
+    // Calculate the log base e of 2
+    int log2E = std::log(2);
+
+    // Calculate the log base 2 of x by dividing logE by log2E
+    int log2Value = logE / log2E;
+
+    return log2Value;
+}
+
+juce::AudioBuffer<float> Reverb::zero_pad(juce::AudioBuffer<float> buffer_to_pad, int num_samples_to_pad) {
+
+    juce::AudioBuffer<float> concatenated(2, buffer_to_pad.getNumSamples() + num_samples_to_pad);
+    juce::AudioBuffer<float> empty(2, num_samples_to_pad);
+    empty.clear();
+
+    concatenated.addFrom(0, 0, buffer_to_pad, 0, 0, buffer_to_pad.getNumSamples());
+    concatenated.addFrom(0, buffer_to_pad.getNumSamples(), empty, 0, 0, empty.getNumSamples());
+
+    concatenated.addFrom(1, 0, buffer_to_pad, 0, 0, buffer_to_pad.getNumSamples());
+    concatenated.addFrom(1, buffer_to_pad.getNumSamples(), empty, 0, 0, empty.getNumSamples());
+
+    return concatenated;
+}
+
 
 void Reverb::setWet(std::atomic<float>* wetParam){
     this->wet = wetParam;
