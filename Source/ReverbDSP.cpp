@@ -66,37 +66,40 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
     // Calculate reverbBlock -> IFFT( FFT(channelDataRead) * FFT(IR) )
 
+    // Counter for the ciruclar offset.
     if (count >= blocksIR) {
         count = 0;
     }
 
-    //Traversal of samples
+    // Traversal of samples.
     for (int sample = 0;  sample < samplesPerBlock;  sample++)
     //for (int sample = 0; sample < 1; sample++)
     {
-        // Traversal of blocks. Blocks go always 0-blocksIR. An offset is set to the reverbBuffer
+        // Traversal of blocks. Blocks go always 0-blocksIR. An offset is set to the revBuffer.
+        // This offset is a circular offset. To avoid creating an infinite revBuffer, samples are
+        // overwritten in a circular way. The offset is calculated as (block + count) % blocksIR.
         for (int block = 0; block < blocksIR; block++)
         {
-            //int offset = count * samplesPerBlock;
-            int channelPos = sample + (block * samplesPerBlock); //OK
-            //int modulo = (block - count) % blocksIR;
-            //int a = block + count;
-            //int modulo = (a % blocksIR + blocksIR) % blocksIR;
+            // Position in the reverbBlock (does not take circular offset into account).
+            int channelPos = sample + (block * samplesPerBlock);
+
+            // Position in the revBuffer (takes circular offset into account).
             int offset = (block + count) % blocksIR;
-            int bufferPos = sample + (offset * samplesPerBlock); //OK
-            //blockPos = sample + block * samplesPerBlock;
-            //int bufferPos = offset + blockPos;
-            //int bufferPos = blockPos;
+            int bufferPos = sample + (offset * samplesPerBlock);
+
+            // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
             revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
             //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + reverbBlock[channelPos]; //THIS is the line
         }
 
-        // Output addition (maybe fix)
+        // Output addition.
         channelDataWrite[sample] = channelDataRead[sample] + revBufferRead[sample + (count * samplesPerBlock)];
         
-        // Buffer clearance
+        // Buffer clearance.
         revBuffer.setSample(0, sample + (count * samplesPerBlock), 0);  // Clear buffer at block #0. This is the block that will be renewed in the next iteration
     }
+
+    // Counter update.
     count += 1;
 
     //processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
