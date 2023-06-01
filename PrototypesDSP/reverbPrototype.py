@@ -61,7 +61,7 @@ class Reverb:
         num_ir_blocks       = int(p/k)
         num_sig_blocks      = int(len(x) / L)
 
-        H                   = self.precompute_frequency_responses(h, L, k, num_ir_blocks)
+        H                   = self.precompute_frequency_responses(h, L, k, num_ir_blocks) # Impulse response
         fdl                 = np.zeros(2*L*num_ir_blocks).astype('complex128')
 
         output              = np.zeros(p+len(x)-1).astype('float64')
@@ -79,11 +79,11 @@ class Reverb:
             fdl                     = self.roll_zero(fdl, 2*L)
             out                     = self.roll_zero(out, L)
         
-        for i in range(1, num_ir_blocks): #process remaining frequency blocks
-            out            += np.fft.ifft(fdl[:2*L]).real[:2*L-1]
-            output[num_sig_blocks+i*L: num_sig_blocks+(i+1)*L] += out[:L]
-            out             = self.roll_zero(out, L)
-            fdl             = self.roll_zero(fdl, 2*L)
+        # for i in range(1, num_ir_blocks): #process remaining frequency blocks
+        #     out            += np.fft.ifft(fdl[:2*L]).real[:2*L-1]
+        #     output[num_sig_blocks+i*L: num_sig_blocks+(i+1)*L] += out[:L]
+        #     out             = self.roll_zero(out, L)
+        #     fdl             = self.roll_zero(fdl, 2*L)
 
         x_zp            = self.zero_pad(x, p-1)
         output          = self.mix*0.3  * output + x_zp
