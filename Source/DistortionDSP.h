@@ -12,6 +12,8 @@
 #include "AudioProcessingModule.h"
 #include <JuceHeader.h>
 
+using FMatrix = std::vector<std::vector<float>>;
+
 class Distortion : public AudioProcessingModule {
     
 public:
@@ -20,6 +22,9 @@ public:
     
     void prepare(double sampleRate, int samplesPerBlock, int numChannels) override;
     void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) override;
+
+    FMatrix getLPFCoefficients(float cutoffFreq);
+    void applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY);
 
     void setGain(std::atomic<float>*);
     void setLevel(std::atomic<float>*);
@@ -31,5 +36,9 @@ private:
     std::atomic<float>* gain;
     std::atomic<float>* level;
     std::atomic<float>* tone;
+
+    double sampleRate;
+    FMatrix previousXsignal;
+    FMatrix previousYsignal;
     
 };

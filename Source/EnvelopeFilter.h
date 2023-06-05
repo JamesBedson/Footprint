@@ -26,9 +26,9 @@ public:
         juce::MidiBuffer& midiMessages) override;
 
     DMatrix getLPFCoefficients(double cutoffFreq, double qFactor);
-    juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer);
     void applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, double qFactor, FMatrix& previousX, FMatrix& previousY);
-
+    juce::AudioBuffer<float> getAmplitudeEnvelope(const juce::AudioBuffer<float>& buffer);
+    
     void setQualityFactor(std::atomic<float>* q);
     void setSensitivity(std::atomic<float>* s);
     void setMinCutoffFreq(std::atomic<float>* m);
