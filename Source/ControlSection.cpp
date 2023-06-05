@@ -26,6 +26,8 @@ ControlSection::ControlSection()
         label->setJustificationType(juce::Justification::horizontallyCentred);
     }
 
+    toggle.setLookAndFeel(&lookAndFeel);
+
     addAndMakeVisible(toggle);
     //toggle.setLookAndFeel(&lookAndFeel);
     
@@ -65,6 +67,7 @@ ControlSection::~ControlSection()
     for (auto* slider : sliders){
         slider->setLookAndFeel(nullptr);
     }
+    toggle.setLookAndFeel(nullptr);
 }
 
 void ControlSection::paint(juce::Graphics& g)
@@ -74,7 +77,8 @@ void ControlSection::paint(juce::Graphics& g)
     
     if (toggle.getToggleState()){
         switchLabel.setText("Mono", juce::dontSendNotification);
-    }else{
+    }
+    else{
         switchLabel.setText("Stereo", juce::dontSendNotification);
     }
 }
@@ -92,8 +96,8 @@ void ControlSection::resized()
     sliderWidth       = 75;
     sliderHeight      = 75;
     
-    toggleWidth       = 75;
-    toggleHeight      = 25;
+    toggleWidth       = 55;
+    toggleHeight      = 20;
 
     sliderLabelWidth  = sliderWidth;
     sliderLabelHeight = 15;
@@ -115,12 +119,11 @@ void ControlSection::resized()
         auto bottomY = sliderBounds.getBottomLeft().getY();
 
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
-
     }
     
     //toggle.setBounds(width * 0.20f ,height * 0.65f , toggleWidth, toggleHeight);
     toggle.setSize(toggleWidth, toggleHeight);
-    toggle.setCentrePosition(sliderCol1CentreX, sliderRow2CentreY + 22.5f);
+    toggle.setCentrePosition(sliderCol1CentreX, sliderRow2CentreY + 35.f);
     
     auto switchBounds = switchLabel.getAttachedComponent()->getBounds();
     auto bottomX = switchBounds.getBottomLeft().getX();

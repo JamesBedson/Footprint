@@ -96,3 +96,18 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
     }
 }
 
+void EditorLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& toggle, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+{
+
+    juce::Rectangle<int> bounds = toggle.getLocalBounds();
+
+    g.setColour(juce::Colours::white);
+    g.drawRoundedRectangle(bounds.toFloat(), 10.f, 4.f);
+    g.setColour(juce::Colours::white);
+    if (toggle.getToggleState()) {
+        g.fillRoundedRectangle(float(bounds.getX() + float((bounds.getWidth() / 2))), float(bounds.getY()), float(bounds.getWidth() / 2), float(bounds.getHeight()), 8.f);
+    }
+    else {
+        g.fillRoundedRectangle(float(bounds.getX()), float(bounds.getY()), float(bounds.getWidth() / 2), float(bounds.getHeight()), 8.f);
+    }
+}

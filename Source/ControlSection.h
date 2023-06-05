@@ -43,13 +43,11 @@ private:
 
     juce::Slider input, output;
     std::vector<juce::Slider*> sliders{&input, &output};
-    juce::Label inputLabel, outputLabel;
+    juce::Label inputLabel, outputLabel, switchLabel;
     std::vector<juce::Label*> sliderLabels{ &inputLabel, &outputLabel};
     
     juce::ToggleButton toggle;
-    
-    juce::Label switchLabel;
-    
+        
     void paintDecor(juce::Graphics&);
 
     EditorLookAndFeel lookAndFeel;
