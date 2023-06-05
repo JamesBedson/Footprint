@@ -76,6 +76,10 @@
         <FILE id="wqla2j" name="Pedal.cpp" compile="1" resource="0" file="Source/Pedal.cpp"/>
         <FILE id="ozX25T" name="Pedal.h" compile="0" resource="0" file="Source/Pedal.h"/>
       </GROUP>
+      <FILE id="aKbgGp" name="ComboBoxLookandFeel.cpp" compile="1" resource="0"
+            file="Source/ComboBoxLookandFeel.cpp"/>
+      <FILE id="DR9MoT" name="ComboBoxLookandFeel.h" compile="0" resource="0"
+            file="Source/ComboBoxLookandFeel.h"/>
       <FILE id="GTexXm" name="EditorLookAndFeel.cpp" compile="1" resource="0"
             file="Source/EditorLookAndFeel.cpp"/>
       <FILE id="sBHe95" name="EditorLookAndFeel.h" compile="0" resource="0"

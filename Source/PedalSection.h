@@ -18,6 +18,7 @@
 #include "DistortionPedal.h"
 #include "PluginProcessor.h"
 #include "ProcessingConstants.h"
+#include "ComboBoxLookandFeel.h"
 
 
 //==============================================================================
@@ -36,6 +37,8 @@ public:
     void resized() override;
     void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
     void timerCallback() override;
+
+    ComboBoxLookandFeel comboBoxLookandFeel;
 
 private:
     
