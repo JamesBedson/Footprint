@@ -32,8 +32,8 @@ void ARAverager::prepare(double sampleRate, int samplesPerBlock, int numChannels
 
 void ARAverager::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer&){
     
-    alphaA = std::exp(-1.f / (sampleRate * attack->get()));
-    alphaR = std::exp(-1.f / (sampleRate * release->get()));
+    alphaA = std::exp(-1.f / (sampleRate * attack->load()));
+    alphaR = std::exp(-1.f / (sampleRate * release->load()));
     
     for (int ch = 0; ch < buffer.getNumChannels(); ch++){
         
@@ -54,10 +54,10 @@ void ARAverager::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
     }
 }
 
-void ARAverager::setAttack(juce::Atomic<float>* attack){
+void ARAverager::setAttack(std::atomic<float>* attack){
     this->attack    = attack;
 }
 
-void ARAverager::setRelease(juce::Atomic<float>* release){
+void ARAverager::setRelease(std::atomic<float>* release){
     this->release   = release;
 }

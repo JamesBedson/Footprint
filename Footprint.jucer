@@ -4,15 +4,15 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{1732951E-82A5-3A2C-CB2C-33985A771FC2}" name="Assets">
-      <FILE id="xAV9Dq" name="backgroundPurpleBlue.png" compile="0" resource="1"
+      <FILE id="BtZpPS" name="backgroundPurpleBlue.png" compile="0" resource="1"
             file="../../../Downloads/Assets/backgroundPurpleBlue.png"/>
-      <FILE id="uQEDSx" name="DisplayPanel.png" compile="0" resource="1"
+      <FILE id="f8TweH" name="DisplayPanel.png" compile="0" resource="1"
             file="../../../Downloads/Assets/DisplayPanel.png"/>
-      <FILE id="irKhnc" name="Slot1PurpleBlue.png" compile="0" resource="1"
+      <FILE id="ueCOUJ" name="Slot1PurpleBlue.png" compile="0" resource="1"
             file="../../../Downloads/Assets/Slot1PurpleBlue.png"/>
-      <FILE id="DkhEqU" name="Slot2PurpleBlue.png" compile="0" resource="1"
+      <FILE id="Z5W4xp" name="Slot2PurpleBlue.png" compile="0" resource="1"
             file="../../../Downloads/Assets/Slot2PurpleBlue.png"/>
-      <FILE id="s1T8QM" name="Slot3PurpleBlue.png" compile="0" resource="1"
+      <FILE id="dGwiLc" name="Slot3PurpleBlue.png" compile="0" resource="1"
             file="../../../Downloads/Assets/Slot3PurpleBlue.png"/>
     </GROUP>
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
