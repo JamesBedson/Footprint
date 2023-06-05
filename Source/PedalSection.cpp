@@ -114,11 +114,17 @@ std::unique_ptr<juce::ComboBox> PedalSection::createComboBox(){
    
     auto newComboBox = std::make_unique<juce::ComboBox>();
     addAndMakeVisible(newComboBox.get());
+    newComboBox->setLookAndFeel(&comboBoxLookandFeel);
     newComboBox->setText("Add Pedal");
     newComboBox->addItem("Compressor", 1);
     newComboBox->addItem("Distortion", 2);
     newComboBox->addItem("Envelope Filter", 3);
     newComboBox->addItem("Reverb", 4);
+    /////////////////
+    //newComboBox->setJustificationType(juce::Justification::centred);
+    //newComboBox->setBounds(getWidth() / 10 - 70, getHeight() / 2 - 10, 140, 20);
+    //newComboBox->resized();
+    ///////////////////////
     newComboBox->addListener(this);
     
     return newComboBox;
