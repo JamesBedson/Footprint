@@ -52,11 +52,11 @@ ControlSection::ControlSection()
     
     //juce::Button::Listener::buttonStateChanged(&toggle);
     
-    if (toggle.getState() == isEnabled()){
+    /*if (toggle.getToggleState()){
         switchLabel.setText("Mono", juce::dontSendNotification);
     }else{
         switchLabel.setText("Stereo", juce::dontSendNotification);
-    }
+    }*/
     
 }
 
@@ -71,6 +71,12 @@ void ControlSection::paint(juce::Graphics& g)
 {
     g.setColour(juce::Colours::white);
     paintDecor(g);
+    
+    if (toggle.getToggleState()){
+        switchLabel.setText("Mono", juce::dontSendNotification);
+    }else{
+        switchLabel.setText("Stereo", juce::dontSendNotification);
+    }
 }
 
 void ControlSection::resized()
@@ -134,5 +140,13 @@ void ControlSection::paintDecor(juce::Graphics& g) {
     g.drawLine(line3, 2.0f);*/
 
 
+}
+
+void ControlSection::buttonClicked(juce::Button* button)
+{
+    if (button == &toggle)
+    {
+        repaint();
+    }
 }
 

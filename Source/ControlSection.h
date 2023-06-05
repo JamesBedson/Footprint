@@ -17,7 +17,7 @@
 //==============================================================================
 /*
 */
-class ControlSection  : public juce::Component
+class ControlSection  : public juce::Component, public juce::Button::Listener
 {
 public:
     ControlSection();
@@ -25,6 +25,8 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void buttonClicked(juce::Button* button) override;
 
 private:
 
