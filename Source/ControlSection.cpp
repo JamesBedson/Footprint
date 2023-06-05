@@ -26,6 +26,11 @@ ControlSection::ControlSection()
         label->setJustificationType(juce::Justification::horizontallyCentred);
     }
 
+    addAndMakeVisible(toggle);
+    //toggle.setLookAndFeel(&lookAndFeel);
+    
+    //switchLabel.setJustificationType(juce::Justification::centred);
+    
     inputLabel.attachToComponent(&input, false);
     outputLabel.attachToComponent(&output, false);
 
@@ -34,9 +39,25 @@ ControlSection::ControlSection()
     font.setTypefaceName("Futura");
     inputLabel.setFont(font);
     outputLabel.setFont(font);
+    //switchLabel.setFont(font);
 
     inputLabel.setText("Input", juce::dontSendNotification);
     outputLabel.setText("Output", juce::dontSendNotification);
+    
+    
+    addAndMakeVisible(switchLabel);
+    switchLabel.setJustificationType(juce::Justification::centred);
+    switchLabel.attachToComponent(&toggle, false);
+    switchLabel.setFont(font);
+    
+    //juce::Button::Listener::buttonStateChanged(&toggle);
+    
+    /*if (toggle.getToggleState()){
+        switchLabel.setText("Mono", juce::dontSendNotification);
+    }else{
+        switchLabel.setText("Stereo", juce::dontSendNotification);
+    }*/
+    
 }
 
 ControlSection::~ControlSection()
@@ -50,6 +71,12 @@ void ControlSection::paint(juce::Graphics& g)
 {
     g.setColour(juce::Colours::white);
     paintDecor(g);
+    
+    if (toggle.getToggleState()){
+        switchLabel.setText("Mono", juce::dontSendNotification);
+    }else{
+        switchLabel.setText("Stereo", juce::dontSendNotification);
+    }
 }
 
 void ControlSection::resized()
@@ -64,10 +91,16 @@ void ControlSection::resized()
 
     sliderWidth       = 75;
     sliderHeight      = 75;
+    
+    toggleWidth       = 75;
+    toggleHeight      = 25;
 
     sliderLabelWidth  = sliderWidth;
     sliderLabelHeight = 15;
 
+    toggleLabelWidth  = toggleWidth;
+    toggleLabelHeight = 20;
+    
     for (auto& slider : sliders) {
         slider->setSize(sliderWidth, sliderHeight);
     }
@@ -84,6 +117,15 @@ void ControlSection::resized()
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
 
     }
+    
+    //toggle.setBounds(width * 0.20f ,height * 0.65f , toggleWidth, toggleHeight);
+    toggle.setSize(toggleWidth, toggleHeight);
+    toggle.setCentrePosition(sliderCol1CentreX, sliderRow2CentreY + 22.5f);
+    
+    auto switchBounds = switchLabel.getAttachedComponent()->getBounds();
+    auto bottomX = switchBounds.getBottomLeft().getX();
+    auto bottomY = switchBounds.getBottomLeft().getY();
+    switchLabel.setBounds(bottomX, bottomY, toggleLabelWidth, toggleLabelHeight);
 }
 
 void ControlSection::paintDecor(juce::Graphics& g) {
@@ -99,3 +141,12 @@ void ControlSection::paintDecor(juce::Graphics& g) {
 
 
 }
+
+void ControlSection::buttonClicked(juce::Button* button)
+{
+    if (button == &toggle)
+    {
+        repaint();
+    }
+}
+

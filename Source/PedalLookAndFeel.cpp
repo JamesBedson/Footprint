@@ -116,3 +116,10 @@ void PedalLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& b
     g.fillEllipse(byPassSwitch.getLocalBounds().toFloat());
 }
 
+/*void PedalLookAndFeel::drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float minSliderPos, float maxSliderPos, const juce::Slider::SliderStyle::LinearHorizontal, juce::Slider& slider)
+{
+    g.setColour(juce::Colours::transparentBlack);
+    g.drawEllipse(slider.getLocalBounds().toFloat(), 2.0f);
+    g.setColour(juce::Colours::white);
+    g.fillEllipse(slider.getLocalBounds().toFloat());
+}*/
