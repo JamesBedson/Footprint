@@ -43,7 +43,7 @@ As a pedalboard plugin, it will be released in the VST3 or AU format, which is c
 As a *free and open-source platfrom*, [Reaper](https://www.reaper.fm/) is one of the most recomended DAW's to work with.
 
 ## Development<a name="Development"></a>
-Footprint have been developed with the JUCE framework. It is an open source C++ codebase that can be used to create plug-ins.
+Footprint have been developed with the [JUCE](https://www.juce.com)  framework. It is an open source C++ codebase that can be used to create plug-ins.
 
 ## Contributors<a name="contributors"></a>
 The following contributors have participated in the development of this software:
