@@ -81,19 +81,14 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
             g.setColour(juce::Colours::black);
             g.fillPath(ellipse2Path, juce::AffineTransform::rotation(angle-90.3f).translated(centerX, centerY));
         }
-        
-        //Outer part
-        /*if (slider.isEnabled())
-            g.setColour (juce::Colours::white.darker());
-        else
-            g.setColour (juce::Colours::red);
-        
-        juce::Path outlineArc;
-        outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
-        outlineArc.closeSubPath();
-        
-        g.strokePath (outlineArc, juce::PathStrokeType (slider.isEnabled() ? (isMouseOver ? 2.0f : 1.2f) : 0.3f));*/
+
     }
+
+    shadowProperties.radius = 40;
+    shadowProperties.offset = juce::Point<int>(-1, 4);
+    shadowProperties.colour = juce::Colours::white.withAlpha(0.25f);
+    dialShadow.setShadowProperties(shadowProperties);
+    slider.setComponentEffect(&dialShadow);
 }
 
 void EditorLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& toggle, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)

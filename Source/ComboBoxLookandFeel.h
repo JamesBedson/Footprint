@@ -30,11 +30,16 @@ public:
 
     void lookAndFeelChanged() override;
 
+    void drawMenuBarBackground(juce::Graphics&, int width, int height, bool isMouseOverBar, juce:: MenuBarComponent&) override;
+
+
     void drawPopupMenuItem(juce::Graphics& g, const juce::Rectangle<int>& area,
         bool isSeparator, bool isActive, bool isHighlighted,
         bool isTicked, bool hasSubMenu, const juce::String& text,
         const juce::String& shortcutKeyText,
         const juce::Drawable* icon, const juce::Colour* textColourToUse) override;
+
+    void drawPopupMenuBackgroundWithOptions(juce::Graphics&, int, int, const juce::PopupMenu::Options&) override;
 
     void mouseEnter(const juce::MouseEvent& event)      override;
     void mouseExit(const juce::MouseEvent& event)       override;
