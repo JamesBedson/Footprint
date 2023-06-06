@@ -91,12 +91,12 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
         }
         
     }
-
+    /*
     shadowProperties.radius = 24;
     shadowProperties.offset = juce::Point<int>(-1, 4);
     shadowProperties.colour = juce::Colours::black.withAlpha(0.25f);
     dialShadow.setShadowProperties(shadowProperties);
-    slider.setComponentEffect(&dialShadow);
+    slider.setComponentEffect(&dialShadow);*/
 }
 
 void PedalLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& byPassSwitch, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)

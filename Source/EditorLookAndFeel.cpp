@@ -83,11 +83,12 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
         }
 
     }
+    /*
     shadowProperties.radius = 40;
     shadowProperties.offset = juce::Point<int>(-1, 4);
     shadowProperties.colour = juce::Colours::white.withAlpha(0.25f);
     dialShadow.setShadowProperties(shadowProperties);
-    slider.setComponentEffect(&dialShadow);
+    slider.setComponentEffect(&dialShadow);*/
 }
 
 void EditorLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& toggle, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)

@@ -13,6 +13,42 @@
 
 namespace ProcessingConstants {
 
+namespace EditorControls {
+
+namespace Numeric {
+
+const float inputGainMin            = 0.f;
+const float inputGainMax            = 2.f;
+const float inputGainIncrement      = 0.01f;
+const float inputGainSkew           = 0.3f;
+const float defaultInputGain        = 1.f;
+
+const float outputGainMin           = 0.f;
+const float outputGainMax           = 2.f;
+const float outputGainIncrement     = 0.01f;
+const float outputGainSkew          = 0.3f;
+const float defaultOutputGain       = 1.f;
+
+const bool  isStereo                = true;
+
+}
+
+namespace Identifiers {
+    
+const std::string inputGainID       = "Input Gain";
+const std::string inputGainParam    = "input_gain";
+
+const std::string outputGainID      = "Output Gain";
+const std::string outputGainParam   = "output_gain";
+
+const std::string monoStereoID      = "Mono/Stereo";
+const std::string monoStereoParam   = "mono_stereo";
+
+
+    }
+
+}
+
     namespace Compressor {
 
         namespace Numeric {
@@ -44,10 +80,10 @@ namespace ProcessingConstants {
 
         namespace Identifiers {
         
-        const std::string compressorAttackID    = "Compressor_Attack";
-        const std::string compressotReleaseID   = "Compressor_Release";
-        const std::string compressorThresholdID = "Compressor_Threshold";
-        const std::string compressorRatioID     = "Compressor_Ratio";
+        const std::string compressorAttackID    = "Compressor Attack";
+        const std::string compressotReleaseID   = "Compressor Release";
+        const std::string compressorThresholdID = "Compressor Threshold";
+        const std::string compressorRatioID     = "Compressor Ratio";
 
         const std::string compressorAttack1     = "attack_1";
         const std::string compressorAttack2     = "attack_2";
@@ -101,9 +137,9 @@ namespace ProcessingConstants {
 
         namespace Identifiers {
         
-        const std::string reverbWetMixID        = "Reverb_Mix";
-        const std::string reverbLowpassID       = "Reverb_Cutoff_Lowpass";
-        const std::string reverbHighpassID      = "Reverb_Cutoff_Highpass";
+        const std::string reverbWetMixID        = "Reverb Mix";
+        const std::string reverbLowpassID       = "Reverb Cutoff (Lowpass)";
+        const std::string reverbHighpassID      = "Reverb Cutoff (Highpass)";
         
         const std::string reverbWetMix1         = "wet_mix_1";
         const std::string reverbWetMix2         = "wet_mix_2";
@@ -151,9 +187,9 @@ namespace ProcessingConstants {
 
         namespace Identifiers {
         
-        const std::string distortionGainID  = "Distortion_Gain";
-        const std::string distortionLevelID = "Distortion_Level";
-        const std::string distortionToneID  = "Distortion_Tone";
+        const std::string distortionGainID  = "Distortion Gain";
+        const std::string distortionLevelID = "Distortion Level";
+        const std::string distortionToneID  = "Distortion Tone";
 
         const std::string distortionGain1   = "gain_1";
         const std::string distortionGain2   = "gain_2";
@@ -201,9 +237,9 @@ namespace ProcessingConstants {
 
         namespace Identifiers {
         
-        const std::string envelopeFilterQualityID           = "Envelope_Filter_Quality";
-        const std::string envelopeFilterSensitivityID       = "Envelope_Filter_Sensitivity";
-        const std::string envelopeFilterCutoffThresholdID   = "Envelope_Filter_Cutoff_Threshold";
+        const std::string envelopeFilterQualityID           = "Envelope Filter Quality";
+        const std::string envelopeFilterSensitivityID       = "Envelope Filter Sensitivity";
+        const std::string envelopeFilterCutoffThresholdID   = "Envelope Filter Cutoff Threshold";
 
         const std::string envelopeFilterQuality1            = "quality_1";
         const std::string envelopeFilterQuality2            = "quality_2";
