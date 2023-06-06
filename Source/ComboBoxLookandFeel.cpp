@@ -37,11 +37,6 @@ void ComboBoxLookandFeel::resized()
 
 void ComboBoxLookandFeel::drawComboBox(juce::Graphics& g, int width, int height, bool isButtonDown, int buttonX, int buttonY, int buttonW, int buttonH, juce::ComboBox& comboBox)
 {
-    comboWidth = 150;
-    comboHeight = 50;
-    g.setColour(juce::Colours::white.darker());
-    g.drawRoundedRectangle(17, 48, comboWidth, comboHeight, 10.0f, 1.0f);
-    //g.fillAll(juce::Colours::white);
 }
 
 juce::Font ComboBoxLookandFeel::getComboBoxFont(juce::ComboBox& comboBox)
