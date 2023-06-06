@@ -3,17 +3,17 @@
 <JUCERPROJECT id="iRiNIf" name="Footprint" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="LHrdKF" name="Footprint">
-    <GROUP id="{1732951E-82A5-3A2C-CB2C-33985A771FC2}" name="Assets">
-      <FILE id="GCcEoE" name="backgroundPurpleBlue.png" compile="0" resource="1"
-            file="../../../Downloads/TTM DOCUMENTATION/Assets/backgroundPurpleBlue.png"/>
-      <FILE id="t9GvRY" name="DisplayPanel.png" compile="0" resource="1"
-            file="../../../Downloads/TTM DOCUMENTATION/Assets/DisplayPanel.png"/>
-      <FILE id="pL24PA" name="Slot1PurpleBlue.png" compile="0" resource="1"
-            file="../../../Downloads/TTM DOCUMENTATION/Assets/Slot1PurpleBlue.png"/>
-      <FILE id="hlDffC" name="Slot2PurpleBlue.png" compile="0" resource="1"
-            file="../../../Downloads/TTM DOCUMENTATION/Assets/Slot2PurpleBlue.png"/>
-      <FILE id="Fxbzgy" name="Slot3PurpleBlue.png" compile="0" resource="1"
-            file="../../../Downloads/TTM DOCUMENTATION/Assets/Slot3PurpleBlue.png"/>
+    <GROUP id="{5DFC2991-19F8-2386-A172-F687A82AFD05}" name="Assets">
+      <FILE id="UtrbeN" name="backgroundPurpleBlue.png" compile="0" resource="1"
+            file="Assets/backgroundPurpleBlue.png"/>
+      <FILE id="dI7ZNj" name="DisplayPanel.png" compile="0" resource="1"
+            file="Assets/DisplayPanel.png"/>
+      <FILE id="IJGeEP" name="Slot1PurpleBlue.png" compile="0" resource="1"
+            file="Assets/Slot1PurpleBlue.png"/>
+      <FILE id="DzCCiq" name="Slot2PurpleBlue.png" compile="0" resource="1"
+            file="Assets/Slot2PurpleBlue.png"/>
+      <FILE id="Zf7n2C" name="Slot3PurpleBlue.png" compile="0" resource="1"
+            file="Assets/Slot3PurpleBlue.png"/>
     </GROUP>
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
       <GROUP id="{C23AE629-B8F6-997A-3B6D-29BBBBA3E068}" name="DSP">
