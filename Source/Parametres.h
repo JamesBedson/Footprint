@@ -32,6 +32,27 @@
                                                ProcessingConstants::EditorControls::Identifiers::monoStereoID,
                                                ProcessingConstants::EditorControls::Numeric::isStereo),
     
+    // Pedal Slots
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Pedals::Identifiers::slot1Param, 1},
+                                                 ProcessingConstants::Pedals::Identifiers::slot1ID,
+                                                 ProcessingConstants::Pedals::Choices::choiceArray,
+                                                 0),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Pedals::Identifiers::slot2Param, 2},
+                                                 ProcessingConstants::Pedals::Identifiers::slot2ID,
+                                                 ProcessingConstants::Pedals::Choices::choiceArray,
+                                                 0),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Pedals::Identifiers::slot3Param, 3},
+                                                 ProcessingConstants::Pedals::Identifiers::slot3ID,
+                                                 ProcessingConstants::Pedals::Choices::choiceArray,
+                                                 0),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Pedals::Identifiers::slot4Param, 4},
+                                                 ProcessingConstants::Pedals::Identifiers::slot4ID,
+                                                 ProcessingConstants::Pedals::Choices::choiceArray,
+                                                 0),
     
     // Compressor
     // ================================================================================================================================

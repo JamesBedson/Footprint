@@ -15,7 +15,7 @@
 
 constexpr float epsilonFloat = 1e-7f;
 
-class Compressor : AudioProcessingModule {
+class Compressor : public AudioProcessingModule {
     
 public:
     Compressor();
