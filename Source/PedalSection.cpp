@@ -16,18 +16,24 @@ PedalSection::PedalSection(FootprintAudioProcessor* processor)
 {
     processorPtr = processor;
     activeComponents.resize(4);
+    slotParameterVector.resize(4);
     
     for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++){
         activeComponents[componentIdx] = createComboBox();
         addAndMakeVisible(activeComponents[componentIdx].get());
     }
     startTimerHz(25);
-    /*
-    addAndMakeVisible(compressorPedal);
-    addAndMakeVisible(reverbPedal);
-    addAndMakeVisible(envelopePedal);
-    addAndMakeVisible(distortionPedal);*/
+    
+    slot1Choice = static_cast<juce::AudioParameterChoice*>(processor->apvts.getParameter(ProcessingConstants::Pedals::Identifiers::slot1Param));
+    slot2Choice = static_cast<juce::AudioParameterChoice*>(processor->apvts.getParameter(ProcessingConstants::Pedals::Identifiers::slot2Param));
+    slot3Choice = static_cast<juce::AudioParameterChoice*>(processor->apvts.getParameter(ProcessingConstants::Pedals::Identifiers::slot3Param));
+    slot4Choice = static_cast<juce::AudioParameterChoice*>(processor->apvts.getParameter(ProcessingConstants::Pedals::Identifiers::slot4Param));
 
+    slotParameterVector[0] = slot1Choice;
+    slotParameterVector[1] = slot2Choice;
+    slotParameterVector[2] = slot3Choice;
+    slotParameterVector[3] = slot4Choice;
+    
 }
 
 PedalSection::~PedalSection()
@@ -43,12 +49,6 @@ void PedalSection::paint (juce::Graphics& g)
 void PedalSection::resized()
 {
     juce::Rectangle<int> bounds = getLocalBounds();
-    
-    /*
-    compressorPedal.setSlot(1);
-    distortionPedal.setSlot(2);
-    reverbPedal.setSlot(3);
-    envelopePedal.setSlot(4);*/
     
     int slotSizeWidth   = 200;
     int slotSizeHeight  = 300;
@@ -86,11 +86,6 @@ void PedalSection::resized()
         activeComponents[componentIdx]->setBounds(*boxSlots[componentIdx]);
     }
     
-    /*
-    compressorPedal.setBounds(pedalSlot4);
-    envelopePedal.setBounds(pedalSlot1);
-    reverbPedal.setBounds(pedalSlot3);
-    distortionPedal.setBounds(pedalSlot2);*/
 }
 
 void PedalSection::paintDecor(juce::Graphics& g) {
@@ -113,8 +108,7 @@ void PedalSection::paintDecor(juce::Graphics& g) {
 std::unique_ptr<juce::ComboBox> PedalSection::createComboBox(){
    
     auto newComboBox = std::make_unique<juce::ComboBox>();
-    auto* popupMenu = newComboBox->getRootMenu();
-    //juce::PopupMenu* popupMenu = newComboBox->getRootMenu();
+    
     addAndMakeVisible(newComboBox.get());
     newComboBox->setLookAndFeel(&comboBoxLookandFeel);
     newComboBox->setJustificationType(juce::Justification::centred);
@@ -123,7 +117,6 @@ std::unique_ptr<juce::ComboBox> PedalSection::createComboBox(){
     newComboBox->addItem("Distortion", 2);
     newComboBox->addItem("Envelope Filter", 3);
     newComboBox->addItem("Reverb", 4);
-    //newComboBox->resized();
     newComboBox->addListener(this);
     
     return newComboBox;
@@ -131,12 +124,14 @@ std::unique_ptr<juce::ComboBox> PedalSection::createComboBox(){
 
 void PedalSection::timerCallback() {
     for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++) {
-        auto& component = activeComponents[componentIdx];
+        auto& component     = activeComponents[componentIdx];
+        auto* slotChoice    = slotParameterVector[componentIdx];
         
         if (auto* pedal = dynamic_cast<Pedal*>(component.get())) {
             if (pedal->isDeleted()) {
                 activeComponents[componentIdx] = createComboBox();
                 activeComponents[componentIdx]->setBounds(*boxSlots[componentIdx]);
+                *slotChoice = 0;
             }
         }
     }
@@ -144,8 +139,9 @@ void PedalSection::timerCallback() {
 
 void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
     for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++) {
-        auto& component = activeComponents[componentIdx];
-
+        auto& component     = activeComponents[componentIdx];
+        auto* slotChoice    = slotParameterVector[componentIdx];
+        
         if (auto* comboBox = dynamic_cast<juce::ComboBox*>(component.get())) {
             if (comboBox == comboBoxThatHasChanged) {
                 
@@ -158,8 +154,9 @@ void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
                     addAndMakeVisible(pedal);
                     pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
-                    
+                    *slotChoice = 1.f;
                 }
+                
                 else if (optionSelected == 2) { // Distortion
                     this->removeChildComponent(comboBox);
                     activeComponents[componentIdx] = std::make_unique<DistortionPedal>(this->processorPtr, getDistortionParameterIDs(componentIdx));
@@ -167,17 +164,19 @@ void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
                     addAndMakeVisible(pedal);
                     pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
+                    *slotChoice = 2.f;
                 }
+                
                 else if (optionSelected == 3) { // Envelope Filter
                     this->removeChildComponent(comboBox);
                     activeComponents[componentIdx] = std::make_unique<EnvelopePedal>(this->processorPtr, getEnvelopeFilterParameterIDs(componentIdx));
-                    
                     auto* pedal = dynamic_cast<EnvelopePedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
-                    
                     pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
+                    *slotChoice = 3.f;
                 }
+                
                 else if (optionSelected == 4) { // Reverb
                     this->removeChildComponent(comboBox);
                     activeComponents[componentIdx] = std::make_unique<ReverbPedal>(this->processorPtr, getReverbParameterIDs(componentIdx));
@@ -185,6 +184,7 @@ void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
                     addAndMakeVisible(pedal);
                     pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
+                    *slotChoice = 4.f;
                 }
             }
         }

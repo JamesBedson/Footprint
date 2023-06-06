@@ -49,6 +49,44 @@ const std::string monoStereoParam   = "mono_stereo";
 
 }
 
+namespace Pedals {
+
+
+namespace Choices {
+
+const std::string noPedal           = "No Pedal";
+const std::string compressor        = "Compressor";
+const std::string envelopeFilter    = "Envelope Filter";
+const std::string reverb            = "Reverb";
+const std::string distortion        = "Distortion";
+
+const juce::StringArray choiceArray
+{
+    noPedal,
+    compressor,
+    distortion,
+    envelopeFilter,
+    reverb
+};
+
+
+}
+
+    namespace Identifiers  {
+
+    const std::string slot1Param    = "slot_1";
+    const std::string slot2Param    = "slot_2";
+    const std::string slot3Param    = "slot_3";
+    const std::string slot4Param    = "slot_4";
+
+    const std::string slot1ID       = "Pedal Slot 1";
+    const std::string slot2ID       = "Pedal Slot 2";
+    const std::string slot3ID       = "Pedal Slot 3";
+    const std::string slot4ID       = "Pedal Slot 4";
+    }
+
+}
+
     namespace Compressor {
 
         namespace Numeric {

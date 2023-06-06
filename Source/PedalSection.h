@@ -52,6 +52,13 @@ private:
     std::vector<juce::Rectangle<int>*> pedalSlots   {&pedalSlot1, &pedalSlot2, &pedalSlot3, &pedalSlot4};
     std::vector<juce::Rectangle<int>*> boxSlots     {&boxSlot1, &boxSlot2, &boxSlot3, &boxSlot4};
     
+    juce::AudioParameterChoice* slot1Choice;
+    juce::AudioParameterChoice* slot2Choice;
+    juce::AudioParameterChoice* slot3Choice;
+    juce::AudioParameterChoice* slot4Choice;
+    
+    std::vector<juce::AudioParameterChoice*> slotParameterVector;
+    
     juce::StringArray getCompressorParameterIDs(const int& idx);
     juce::StringArray getEnvelopeFilterParameterIDs(const int& idx);
     juce::StringArray getReverbParameterIDs(const int& idx);
