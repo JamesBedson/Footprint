@@ -95,11 +95,12 @@ void PedalSection::resized()
 
 void PedalSection::paintDecor(juce::Graphics& g) {
 
-    juce::Line<float> line1(juce::Point<float>((getLocalBounds().getWidth() * 0.25f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.25f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
-    juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.5f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.5f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
-    juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.75f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.75f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
-    juce::Line<float> line4(juce::Point<float>((getLocalBounds().getWidth()) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth()) + 50.0f, getLocalBounds().getHeight() * 0.5f));
+    juce::Line<float> line1(juce::Point<float>((getLocalBounds().getWidth() * 0.25f) - 34.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.25f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
+    juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.5f) - 34.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.5f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
+    juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.75f) - 34.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.75f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
+    juce::Line<float> line4(juce::Point<float>((getLocalBounds().getWidth()) - 34.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth()) + 50.0f, getLocalBounds().getHeight() * 0.5f));
     juce::Line<float> line5(juce::Point<float>((getLocalBounds().getWidth() * (-1.0f)), getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.02f), getLocalBounds().getHeight() * 0.5f));
+
 
     g.drawLine(line1, 2.0f);
     g.drawLine(line2, 2.0f);
@@ -115,16 +116,14 @@ std::unique_ptr<juce::ComboBox> PedalSection::createComboBox(){
     auto newComboBox = std::make_unique<juce::ComboBox>();
     addAndMakeVisible(newComboBox.get());
     newComboBox->setLookAndFeel(&comboBoxLookandFeel);
+    newComboBox->setJustificationType(juce::Justification::centred);
     newComboBox->setText("Add Pedal");
     newComboBox->addItem("Compressor", 1);
     newComboBox->addItem("Distortion", 2);
     newComboBox->addItem("Envelope Filter", 3);
     newComboBox->addItem("Reverb", 4);
-    /////////////////
-    //newComboBox->setJustificationType(juce::Justification::centred);
-    //newComboBox->setBounds(getWidth() / 10 - 70, getHeight() / 2 - 10, 140, 20);
-    //newComboBox->resized();
-    ///////////////////////
+    newComboBox->setBounds(getWidth() / 10 - 70, getHeight() / 2 - 10, 140, 20);
+    newComboBox->resized();
     newComboBox->addListener(this);
     
     return newComboBox;

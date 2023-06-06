@@ -28,5 +28,9 @@ public:
     void drawToggleButton(juce::Graphics&, juce::ToggleButton&, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
     
 private:
+
+    juce::DropShadow shadowProperties;
+    juce::DropShadowEffect dialShadow;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PedalLookAndFeel)
 };
