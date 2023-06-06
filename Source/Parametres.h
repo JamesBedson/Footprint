@@ -11,6 +11,28 @@
 #pragma once
 {
     
+    // Editor
+    std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {ProcessingConstants::EditorControls::Identifiers::inputGainParam, 1},
+                                                ProcessingConstants::EditorControls::Identifiers::inputGainID,
+                                                juce::NormalisableRange<float>(ProcessingConstants::EditorControls::Numeric::inputGainMin,
+                                                                               ProcessingConstants::EditorControls::Numeric::inputGainMax,
+                                                                               ProcessingConstants::EditorControls::Numeric::inputGainIncrement,
+                                                                               ProcessingConstants::EditorControls::Numeric::inputGainSkew),
+                                                ProcessingConstants::EditorControls::Numeric::defaultInputGain),
+    
+    std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {ProcessingConstants::EditorControls::Identifiers::outputGainParam, 1},
+                                                ProcessingConstants::EditorControls::Identifiers::outputGainID,
+                                                juce::NormalisableRange<float>(ProcessingConstants::EditorControls::Numeric::outputGainMin,
+                                                                               ProcessingConstants::EditorControls::Numeric::outputGainMax,
+                                                                               ProcessingConstants::EditorControls::Numeric::outputGainIncrement,
+                                                                               ProcessingConstants::EditorControls::Numeric::outputGainIncrement),
+                                                ProcessingConstants::EditorControls::Numeric::defaultOutputGain),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::EditorControls::Identifiers::monoStereoParam, 1},
+                                               ProcessingConstants::EditorControls::Identifiers::monoStereoID,
+                                               ProcessingConstants::EditorControls::Numeric::isStereo),
+    
+    
     // Compressor
     // ================================================================================================================================
     
