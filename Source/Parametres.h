@@ -25,7 +25,7 @@
                                                 juce::NormalisableRange<float>(ProcessingConstants::EditorControls::Numeric::outputGainMin,
                                                                                ProcessingConstants::EditorControls::Numeric::outputGainMax,
                                                                                ProcessingConstants::EditorControls::Numeric::outputGainIncrement,
-                                                                               ProcessingConstants::EditorControls::Numeric::outputGainIncrement),
+                                                                               ProcessingConstants::EditorControls::Numeric::outputGainSkew),
                                                 ProcessingConstants::EditorControls::Numeric::defaultOutputGain),
     
     std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::EditorControls::Identifiers::monoStereoParam, 1},

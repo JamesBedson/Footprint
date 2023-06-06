@@ -11,7 +11,7 @@
 
 //==============================================================================
 FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), pedalSection(&p)
+    : AudioProcessorEditor (&p), audioProcessor (p), pedalSection(&p), controlSection(&p)
 {
     audioProcessor.setDisplaySection(&displaySection);
     // "Add and make visible" all child components of the editor
