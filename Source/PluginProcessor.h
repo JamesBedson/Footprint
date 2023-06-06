@@ -13,6 +13,8 @@
 #include "ReverbDSP.h"
 #include "DistortionDSP.h"
 #include "EnvelopeFilter.h"
+#include "GainDSP.h"
+#include "MonoDSP.h"
 #include "PassThrough.h"
 #include "DisplaySection.h"
 #include "ProcessingConstants.h"
@@ -78,6 +80,10 @@ public:
 
 private:
     void initParameters();
+    
+    // Editor Controls
+    std::atomic<float>* inputGain;
+    std::atomic<float>* outputGain;
     
     // Compressor Parameters
 
@@ -148,6 +154,10 @@ private:
     std::atomic<float>* cutoffThreshold2;
     std::atomic<float>* cutoffThreshold3;
     std::atomic<float>* cutoffThreshold4;
+    
+    Gain inputGainModule;
+    Gain outputGainModule;
+    Mono monoStereoModule;
     
     std::vector<std::unique_ptr<Compressor>>        compressorVector;
     std::vector<std::unique_ptr<EnvelopeFilter>>    envelopeFilterVector;
