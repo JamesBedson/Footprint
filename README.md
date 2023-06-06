@@ -9,10 +9,11 @@
     -   2.2 General Control & Visualization
     -   2.3 Pedalboard
 3.  Features
-4.  Installation
-5.  Usage
-6.  Supported Platforms
-7.  Contributors
+4. Usage
+5.  Supported Platforms
+6.  Installation
+7.  Development
+8.  Contributors
 
 ## Purpose<a name="purpose"></a>
 
@@ -37,6 +38,12 @@ Footprint is based in two main sections:
 Footprint offers 4 different pedals to combine: Compressor, Envelope Filter, Reverb and Distortion. Each one simulating the most common parameters to modify by the user.
 
 ## Supported platforms<a name="Supported platforms"></a>
+An audio plugin, does not depend only on the platform but also on the host that will be running through.
+As a pedalboard plugin, it will be released in the VST3 or AU format, which is compatible with almost every DAW available.
+As a *free and open-source platfrom*, [Reaper](https://www.reaper.fm/) is one of the most recomended DAW's to work with.
+
+## Development<a name="Development"></a>
+Footprint have been developed with the JUCE framework. It is an open source C++ codebase that can be used to create plug-ins.
 
 ## Contributors<a name="contributors"></a>
 The following contributors have participated in the development of this software:
