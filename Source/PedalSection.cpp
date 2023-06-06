@@ -70,16 +70,16 @@ void PedalSection::resized()
     pedalSlot4.setSize(slotSizeWidth, slotSizeHeight);
     pedalSlot4.setCentre(slot4Centre);
     
-    boxSlot1.setSize(slotSizeWidth, slotSizeHeight * 0.5f);
+    boxSlot1.setSize(slotSizeWidth, slotSizeHeight * 0.1f);
     boxSlot1.setCentre(slot1Centre);
     
-    boxSlot2.setSize(slotSizeWidth, slotSizeHeight * 0.5f);
+    boxSlot2.setSize(slotSizeWidth, slotSizeHeight * 0.1f);
     boxSlot2.setCentre(slot2Centre);
     
-    boxSlot3.setSize(slotSizeWidth, slotSizeHeight * 0.5f);
+    boxSlot3.setSize(slotSizeWidth, slotSizeHeight * 0.1f);
     boxSlot3.setCentre(slot3Centre);
     
-    boxSlot4.setSize(slotSizeWidth, slotSizeHeight * 0.5f);
+    boxSlot4.setSize(slotSizeWidth, slotSizeHeight * 0.1f);
     boxSlot4.setCentre(slot4Centre);
     
     for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++){
@@ -110,10 +110,11 @@ void PedalSection::paintDecor(juce::Graphics& g) {
 
 }
 
-
 std::unique_ptr<juce::ComboBox> PedalSection::createComboBox(){
    
     auto newComboBox = std::make_unique<juce::ComboBox>();
+    auto* popupMenu = newComboBox->getRootMenu();
+    //juce::PopupMenu* popupMenu = newComboBox->getRootMenu();
     addAndMakeVisible(newComboBox.get());
     newComboBox->setLookAndFeel(&comboBoxLookandFeel);
     newComboBox->setJustificationType(juce::Justification::centred);
@@ -122,8 +123,7 @@ std::unique_ptr<juce::ComboBox> PedalSection::createComboBox(){
     newComboBox->addItem("Distortion", 2);
     newComboBox->addItem("Envelope Filter", 3);
     newComboBox->addItem("Reverb", 4);
-    newComboBox->setBounds(getWidth() / 10 - 70, getHeight() / 2 - 10, 140, 20);
-    newComboBox->resized();
+    //newComboBox->resized();
     newComboBox->addListener(this);
     
     return newComboBox;

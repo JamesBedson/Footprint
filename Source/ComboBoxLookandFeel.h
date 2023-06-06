@@ -41,6 +41,9 @@ public:
 
     void drawPopupMenuBackgroundWithOptions(juce::Graphics&, int, int, const juce::PopupMenu::Options&) override;
 
+    void drawPopupMenuBackground(juce::Graphics&, int, int) override;
+
+
     void mouseEnter(const juce::MouseEvent& event)      override;
     void mouseExit(const juce::MouseEvent& event)       override;
 
