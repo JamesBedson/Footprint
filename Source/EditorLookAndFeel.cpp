@@ -83,7 +83,6 @@ void EditorLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
         }
 
     }
-
     shadowProperties.radius = 40;
     shadowProperties.offset = juce::Point<int>(-1, 4);
     shadowProperties.colour = juce::Colours::white.withAlpha(0.25f);
@@ -97,8 +96,8 @@ void EditorLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& 
     juce::Rectangle<int> bounds = toggle.getLocalBounds();
 
     g.setColour(juce::Colours::white);
-    g.drawRoundedRectangle(bounds.toFloat(), 10.f, 4.f);
-    g.setColour(juce::Colours::white);
+    g.drawRoundedRectangle(bounds.toFloat(), 10.f, 1.2f);
+    //g.setColour(juce::Colours::white);
     if (toggle.getToggleState()) {
         g.fillRoundedRectangle(float(bounds.getX() + float((bounds.getWidth() / 2))), float(bounds.getY()), float(bounds.getWidth() / 2), float(bounds.getHeight()), 8.f);
     }

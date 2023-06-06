@@ -41,6 +41,7 @@ void ComboBoxLookandFeel::drawComboBox(juce::Graphics& g, int width, int height,
     comboHeight = 50;
     g.setColour(juce::Colours::white.darker());
     g.drawRoundedRectangle(17, 48, comboWidth, comboHeight, 10.0f, 1.0f);
+    //g.fillAll(juce::Colours::white);
 }
 
 juce::Font ComboBoxLookandFeel::getComboBoxFont(juce::ComboBox& comboBox)
@@ -67,10 +68,10 @@ void ComboBoxLookandFeel::drawPopupMenuItem(juce::Graphics& g, const juce::Recta
     juce::Rectangle<int> itemBounds(area.getX(), area.getY(), itemWidth, itemHeight);
 
     {
-        //juce::Colour backgroundColour(juce::Colours::white.darker().darker().darker());
-        juce::Colour backgroundColour(juce::Colours::red);
+        juce::Colour backgroundColour(juce::Colours::white.darker().darker().darker());
+        //juce::Colour backgroundColour(juce::Colours::yellow);
         g.setColour(backgroundColour);
-        g.fillRect(itemBounds);
+        //g.fillRect(itemBounds);
 
         juce::Font labelFont(getPopupMenuFont());
         labelFont.setTypefaceName("Futura");
@@ -94,23 +95,11 @@ void ComboBoxLookandFeel::drawPopupMenuItem(juce::Graphics& g, const juce::Recta
 
 void ComboBoxLookandFeel::drawPopupMenuBackgroundWithOptions(juce::Graphics& g, int width, int height, const juce::PopupMenu::Options&)
 {
-    ////g.fillAll(juce::Colours::blue);
-    //const float cornerRadius = 5.0f; // Radius for rounded corners
-
-    //g.setColour(juce::Colours::yellow);
-    ////g.fillAll();
-
-    //const juce::Rectangle<int> smallerBounds = juce::Rectangle<int>(0, 0, width * 0.5f, height *0.5f);
-    //g.setColour(juce::Colours::red);
-    //g.fillRoundedRectangle(smallerBounds.toFloat(), cornerRadius);
-    //g.setColour(juce::Colours::white);
-    int backgroundWidth = 500; // Customize as needed
-    int backgroundHeight = 200; // Customize as needed
-
-    // Draw the custom background
     g.fillAll(juce::Colours::white.darker().darker());
-    g.setColour(juce::Colours::white);
-    g.drawRect(0, 0, backgroundWidth, backgroundHeight);
+}
+
+void ComboBoxLookandFeel::drawPopupMenuBackground(juce::Graphics&, int, int)
+{
 }
 
 void ComboBoxLookandFeel::mouseEnter(const juce::MouseEvent& event)
