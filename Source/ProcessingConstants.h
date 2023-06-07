@@ -153,8 +153,8 @@ const juce::StringArray choiceArray
         namespace Numeric {
 
         const float wetMin                  = 0.f;
-        const float wetMax                  = 100.f;
-        const float wetIncrement            = 0.1f;
+        const float wetMax                  = 1.f;
+        const float wetIncrement            = 0.05f;
         const float wetSkew                 = 1.f;
         
         const float cutoffLowpassMin        = 150.f;

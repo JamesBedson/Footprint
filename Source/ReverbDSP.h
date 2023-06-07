@@ -79,6 +79,7 @@ private:
 
     //juce::dsp::Convolution convolution;
 
+    float wetValue;
     std::atomic<float>* wet;
     std::atomic<float>* lowpassCutoff;
     std::atomic<float>* highpassCutoff;
