@@ -25,6 +25,9 @@ public:
 
     FMatrix getLPFCoefficients(float cutoffFreq);
     void applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY);
+    
+    FMatrix getBPFCoefficients(float cutoffFreq);
+    void applyBPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY);
 
     void setGain(std::atomic<float>*);
     void setLevel(std::atomic<float>*);
