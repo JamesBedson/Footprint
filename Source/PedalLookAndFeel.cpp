@@ -91,21 +91,12 @@ void PedalLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int wi
         }
         
     }
-//    else
-//    {
-//        if (slider.isEnabled())
-//            g.setColour (slider.findColour (juce::Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
-//        else
-//            g.setColour (juce::Colours::red);
-//
-//        juce::Path p;
-//        p.addEllipse (-0.4f * rw, -0.4f * rw, rw * 0.8f, rw * 0.8f);
-//        juce::PathStrokeType (rw * 0.1f).createStrokedPath (p, p);
-//
-//        p.addLineSegment (juce::Line<float> (0.0f, 0.0f, 0.0f, -radius), rw * 0.2f);
-//
-//        g.fillPath (p, juce::AffineTransform::rotation (angle).translated (centreX, centreY));
-//    }
+    /*
+    shadowProperties.radius = 24;
+    shadowProperties.offset = juce::Point<int>(-1, 4);
+    shadowProperties.colour = juce::Colours::black.withAlpha(0.25f);
+    dialShadow.setShadowProperties(shadowProperties);
+    slider.setComponentEffect(&dialShadow);*/
 }
 
 void PedalLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& byPassSwitch, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
@@ -115,4 +106,3 @@ void PedalLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& b
     g.setColour(juce::Colours::white);
     g.fillEllipse(byPassSwitch.getLocalBounds().toFloat());
 }
-

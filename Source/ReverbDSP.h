@@ -12,7 +12,7 @@
 #include "AudioProcessingModule.h"
 #include <JuceHeader.h>
 
-class Reverb : AudioProcessingModule {
+class Reverb : public AudioProcessingModule {
     
 public:
     Reverb();

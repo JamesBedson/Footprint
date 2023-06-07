@@ -31,6 +31,11 @@ apvts(*this, nullptr, "Parameters",
     reverbVector.resize(4);
     envelopeFilterVector.resize(4);
     distortionVector.resize(4);
+    activeModules.resize(4);
+    audioPassThroughVector.resize(4);
+    
+    inputGainModule.setGainValue(inputGain);
+    outputGainModule.setGainValue(outputGain);
     
     for (int slotIdx = 0; slotIdx < 4; slotIdx++){
         
@@ -45,12 +50,23 @@ apvts(*this, nullptr, "Parameters",
         
         distortionVector[slotIdx] = std::make_unique<Distortion>();
         initDistortionParameters(slotIdx);
+        
+        audioPassThroughVector[slotIdx] = std::make_unique<AudioPassThrough>();
     }
+    
+    apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot1Param, this);
+    apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
+    apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
+    apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
     
 }
 
 FootprintAudioProcessor::~FootprintAudioProcessor()
 {
+    apvts.removeParameterListener(ProcessingConstants::Pedals::Identifiers::slot1Param, this);
+    apvts.removeParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
+    apvts.removeParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
+    apvts.removeParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
 }
 
 //==============================================================================
@@ -129,10 +145,29 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     rmsOutLevelLeft.setCurrentAndTargetValue(-100.0f);
     rmsOutLevelRight.setCurrentAndTargetValue(-100.0f);
 
-    //compressorVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
-    //envelopeFilterVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
-    //reverbVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
-    distortionVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
+    inputGainModule.prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+    outputGainModule.prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+    
+    for (int slotIdx = 0; slotIdx < 4; slotIdx++){
+        
+        compressorVector[slotIdx]       ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+        envelopeFilterVector[slotIdx]   ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+        //reverbVector[slotIdx]           ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+        distortionVector[slotIdx]       ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+        
+    }
+    
+    assignActiveModules(ProcessingConstants::Pedals::Identifiers::slot1Param,
+                        static_cast<int>(apvts.getParameterAsValue(ProcessingConstants::Pedals::Identifiers::slot1Param).getValue()));
+    
+    assignActiveModules(ProcessingConstants::Pedals::Identifiers::slot2Param,
+                        static_cast<int>(apvts.getParameterAsValue(ProcessingConstants::Pedals::Identifiers::slot2Param).getValue()));
+    
+    assignActiveModules(ProcessingConstants::Pedals::Identifiers::slot3Param,
+                        static_cast<int>(apvts.getParameterAsValue(ProcessingConstants::Pedals::Identifiers::slot3Param).getValue()));
+    
+    assignActiveModules(ProcessingConstants::Pedals::Identifiers::slot4Param,
+                        static_cast<int>(apvts.getParameterAsValue(ProcessingConstants::Pedals::Identifiers::slot4Param).getValue()));
 
 }
 
@@ -177,6 +212,9 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
     /////////////////////////////////////////////INPUT RMS LEVEL METER//////////////////////////////////////////////////
     juce::ScopedNoDenormals noInDenormals;
+    
+    inputGainModule.processBlock(buffer, midiMessages);
+    
     rmsInLevelLeft.skip(buffer.getNumSamples());
     rmsInLevelRight.skip(buffer.getNumSamples());
     {
@@ -190,7 +228,7 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     }
 
     {
-        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
         if (value < rmsInLevelRight.getCurrentValue())
         {
             rmsInLevelRight.setTargetValue(value);
@@ -207,15 +245,19 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    //compressorVector[0]->processBlock(buffer, midiMessages);                            // AQUIIIIIIIIIIIIIIIIIII
-    //envelopeFilterVector[0]->processBlock(buffer, midiMessages);
-    //reverbVector[0]->processBlock(buffer, midiMessages);
-    distortionVector[0]->processBlock(buffer, midiMessages);
-
+    // DSP Block
+    
+    activeModules[0]->processBlock(buffer, midiMessages);
+    activeModules[1]->processBlock(buffer, midiMessages);
+    activeModules[2]->processBlock(buffer, midiMessages);
+    activeModules[3]->processBlock(buffer, midiMessages);
     //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
 
     /////////////////////////////////////////////OUTPUT RMS LEVEL METER//////////////////////////////////////////////////
     juce::ScopedNoDenormals noOutDenormals;
+    bool isStereo = static_cast<bool>(apvts.getRawParameterValue(ProcessingConstants::EditorControls::Identifiers::monoStereoParam)->load());
+    if (!isStereo) monoStereoModule.processBlock(buffer, midiMessages);
+    
     rmsOutLevelLeft.skip(buffer.getNumSamples());
     rmsOutLevelRight.skip(buffer.getNumSamples());
     {
@@ -229,7 +271,7 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     }
 
     {
-        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
         if (value < rmsOutLevelRight.getCurrentValue())
         {
             rmsOutLevelRight.setTargetValue(value);
@@ -279,6 +321,11 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 void FootprintAudioProcessor::initParameters(){
+    
+    // Editor Controls
+    
+    inputGain   = apvts.getRawParameterValue(ProcessingConstants::EditorControls::Identifiers::inputGainParam);
+    outputGain  = apvts.getRawParameterValue(ProcessingConstants::EditorControls::Identifiers::outputGainParam);
     
     // Compressor
     attack1     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack1);
@@ -533,4 +580,154 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
         }
             break;
     }
+}
+
+void FootprintAudioProcessor::parameterChanged(const juce::String &parameterID, float newValue){
+    
+    int newValueInt         = static_cast<int>(newValue);
+    assignActiveModules(parameterID, newValueInt);
+}
+
+void FootprintAudioProcessor::assignActiveModules(const juce::String &paramID, int value) {
+    
+    if (paramID == static_cast<juce::String>(ProcessingConstants::Pedals::Identifiers::slot1Param)) {
+        
+        switch (value) {
+            case 0: {
+                //DBG("Assigning Audio Pass though to slot 1");
+                activeModules[0] = audioPassThroughVector[0].get();
+                break;
+            }
+            
+            case 1: {
+                //DBG("Assigning Compressor to slot 1");
+                activeModules[0] = compressorVector[0].get();
+                break;
+            }
+                
+            case 2: {
+                //DBG("Assigning distortion to slot 1");
+                activeModules[0] = distortionVector[0].get();
+                break;
+            }
+                
+            case 3: {
+                //DBG("Assigning envelope Filter to slot 1");
+                activeModules[0] = envelopeFilterVector[0].get();
+                break;
+            }
+            
+            case 4: {
+                //DBG("Assigning reverb to slot 1");
+                activeModules[0] = reverbVector[0].get();
+                break;
+            }
+        }
+    }
+    
+    else if (paramID == static_cast<juce::String>(ProcessingConstants::Pedals::Identifiers::slot2Param)) {
+        
+        switch (value) {
+            case 0: {
+                //DBG("Assigning Audio Pass though to slot 2");
+                activeModules[1] = audioPassThroughVector[1].get();
+                break;
+            }
+            
+            case 1: {
+                //DBG("Assigning compressor to slot 2");
+                activeModules[1] = compressorVector[1].get();
+                break;
+            }
+                
+            case 2: {
+                //DBG("Assigning distortion to slot 2");
+                activeModules[1] = distortionVector[1].get();
+                break;
+            }
+                
+            case 3: {
+                //DBG("Assigning envelope to slot 2");
+                activeModules[1] = envelopeFilterVector[1].get();
+                break;
+            }
+            
+            case 4: {
+                //DBG("Assigning reverb though to slot 2");
+                activeModules[1] = reverbVector[1].get();
+                break;
+            }
+        }
+        
+        
+    }
+    
+    else if (paramID == static_cast<juce::String>(ProcessingConstants::Pedals::Identifiers::slot3Param)) {
+        
+        switch (value) {
+            case 0: {
+                //DBG("Assigning Audio Pass though to slot 3");
+                activeModules[2] = audioPassThroughVector[2].get();
+                break;
+            }
+            
+            case 1: {
+                //DBG("Assigning compressor to slot 3");
+                activeModules[2] = compressorVector[2].get();
+                break;
+            }
+                
+            case 2: {
+                //DBG("Assigning distortion to slot 3");
+                activeModules[2] = distortionVector[2].get();
+                break;
+            }
+                
+            case 3: {
+                //DBG("Assigning envelope to slot 3");
+                activeModules[2] = envelopeFilterVector[2].get();
+                break;
+            }
+            
+            case 4: {
+                //DBG("Assigning reverb though to slot 2");
+                activeModules[2] = reverbVector[2].get();
+                break;
+            }
+        }
+    }
+    
+    else if (paramID == static_cast<juce::String>(ProcessingConstants::Pedals::Identifiers::slot4Param)) {
+        
+        switch (value) {
+            case 0: {
+                //DBG("Assigning Audio Pass though to slot 4");
+                activeModules[3] = audioPassThroughVector[3].get();
+                break;
+            }
+            case 1: {
+                //DBG("Assigning compressor to slot 4");
+                activeModules[3] = compressorVector[3].get();
+                break;
+            }
+                
+            case 2: {
+                //DBG("Assigning distortion to slot 4");
+                activeModules[3] = distortionVector[3].get();
+                break;
+            }
+                
+            case 3: {
+                //DBG("Assigning envelope to slot 4");
+                activeModules[3] = envelopeFilterVector[3].get();
+                break;
+            }
+            
+            case 4: {
+                //DBG("Assigning reverb to slot 4");
+                activeModules[3] = reverbVector[3].get();
+                break;
+            }
+        }
+    }    
 }

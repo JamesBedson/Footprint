@@ -11,6 +11,49 @@
 #pragma once
 {
     
+    // Editor
+    std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {ProcessingConstants::EditorControls::Identifiers::inputGainParam, 1},
+                                                ProcessingConstants::EditorControls::Identifiers::inputGainID,
+                                                juce::NormalisableRange<float>(ProcessingConstants::EditorControls::Numeric::inputGainMin,
+                                                                               ProcessingConstants::EditorControls::Numeric::inputGainMax,
+                                                                               ProcessingConstants::EditorControls::Numeric::inputGainIncrement,
+                                                                               ProcessingConstants::EditorControls::Numeric::inputGainSkew),
+                                                ProcessingConstants::EditorControls::Numeric::defaultInputGain),
+    
+    std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {ProcessingConstants::EditorControls::Identifiers::outputGainParam, 1},
+                                                ProcessingConstants::EditorControls::Identifiers::outputGainID,
+                                                juce::NormalisableRange<float>(ProcessingConstants::EditorControls::Numeric::outputGainMin,
+                                                                               ProcessingConstants::EditorControls::Numeric::outputGainMax,
+                                                                               ProcessingConstants::EditorControls::Numeric::outputGainIncrement,
+                                                                               ProcessingConstants::EditorControls::Numeric::outputGainSkew),
+                                                ProcessingConstants::EditorControls::Numeric::defaultOutputGain),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::EditorControls::Identifiers::monoStereoParam, 1},
+                                               ProcessingConstants::EditorControls::Identifiers::monoStereoID,
+                                               ProcessingConstants::EditorControls::Numeric::isStereo),
+    
+    // Pedal Slots
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Pedals::Identifiers::slot1Param, 1},
+                                                 ProcessingConstants::Pedals::Identifiers::slot1ID,
+                                                 ProcessingConstants::Pedals::Choices::choiceArray,
+                                                 0),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Pedals::Identifiers::slot2Param, 2},
+                                                 ProcessingConstants::Pedals::Identifiers::slot2ID,
+                                                 ProcessingConstants::Pedals::Choices::choiceArray,
+                                                 0),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Pedals::Identifiers::slot3Param, 3},
+                                                 ProcessingConstants::Pedals::Identifiers::slot3ID,
+                                                 ProcessingConstants::Pedals::Choices::choiceArray,
+                                                 0),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Pedals::Identifiers::slot4Param, 4},
+                                                 ProcessingConstants::Pedals::Identifiers::slot4ID,
+                                                 ProcessingConstants::Pedals::Choices::choiceArray,
+                                                 0),
+    
     // Compressor
     // ================================================================================================================================
     

@@ -11,20 +11,27 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "PluginProcessor.h"
 #include "EditorLookAndFeel.h"
 #include "GUIAttributes.h"
 
 //==============================================================================
 /*
 */
-class ControlSection  : public juce::Component
+
+using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
+
+class ControlSection  : public juce::Component, public juce::Button::Listener
 {
 public:
-    ControlSection();
+    ControlSection(FootprintAudioProcessor* p);
     ~ControlSection() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void buttonClicked(juce::Button* button) override;
 
 private:
 
@@ -35,13 +42,20 @@ private:
     int sliderRow2CentreY;
 
     int sliderWidth, sliderHeight;
+    int toggleWidth, toggleHeight;
     int sliderLabelWidth, sliderLabelHeight;
+    int toggleLabelWidth, toggleLabelHeight;
 
     juce::Slider input, output;
-    std::vector<juce::Slider*> sliders{&input, &output};
-    juce::Label inputLabel, outputLabel;
+    SliderAttachment inputAttachment, outputAttachment;
+    
+    std::vector<juce::Slider*> sliders {&input, &output};
+    juce::Label inputLabel, outputLabel, switchLabel;
     std::vector<juce::Label*> sliderLabels{ &inputLabel, &outputLabel};
     
+    juce::ToggleButton monoStereoSwitch;
+    ButtonAttachment monoSwitchAttachment;
+        
     void paintDecor(juce::Graphics&);
 
     EditorLookAndFeel lookAndFeel;

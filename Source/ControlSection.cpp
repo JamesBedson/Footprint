@@ -12,7 +12,10 @@
 #include "ControlSection.h"
 
 //==============================================================================
-ControlSection::ControlSection()
+ControlSection::ControlSection(FootprintAudioProcessor* p)
+: inputAttachment       (p->apvts, ProcessingConstants::EditorControls::Identifiers::inputGainParam, input),
+outputAttachment        (p->apvts, ProcessingConstants::EditorControls::Identifiers::outputGainParam, output),
+monoSwitchAttachment    (p->apvts, ProcessingConstants::EditorControls::Identifiers::monoStereoParam, monoStereoSwitch)
 {
     for (auto& slider : sliders) {
         addAndMakeVisible(slider);
@@ -26,6 +29,13 @@ ControlSection::ControlSection()
         label->setJustificationType(juce::Justification::horizontallyCentred);
     }
 
+    monoStereoSwitch.setLookAndFeel(&lookAndFeel);
+
+    addAndMakeVisible(monoStereoSwitch);
+    //toggle.setLookAndFeel(&lookAndFeel);
+    
+    //switchLabel.setJustificationType(juce::Justification::centred);
+    
     inputLabel.attachToComponent(&input, false);
     outputLabel.attachToComponent(&output, false);
 
@@ -34,9 +44,25 @@ ControlSection::ControlSection()
     font.setTypefaceName("Futura");
     inputLabel.setFont(font);
     outputLabel.setFont(font);
+    //switchLabel.setFont(font);
 
     inputLabel.setText("Input", juce::dontSendNotification);
     outputLabel.setText("Output", juce::dontSendNotification);
+    
+    
+    addAndMakeVisible(switchLabel);
+    switchLabel.setJustificationType(juce::Justification::centred);
+    switchLabel.attachToComponent(&monoStereoSwitch, false);
+    switchLabel.setFont(font);
+    
+    //juce::Button::Listener::buttonStateChanged(&toggle);
+    
+    /*if (toggle.getToggleState()){
+        switchLabel.setText("Mono", juce::dontSendNotification);
+    }else{
+        switchLabel.setText("Stereo", juce::dontSendNotification);
+    }*/
+    
 }
 
 ControlSection::~ControlSection()
@@ -44,12 +70,20 @@ ControlSection::~ControlSection()
     for (auto* slider : sliders){
         slider->setLookAndFeel(nullptr);
     }
+    monoStereoSwitch.setLookAndFeel(nullptr);
 }
 
 void ControlSection::paint(juce::Graphics& g)
 {
     g.setColour(juce::Colours::white);
     paintDecor(g);
+    
+    if (monoStereoSwitch.getToggleState()){
+        switchLabel.setText("Stereo", juce::dontSendNotification);
+    }
+    else {
+        switchLabel.setText("Mono", juce::dontSendNotification);
+    }
 }
 
 void ControlSection::resized()
@@ -64,10 +98,16 @@ void ControlSection::resized()
 
     sliderWidth       = 75;
     sliderHeight      = 75;
+    
+    toggleWidth       = 55;
+    toggleHeight      = 20;
 
     sliderLabelWidth  = sliderWidth;
     sliderLabelHeight = 15;
 
+    toggleLabelWidth  = toggleWidth;
+    toggleLabelHeight = 20;
+    
     for (auto& slider : sliders) {
         slider->setSize(sliderWidth, sliderHeight);
     }
@@ -82,8 +122,16 @@ void ControlSection::resized()
         auto bottomY = sliderBounds.getBottomLeft().getY();
 
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
-
     }
+    
+    //toggle.setBounds(width * 0.20f ,height * 0.65f , toggleWidth, toggleHeight);
+    monoStereoSwitch.setSize(toggleWidth, toggleHeight);
+    monoStereoSwitch.setCentrePosition(sliderCol1CentreX, sliderRow2CentreY + 35.f);
+    
+    auto switchBounds = switchLabel.getAttachedComponent()->getBounds();
+    auto bottomX = switchBounds.getBottomLeft().getX();
+    auto bottomY = switchBounds.getBottomLeft().getY();
+    switchLabel.setBounds(bottomX, bottomY, toggleLabelWidth, toggleLabelHeight);
 }
 
 void ControlSection::paintDecor(juce::Graphics& g) {
@@ -99,3 +147,12 @@ void ControlSection::paintDecor(juce::Graphics& g) {
 
 
 }
+
+void ControlSection::buttonClicked(juce::Button* button)
+{
+    if (button == &monoStereoSwitch)
+    {
+        repaint();
+    }
+}
+

@@ -24,7 +24,13 @@ public:
     void drawRotarySlider(juce::Graphics&, int x, int y, int width, int height,
                            float sliderPosProportional, float rotaryStartAngle, float rotaryEndAngle,
                            juce::Slider&) override;
+    void drawToggleButton(juce::Graphics&, juce::ToggleButton& toggle,
+        bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
 
 private:
+
+    juce::DropShadow shadowProperties;
+    juce::DropShadowEffect dialShadow;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EditorLookAndFeel)
 };

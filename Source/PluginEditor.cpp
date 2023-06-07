@@ -11,7 +11,7 @@
 
 //==============================================================================
 FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), pedalSection(&p)
+    : AudioProcessorEditor (&p), audioProcessor (p), pedalSection(&p), controlSection(&p)
 {
     audioProcessor.setDisplaySection(&displaySection);
     // "Add and make visible" all child components of the editor
@@ -108,12 +108,13 @@ void FootprintAudioProcessorEditor::timerCallback()
 
 void FootprintAudioProcessorEditor::paintDecor(juce::Graphics& g) {
 
-    juce::Line<float> line1(juce::Point<float>((getLocalBounds().getWidth() * 0.12f), getLocalBounds().getHeight() * 0.42f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.42f));
+    juce::Line<float> line1(juce::Point<float>((getLocalBounds().getWidth() * 0.125f), getLocalBounds().getHeight() * 0.45f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.45f));
     juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.92f), getLocalBounds().getHeight() * 0.7f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.7f));
     juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.03f), getLocalBounds().getHeight() * 0.7f), juce::Point<float>((getLocalBounds().getWidth() * 0.08f), getLocalBounds().getHeight() * 0.7f));
-    juce::Line<float> line4(juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.42f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.7f));
+    juce::Line<float> line4(juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.45f), juce::Point<float>((getLocalBounds().getWidth() * 0.97f), getLocalBounds().getHeight() * 0.7f));
     juce::Line<float> line5(juce::Point<float>((getLocalBounds().getWidth() * 0.03), getLocalBounds().getHeight() * 0.20755f), juce::Point<float>((getLocalBounds().getWidth() * 0.076f), getLocalBounds().getHeight() * 0.20755f));
     juce::Line<float> line6(juce::Point<float>((getLocalBounds().getWidth() * 0.03), getLocalBounds().getHeight() * 0.20755f), juce::Point<float>((getLocalBounds().getWidth() * 0.03f), getLocalBounds().getHeight() * 0.7f));
+    juce::Line<float> line7(juce::Point<float>((getLocalBounds().getWidth() * 0.125f), getLocalBounds().getHeight() * 0.45f), juce::Point<float>((getLocalBounds().getWidth() * 0.125f), getLocalBounds().getHeight() * 0.38f));
 
     g.drawLine(line1, 2.0f);
     g.drawLine(line2, 2.0f);
@@ -121,5 +122,6 @@ void FootprintAudioProcessorEditor::paintDecor(juce::Graphics& g) {
     g.drawLine(line4, 2.0f);
     g.drawLine(line5, 2.0f);
     g.drawLine(line6, 2.0f);
+    g.drawLine(line7, 2.0f);
 
 }

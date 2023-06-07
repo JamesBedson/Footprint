@@ -13,6 +13,9 @@
 #include "ReverbDSP.h"
 #include "DistortionDSP.h"
 #include "EnvelopeFilter.h"
+#include "GainDSP.h"
+#include "MonoDSP.h"
+#include "PassThrough.h"
 #include "DisplaySection.h"
 #include "ProcessingConstants.h"
 //==============================================================================
@@ -21,7 +24,7 @@
 
 using APVTS = juce::AudioProcessorValueTreeState;
 
-class FootprintAudioProcessor  : public juce::AudioProcessor
+class FootprintAudioProcessor  : public juce::AudioProcessor, public juce::AudioProcessorValueTreeState::Listener
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
@@ -72,10 +75,15 @@ public:
     
     DisplaySection* displaySection = nullptr;
     void setDisplaySection(DisplaySection* section);
-    
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    void assignActiveModules(const juce::String& paramID, int value);
 
 private:
     void initParameters();
+    
+    // Editor Controls
+    std::atomic<float>* inputGain;
+    std::atomic<float>* outputGain;
     
     // Compressor Parameters
 
@@ -147,10 +155,17 @@ private:
     std::atomic<float>* cutoffThreshold3;
     std::atomic<float>* cutoffThreshold4;
     
+    Gain inputGainModule;
+    Gain outputGainModule;
+    Mono monoStereoModule;
+    
     std::vector<std::unique_ptr<Compressor>>        compressorVector;
     std::vector<std::unique_ptr<EnvelopeFilter>>    envelopeFilterVector;
     std::vector<std::unique_ptr<Distortion>>        distortionVector;
     std::vector<std::unique_ptr<Reverb>>            reverbVector;
+    std::vector<std::unique_ptr<AudioPassThrough>>  audioPassThroughVector;
+    
+    std::vector<AudioProcessingModule*>             activeModules;
     
     //==============================================================================
     juce::LinearSmoothedValue<float> rmsInLevelLeft, rmsInLevelRight;

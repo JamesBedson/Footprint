@@ -15,7 +15,7 @@
 using DMatrix = std::vector<std::vector<double>>;
 using FMatrix = std::vector<std::vector<float>>;
 
-class EnvelopeFilter : AudioProcessingModule {
+class EnvelopeFilter : public AudioProcessingModule {
 
 public:
     EnvelopeFilter();
