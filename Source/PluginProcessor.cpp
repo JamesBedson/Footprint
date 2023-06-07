@@ -145,6 +145,7 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     rmsOutLevelLeft.setCurrentAndTargetValue(-100.0f);
     rmsOutLevelRight.setCurrentAndTargetValue(-100.0f);
 
+<<<<<<< Updated upstream
     inputGainModule.prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
     outputGainModule.prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
     
@@ -168,6 +169,11 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     
     assignActiveModules(ProcessingConstants::Pedals::Identifiers::slot4Param,
                         static_cast<int>(apvts.getParameterAsValue(ProcessingConstants::Pedals::Identifiers::slot4Param).getValue()));
+=======
+    //compressorVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
+    //envelopeFilterVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
+    reverbVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
+>>>>>>> Stashed changes
 
 }
 
@@ -245,12 +251,19 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+<<<<<<< Updated upstream
     // DSP Block
     
     activeModules[0]->processBlock(buffer, midiMessages);
     activeModules[1]->processBlock(buffer, midiMessages);
     activeModules[2]->processBlock(buffer, midiMessages);
     activeModules[3]->processBlock(buffer, midiMessages);
+=======
+    //compressorVector[0]->processBlock(buffer, midiMessages);                            // AQUIIIIIIIIIIIIIIIIIII
+    //envelopeFilterVector[0]->processBlock(buffer, midiMessages);
+    reverbVector[0]->processBlock(buffer, midiMessages);
+
+>>>>>>> Stashed changes
     //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
 
     /////////////////////////////////////////////OUTPUT RMS LEVEL METER//////////////////////////////////////////////////
