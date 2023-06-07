@@ -23,9 +23,11 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
 
-    //loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
     //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-    loadIR("./IR/48kHz/IR_1_aranyo.wav");
+    loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
+    //loadIR("C:/Downloads/SMALL CHURCH E001 M2S.wav");
+
+    //loadIR("./IR/48kHz/IR_1_aranyo.wav");
 
     blockSize = samplesPerBlock;
 
@@ -76,6 +78,9 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     //    processedMonoChannel.copyTo(buffer);
     //}
 
+    // Get parameters
+    wetValue = wet->load();
+
     // Get input data pointers
     auto* channelDataWrite = buffer.getWritePointer(0);
     auto* channelDataRead = buffer.getReadPointer(0);
@@ -124,11 +129,11 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
             // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
             //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
-            revBufferWrite[bufferPos] = revBufferRead[bufferPos] + reverbBlockRead[channelPos]; //THIS is the line
+            revBufferWrite[bufferPos] = revBufferRead[bufferPos] + 5.0f*reverbBlockRead[channelPos]; //THIS is the line
         }
 
         // Output addition.
-        channelDataWrite[sample] = channelDataRead[sample] + revBufferRead[sample + (count * samplesPerBlock)];
+        channelDataWrite[sample] = (1 - wetValue) * channelDataRead[sample] + wetValue * revBufferRead[sample + (count * samplesPerBlock)];
         
         // Buffer clearance.
         revBuffer.setSample(0, sample + (count * samplesPerBlock), 0);  // Clear buffer at block #0. This is the block that will be renewed in the next iteration

@@ -152,7 +152,7 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
         
         compressorVector[slotIdx]       ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         envelopeFilterVector[slotIdx]   ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
-        //reverbVector[slotIdx]           ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+        reverbVector[slotIdx]           ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         distortionVector[slotIdx]       ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         
     }
@@ -168,6 +168,10 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     
     assignActiveModules(ProcessingConstants::Pedals::Identifiers::slot4Param,
                         static_cast<int>(apvts.getParameterAsValue(ProcessingConstants::Pedals::Identifiers::slot4Param).getValue()));
+
+    //compressorVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
+    //envelopeFilterVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
+    //reverbVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
 
 }
 
@@ -251,6 +255,11 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     activeModules[1]->processBlock(buffer, midiMessages);
     activeModules[2]->processBlock(buffer, midiMessages);
     activeModules[3]->processBlock(buffer, midiMessages);
+
+    //compressorVector[0]->processBlock(buffer, midiMessages);                            // AQUIIIIIIIIIIIIIIIIIII
+    //envelopeFilterVector[0]->processBlock(buffer, midiMessages);
+    //reverbVector[0]->processBlock(buffer, midiMessages);
+
     //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
 
     /////////////////////////////////////////////OUTPUT RMS LEVEL METER//////////////////////////////////////////////////
