@@ -48,8 +48,8 @@ void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
             
             // Tone:
             //cutoff = std::pow(10.f, (53.f - tone->load()) / 10.f);
-            cutoff = tone->load();
-            applyBPF(buffer, ch, n, cutoff, previousXsignal, previousYsignal);
+            //cutoff = tone->load();
+            //applyBPF(buffer, ch, n, cutoff, previousXsignal, previousYsignal);
             
             // Gain:
             if (gain->load() > 0.f) {
