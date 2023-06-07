@@ -25,11 +25,8 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
 
     //loadIR("C:\Downloads\IR_UPF_formated\48kHz\UPF_Aranyo_large_48kHz.wav");
     //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-<<<<<<< Updated upstream
+
     loadIR("./IR/48kHz/IR_1_aranyo.wav");
-=======
-    loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
->>>>>>> Stashed changes
 
     blockSize = samplesPerBlock;
 
