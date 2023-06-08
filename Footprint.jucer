@@ -15,38 +15,60 @@
       <FILE id="Zf7n2C" name="Slot3PurpleBlue.png" compile="0" resource="1"
             file="Assets/Slot3PurpleBlue.png"/>
     </GROUP>
-    <GROUP id="{7CA8AB6E-4901-4B90-0F73-955939EE93AD}" name="IR">
-      <GROUP id="{D4F9D39A-32ED-157D-4513-ECE8DE6877A2}" name="48kHz">
-        <FILE id="Bpx8iq" name="IR_1_aranyo.wav" compile="0" resource="1" file="IR/48kHz/IR_1_aranyo.wav"/>
-        <FILE id="JANIoV" name="IR_1_bathroom.wav" compile="0" resource="1"
-              file="IR/48kHz/IR_1_bathroom.wav"/>
-        <FILE id="udpHcN" name="IR_1_passadis.wav" compile="0" resource="1"
-              file="IR/48kHz/IR_1_passadis.wav"/>
-        <FILE id="OHszWS" name="IR_2_aranyo.wav" compile="0" resource="1" file="IR/48kHz/IR_2_aranyo.wav"/>
-        <FILE id="Hh3AOZ" name="IR_2_passadis.wav" compile="0" resource="1"
-              file="IR/48kHz/IR_2_passadis.wav"/>
-        <FILE id="ZaK14i" name="IR_3_passadis_ma1.wav" compile="0" resource="1"
-              file="IR/48kHz/IR_3_passadis_ma1.wav"/>
-        <FILE id="uaYteH" name="IR_3_passadis_ma2.wav" compile="0" resource="1"
-              file="IR/48kHz/IR_3_passadis_ma2.wav"/>
-        <FILE id="Wn9PR7" name="IR_4_passadis.wav" compile="0" resource="1"
-              file="IR/48kHz/IR_4_passadis.wav"/>
+    <GROUP id="{2A57332B-23B2-E97B-D7CF-CBDA2246C730}" name="IR_UPF_formated">
+      <GROUP id="{94E2506C-168C-94C6-C196-28A7C4D45862}" name="44.1kHz">
+        <FILE id="whVtSf" name="UPF_Aranyo_large_44.1kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/44.1kHz/UPF_Aranyo_large_44.1kHz.wav"/>
+        <FILE id="F0rV3V" name="UPF_Aranyo_short_44.1kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/44.1kHz/UPF_Aranyo_short_44.1kHz.wav"/>
+        <FILE id="Ir2bpS" name="UPF_corridor_balloon_1_44.1kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/44.1kHz/UPF_corridor_balloon_1_44.1kHz.wav"/>
+        <FILE id="mPEHkp" name="UPF_corridor_balloon_2_44.1kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/44.1kHz/UPF_corridor_balloon_2_44.1kHz.wav"/>
+        <FILE id="gc4CNp" name="UPF_corridor_balloon_3_44.1kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/44.1kHz/UPF_corridor_balloon_3_44.1kHz.wav"/>
+        <FILE id="J4uBWF" name="UPF_corridor_hand_1_44.1kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/44.1kHz/UPF_corridor_hand_1_44.1kHz.wav"/>
+        <FILE id="RsOgtE" name="UPF_corridor_hand_2_44.1kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/44.1kHz/UPF_corridor_hand_2_44.1kHz.wav"/>
+        <FILE id="rMCtJo" name="UPF_toilete_44.1kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/44.1kHz/UPF_toilete_44.1kHz.wav"/>
       </GROUP>
-      <GROUP id="{5397757E-9E16-1EC8-4C86-D8DD91ED821F}" name="96kHz">
-        <FILE id="jWAVP6" name="IR_1_aranyo.wav" compile="0" resource="1" file="IR/96kHz/IR_1_aranyo.wav"/>
-        <FILE id="CtfU3P" name="IR_1_bathroom.wav" compile="0" resource="1"
-              file="IR/96kHz/IR_1_bathroom.wav"/>
-        <FILE id="gTunf6" name="IR_1_passadis.wav" compile="0" resource="1"
-              file="IR/96kHz/IR_1_passadis.wav"/>
-        <FILE id="l9aawU" name="IR_2_aranyo.wav" compile="0" resource="1" file="IR/96kHz/IR_2_aranyo.wav"/>
-        <FILE id="PROh34" name="IR_2_passadis.wav" compile="0" resource="1"
-              file="IR/96kHz/IR_2_passadis.wav"/>
-        <FILE id="qCbBEQ" name="IR_3_passadis_ma1.wav" compile="0" resource="1"
-              file="IR/96kHz/IR_3_passadis_ma1.wav"/>
-        <FILE id="xdcJqG" name="IR_3_passadis_ma2.wav" compile="0" resource="1"
-              file="IR/96kHz/IR_3_passadis_ma2.wav"/>
-        <FILE id="ONVWLl" name="IR_4_passadis.wav" compile="0" resource="1"
-              file="IR/96kHz/IR_4_passadis.wav"/>
+      <GROUP id="{50277C90-20F1-C247-AA82-34B526696280}" name="48kHz">
+        <FILE id="CNS2Y1" name="UPF_Aranyo_large_48kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav"/>
+        <FILE id="oGT5cp" name="UPF_Aranyo_short_48kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/48kHz/UPF_Aranyo_short_48kHz.wav"/>
+        <FILE id="ITMwhM" name="UPF_corridor_balloon_1_48kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav"/>
+        <FILE id="DZDt3k" name="UPF_corridor_balloon_2_48kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/48kHz/UPF_corridor_balloon_2_48kHz.wav"/>
+        <FILE id="etkVVH" name="UPF_corridor_balloon_3_48kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/48kHz/UPF_corridor_balloon_3_48kHz.wav"/>
+        <FILE id="TZr4Fs" name="UPF_corridor_hand_1_48kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/48kHz/UPF_corridor_hand_1_48kHz.wav"/>
+        <FILE id="MYN9U0" name="UPF_corridor_hand_2_48kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/48kHz/UPF_corridor_hand_2_48kHz.wav"/>
+        <FILE id="wcdRXQ" name="UPF_toilete_48kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/48kHz/UPF_toilete_48kHz.wav"/>
+      </GROUP>
+      <GROUP id="{B67F38BF-2BD5-6DB2-73DC-6BD5548B8270}" name="96kHz">
+        <FILE id="GsTwqY" name="UPF_Aranyo_large_96kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/96kHz/UPF_Aranyo_large_96kHz.wav"/>
+        <FILE id="xhNt3T" name="UPF_Aranyo_short_96kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/96kHz/UPF_Aranyo_short_96kHz.wav"/>
+        <FILE id="OfAyhk" name="UPF_corridor_balloon_1_96kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/96kHz/UPF_corridor_balloon_1_96kHz.wav"/>
+        <FILE id="fsVQSA" name="UPF_corridor_balloon_2_96kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/96kHz/UPF_corridor_balloon_2_96kHz.wav"/>
+        <FILE id="HkoMfr" name="UPF_corridor_balloon_3_96kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/96kHz/UPF_corridor_balloon_3_96kHz.wav"/>
+        <FILE id="mtsdCG" name="UPF_corridor_hand_1_96kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/96kHz/UPF_corridor_hand_1_96kHz.wav"/>
+        <FILE id="S1Ri0F" name="UPF_corridor_hand_2_96kHz.wav" compile="0"
+              resource="1" file="IR_UPF_formated/96kHz/UPF_corridor_hand_2_96kHz.wav"/>
+        <FILE id="igRCHY" name="UPF_toilete_96kHz.wav" compile="0" resource="1"
+              file="IR_UPF_formated/96kHz/UPF_toilete_96kHz.wav"/>
       </GROUP>
     </GROUP>
     <GROUP id="{509E2B95-4DD9-F613-36E8-01A54CB0D0CF}" name="Source">
