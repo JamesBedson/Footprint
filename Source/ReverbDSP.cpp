@@ -24,10 +24,10 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     this->samplesPerBlock = samplesPerBlock;
 
     //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-    loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
+    //loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
     //loadIR("C:/Downloads/SMALL CHURCH E001 M2S.wav");
 
-    //loadIR("./IR/48kHz/IR_1_aranyo.wav");
+    loadIR("../../IR/48kHz/IR_1_aranyo.wav");
 
     blockSize = samplesPerBlock;
 
@@ -196,12 +196,13 @@ juce::AudioBuffer<float> Reverb::fft_block(juce::AudioBuffer<float>& buffer_bloc
 
 void Reverb::loadIR(const char* filePath) {
 
-    juce::File IR_file(filePath);
+    juce::File IR_file = IR_file.getCurrentWorkingDirectory().getChildFile(filePath);
 
     juce::AudioFormatManager formatManager;
     formatManager.registerBasicFormats();
+    //juce::AudioFormatReader* reader = formatManager.createReaderFor(IR_file);
     juce::AudioFormatReader* reader = formatManager.createReaderFor(IR_file);
-
+    
     if (reader != nullptr) {
         const int numSamples = reader->lengthInSamples;
         const int numChannelsIR = reader->numChannels;
