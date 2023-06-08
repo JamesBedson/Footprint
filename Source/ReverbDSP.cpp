@@ -84,10 +84,12 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     auto* channelDataWrite = buffer.getWritePointer(0);
     auto* channelDataRead = buffer.getReadPointer(0);
 
-    // Calculate reverbBlock -> IFFT( FFT(channelDataRead) * FFT(IR) )
+    // Calculate reverbBlock -> FFT(channelDataRead)
     reverbBlock = fft_block(buffer);
 
     auto* impulseResponseRead = impulseResponse.getReadPointer(0);
+    //auto* impulseResponseRead = impulseResponse_fft.getReadPointer(0);
+    //should this be impulseResponse_fft?
 
     auto* reverbBlockWrite = reverbBlock.getWritePointer(0);
     auto* reverbBlockRead = reverbBlock.getReadPointer(0);
@@ -103,7 +105,10 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     // Perform the FFT
     fft_L.performRealOnlyInverseTransform(reverbBlockWrite);
     //fft_R.performRealOnlyForwardTransform(channelData_R);
-    reverbBlock;
+    //reverbBlock.setSize(reverbBlock.getNumChannels(), reverbBlock.getNumSamples() / 2, true, false, false);
+
+    reverbBlockWrite = reverbBlock.getWritePointer(0);
+    reverbBlockRead = reverbBlock.getReadPointer(0);
 
     // Counter for the ciruclar offset.
     if (count >= blocksIR) {
@@ -129,6 +134,7 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
             // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
             //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
             revBufferWrite[bufferPos] = revBufferRead[bufferPos] + 5.0f*reverbBlockRead[channelPos]; //THIS is the line
+            //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + reverbBlockRead[channelPos]; //THIS is the line
         }
 
         // Output addition.
@@ -159,6 +165,11 @@ void Reverb::fft_IR(juce::AudioBuffer<float>& buffer_IR) {
     juce::dsp::FFT fft_R(calculateLog2(num_samples_fft_ir / 2));
 
     // Perform the FFT
+    /*fft_L.performRealOnlyForwardTransform(channelData_L, true);
+    fft_R.performRealOnlyForwardTransform(channelData_R, true);*/
+
+    //buffer_IR.setSize(buffer_IR.getNumChannels(), (buffer_IR.getNumSamples() / 2) + 1, true, true, false);
+
     fft_L.performRealOnlyForwardTransform(channelData_L);
     fft_R.performRealOnlyForwardTransform(channelData_R);
 
@@ -226,24 +237,30 @@ int Reverb::calculateLog2(int x)
     return log2Value;
 }
 
-void Reverb::zero_pad(juce::AudioBuffer<float>& buffer_to_pad, int num_samples_to_pad)
+void Reverb::zero_pad(juce::AudioBuffer<float>& buffer_to_pad, int num_samples_ir)
 {
     int numChannels = buffer_to_pad.getNumChannels();
     int currentNumSamples = buffer_to_pad.getNumSamples();
 
-    int numSamplesToAdd = num_samples_to_pad - currentNumSamples;
+    //int numSamplesToAdd = num_samples_to_pad - currentNumSamples;
 
     // Resize the buffer to accommodate the desired number of samples
-    buffer_to_pad.setSize(numChannels, num_samples_to_pad, true, true, true);
+    buffer_to_pad.setSize(numChannels, num_samples_ir, true, true, true);
 
     // Zero-pad each channel
-    for (int channel = 0; channel < numChannels; ++channel)
+    for (int sample = currentNumSamples; sample < num_samples_ir; sample++)
     {
-        float* channelData = buffer_to_pad.getWritePointer(channel);
-
-        // Set the added samples to zero
-        std::memset(channelData + currentNumSamples, 0, numSamplesToAdd * sizeof(float));
+        buffer_to_pad.setSample(0, sample, 0);
+        buffer_to_pad.setSample(1, sample, 0);
     }
+    
+    //for (int channel = 0; channel < numChannels; ++channel)
+    //{
+    //    float* channelData = buffer_to_pad.getWritePointer(channel);
+
+    //    // Set the added samples to zero
+    //    std::memset(channelData + currentNumSamples, 0, numSamplesToAdd * sizeof(float));
+    //}
 }
 
 void Reverb::setWet(std::atomic<float>* wetParam){
