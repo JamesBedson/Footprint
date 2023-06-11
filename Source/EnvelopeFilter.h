@@ -46,6 +46,5 @@ private:
     FMatrix previousYamplitude;
     FMatrix previousXsignal;
     FMatrix previousYsignal;
-    bool isFirst;
 
 };
