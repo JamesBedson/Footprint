@@ -28,6 +28,9 @@ highpassAttachment(processor->apvts, parameterIDs[2], highCut)
         label->setJustificationType(juce::Justification::horizontallyCentred);
     }
     type.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+    type.setColour(juce::Slider::backgroundColourId, juce::Colours::white.withAlpha(0.5f));
+    type.setColour(juce::Slider::trackColourId, juce::Colours::lightblue);
+    type.setColour(juce::Slider::thumbColourId, juce::Colours::white);
 
     mixLabel.attachToComponent(&mix, false);
     highCutLabel.attachToComponent(&highCut, false);

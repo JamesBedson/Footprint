@@ -28,6 +28,11 @@ DisplaySection::DisplaySection()
         
     WaveformZoom.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     WaveformZoom.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+
+    WaveformZoom.setColour(juce::Slider::backgroundColourId, juce::Colours::white.withAlpha(0.5f));
+    WaveformZoom.setColour(juce::Slider::trackColourId, juce::Colours::lightblue);
+    WaveformZoom.setColour(juce::Slider::thumbColourId, juce::Colours::white);
+
     WaveformZoom.onValueChange = [this](){
         float sliderValue = WaveformZoom.getValue();
         
