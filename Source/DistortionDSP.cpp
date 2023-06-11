@@ -37,25 +37,43 @@ void Distortion::prepare(double sampleRate, int samplesPerBlock, int numChannels
 
 void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
     
-    float gainVal = gain->load();
+    float value, cutoff, toneVal, gainVal, waveShaper, levelVal;
+    int sign;
+    gainVal = gain->load();
+    toneVal = tone->load();
+    levelVal = level->load();
 
-    if (gainVal > 0.f) {
-        for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
+    float nyquist = sampleRate / 2;
+    cutoff = nyquist * toneVal;
+    
+
+    for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
+        auto* channelDataWrite = buffer.getWritePointer(ch);
+        auto* channelDataRead = buffer.getReadPointer(ch);
+
+        for (int n = 0; n < buffer.getNumSamples(); n++) {
+            // Tone:
             
-            auto* channelDataWrite  = buffer.getWritePointer(ch);
-            auto* channelDataRead   = buffer.getReadPointer(ch);
+            if (toneVal < 0.65f) {
+                applyLPF(buffer, ch, n, cutoff, previousXsignal, previousYsignal);
+            }
+            else {
+                applyHPF(buffer, ch, n, 400.f * toneVal, previousXsignal, previousYsignal);
+            }
             
-            for (int n = 0; n < buffer.getNumSamples(); n++) {
-                float value         = channelDataRead[n];
-                float waveShaper    = 1 - std::exp(- gainVal * std::abs(value));
-                int sign;
-                
+            // Gain:
+            if (gainVal > 0.f) {
+                value = channelDataRead[n];
+                waveShaper = 1 - std::exp(-gainVal * std::abs(value));
+
                 if (value >= 0) sign = 1;
                 else            sign = -1;
-                
+
                 channelDataWrite[n] = sign * waveShaper;
-                //channelDataWrite[n] = (value / std::abs(value)) * (1 - std::exp(- gainVal * std::abs(value)));
             }
+            
+            // Level:
+            channelDataWrite[n] *= levelVal;
         }
     }
 }
@@ -108,16 +126,17 @@ void Distortion::applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, doubl
     previousY[ch][1] = channelDataRead[n];
 }
 
-FMatrix Distortion::getBPFCoefficients(float cutoffFreq) {
+FMatrix Distortion::getHPFCoefficients(float cutoffFreq) {
 
     float w = 2.f * juce::MathConstants<float>::pi * cutoffFreq / this->sampleRate;
-    float alpha = std::sin(w) / (2.f * 1.f); // Q = 1
+    float Q = 1.0; // Q = 1
+    float alpha = std::sin(w) / (2.f * Q);
 
-    float b0 = 1.f * alpha;
-    float b1 = 0.f;
-    float b2 = - 1.f * alpha;
+    float b0 = (1 + std::cos(w)) / 2.f;
+    float b1 = - 1 - std::cos(w);
+    float b2 = (1 + std::cos(w)) / 2.f;
     float a0 = 1.f + alpha;
-    float a1 = -2.f * std::cos(w);
+    float a1 = - 2.f * std::cos(w);
     float a2 = 1.f - alpha;
 
     FMatrix ba = { { b0, b1, b2 }, { a0, a1, a2 } };
@@ -128,14 +147,14 @@ FMatrix Distortion::getBPFCoefficients(float cutoffFreq) {
     return ba;
 }
 
-void Distortion::applyBPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY) {
+void Distortion::applyHPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY) {
 
     auto* channelDataWrite = buffer.getWritePointer(ch);
     auto* channelDataRead = buffer.getReadPointer(ch);
 
     float xN1, xN2, yN1, yN2, b0, b1, b2, a1, a2;
 
-    FMatrix coefficients = getBPFCoefficients(cutoff);
+    FMatrix coefficients = getHPFCoefficients(cutoff);
 
     xN1 = previousX[ch][0];
     xN2 = previousX[ch][1];
