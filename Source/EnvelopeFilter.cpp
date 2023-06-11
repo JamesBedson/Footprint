@@ -23,8 +23,7 @@ EnvelopeFilter::~EnvelopeFilter() {
 void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChannels) {
 
     this->sampleRate = sampleRate;
-    isFirst = true;
-    this->windowSize = 500;
+    this->windowSize = 400;
 
     windowCutoffs.resize(numChannels);
     previousXamplitude.resize(numChannels);
@@ -54,12 +53,11 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
     juce::MidiBuffer& midiMessages) {
 
     juce::AudioBuffer<float> ampBuffer = getAmplitudeEnvelope(buffer);
-    double currentCutoff;
+    double currentCutoff, amplitude;
     double averageCutoffFreq = 0.0;
-    int times = 1;
     double minCutoff = static_cast<double>(minCutoffFrequency->load());
     double sens = static_cast<double>(sensitivity->load());
-    double amplitude;
+    double Q = static_cast<double>(qualityFactor->load());
 
     for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
 
@@ -73,21 +71,13 @@ void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
             windowCutoffs[ch][windowSize - 1] = currentCutoff;
 
             for (double value : windowCutoffs[ch]) averageCutoffFreq += value;
-
-            /*if (isFirst) {
-                averageCutoffFreq /= times;
-                times++;
-            }
-            else {
-                averageCutoffFreq /= windowSize;
-            }*/
             averageCutoffFreq /= windowSize;
-            applyLPF(buffer, ch, n, averageCutoffFreq, static_cast<double>(qualityFactor->load()), previousXsignal, previousYsignal);
+
+            applyLPF(buffer, ch, n, averageCutoffFreq, Q, previousXsignal, previousYsignal);
 
             averageCutoffFreq = 0.0;
         }
     }
-    if (isFirst) isFirst = false;
 }
 
 DMatrix EnvelopeFilter::getLPFCoefficients(double cutoffFreq, double qualityFactor) {
