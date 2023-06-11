@@ -222,14 +222,14 @@ const juce::StringArray choiceArray
         const float toneIncrement           = 0.01f;
         const float toneSkew                = 1.f;*/
 
-        const float minTone = 1900.f;
-        const float maxTone = 22050.f;
-        const float toneIncrement = 5.f;
+        const float minTone = 0.05f;
+        const float maxTone = 1.f;
+        const float toneIncrement = 0.01f;
         const float toneSkew = 1.f;
         
         const float defaultGainDecibels     = 0.f;
         const float defaultLevel            = 1.f;
-        const float defaultTone             = 1.f;
+        const float defaultTone             = 0.6f;
 
         }
 

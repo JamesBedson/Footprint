@@ -37,10 +37,15 @@ void Distortion::prepare(double sampleRate, int samplesPerBlock, int numChannels
 
 void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
     
-    float value, cutoff, g, l;
-    g = gain->load();
-    cutoff = tone->load();
-    l = level->load();
+    float value, cutoff, toneVal, gainVal, waveShaper, levelVal;
+    int sign;
+    gainVal = gain->load();
+    toneVal = tone->load();
+    levelVal = level->load();
+
+    float nyquist = sampleRate / 2;
+    cutoff = nyquist * toneVal;
+    
 
 
 
@@ -52,25 +57,27 @@ void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
         for (int n = 0; n < buffer.getNumSamples(); n++) {
             
             // Tone:
-            //cutoff = std::pow(10.f, t / 10.f);
             
-            if (l > 2500.f) {
-                applyBPF(buffer, ch, n, cutoff, previousXsignal, previousYsignal);
+            if (toneVal < 0.65f) {
+                applyLPF(buffer, ch, n, cutoff, previousXsignal, previousYsignal);
             }
             else {
-                applyLPF(buffer, ch, n, cutoff, previousXsignal, previousYsignal);
+                applyHPF(buffer, ch, n, 400.f * toneVal, previousXsignal, previousYsignal);
             }
             
             // Gain:
-            if (g > 0.f) {
+            if (gainVal > 0.f) {
                 value = channelDataRead[n];
-                channelDataWrite[n] = (value / std::abs(value)) * (1 - std::exp(- g * std::abs(value)));
+                waveShaper = 1 - std::exp(-gainVal * std::abs(value));
+
+                if (value >= 0) sign = 1;
+                else            sign = -1;
+
+                channelDataWrite[n] = sign * waveShaper;
             }
             
             // Level:
-            channelDataWrite[n] *= l;
-
-            
+            channelDataWrite[n] *= levelVal;
         }
     }
 
@@ -124,17 +131,17 @@ void Distortion::applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, doubl
     previousY[ch][1] = channelDataRead[n];
 }
 
-FMatrix Distortion::getBPFCoefficients(float cutoffFreq) {
+FMatrix Distortion::getHPFCoefficients(float cutoffFreq) {
 
     float w = 2.f * juce::MathConstants<float>::pi * cutoffFreq / this->sampleRate;
-    float Q = 4.0;
-    float alpha = std::sin(w) / (2.f * Q); // Q = 1
+    float Q = 1.0; // Q = 1
+    float alpha = std::sin(w) / (2.f * Q);
 
-    float b0 = Q * alpha;
-    float b1 = 0.f;
-    float b2 = - Q * alpha;
+    float b0 = (1 + std::cos(w)) / 2.f;
+    float b1 = - 1 - std::cos(w);
+    float b2 = (1 + std::cos(w)) / 2.f;
     float a0 = 1.f + alpha;
-    float a1 = -2.f * std::cos(w);
+    float a1 = - 2.f * std::cos(w);
     float a2 = 1.f - alpha;
 
     FMatrix ba = { { b0, b1, b2 }, { a0, a1, a2 } };
@@ -145,14 +152,14 @@ FMatrix Distortion::getBPFCoefficients(float cutoffFreq) {
     return ba;
 }
 
-void Distortion::applyBPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY) {
+void Distortion::applyHPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY) {
 
     auto* channelDataWrite = buffer.getWritePointer(ch);
     auto* channelDataRead = buffer.getReadPointer(ch);
 
     float xN1, xN2, yN1, yN2, b0, b1, b2, a1, a2;
 
-    FMatrix coefficients = getBPFCoefficients(cutoff);
+    FMatrix coefficients = getHPFCoefficients(cutoff);
 
     xN1 = previousX[ch][0];
     xN2 = previousX[ch][1];
@@ -172,17 +179,6 @@ void Distortion::applyBPF(juce::AudioBuffer<float>& buffer, int ch, int n, doubl
     previousY[ch][0] = previousY[ch][1];
     previousY[ch][1] = channelDataRead[n];
 }
-
-/*float Distortion::dsp(const float* ori, int num_samples) {
-    float X{num_samples}, term;
-    for (int k = 0; k < num_samples; k++) {
-        term = 0.f;
-        for (int n = 0; n < num_samples; n++) {
-            std::complex<float> complexNumber(0.0, 1.0);
-            term += ori[n] * std::exp(- 2 * complexNumber * juce::MathConstants<float>::pi * k * n / num_samples);
-        }
-    }
-}*/
 
 void Distortion::setGain(std::atomic<float>* gain){
     this->gain = gain;
