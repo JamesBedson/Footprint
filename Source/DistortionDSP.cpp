@@ -47,15 +47,11 @@ void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
     cutoff = nyquist * toneVal;
     
 
-
-
     for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
-
         auto* channelDataWrite = buffer.getWritePointer(ch);
         auto* channelDataRead = buffer.getReadPointer(ch);
 
         for (int n = 0; n < buffer.getNumSamples(); n++) {
-            
             // Tone:
             
             if (toneVal < 0.65f) {
@@ -80,7 +76,6 @@ void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
             channelDataWrite[n] *= levelVal;
         }
     }
-
 }
 
 FMatrix Distortion::getLPFCoefficients(float cutoffFreq) {
