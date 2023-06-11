@@ -29,6 +29,8 @@ public:
     FMatrix getBPFCoefficients(float cutoffFreq);
     void applyBPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY);
 
+    float dsp(const float* ori, int num_samples);
+
     void setGain(std::atomic<float>*);
     void setLevel(std::atomic<float>*);
     void setTone(std::atomic<float>*);
