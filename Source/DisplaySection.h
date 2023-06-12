@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "WaveformVisualizer.h"
 #include "GUIAttributes.h"
+#include "DBGrid.h"
 
 //==============================================================================
 /*
@@ -32,6 +33,8 @@ public:
 
     juce::Slider bufferSizeView;
     juce::Slider WaveformZoom;
+    DBGrid dBGridIn;
+    DBGrid dBGridOut;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DisplaySection)

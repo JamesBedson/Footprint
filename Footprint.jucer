@@ -157,6 +157,12 @@
             file="Source/DeleteSwitchLookandFeel.cpp"/>
       <FILE id="td9bsl" name="DeleteSwitchLookandFeel.h" compile="0" resource="0"
             file="Source/DeleteSwitchLookandFeel.h"/>
+      <FILE id="TOYA9R" name="ReverbTypeSwitch.cpp" compile="1" resource="0"
+            file="Source/ReverbTypeSwitch.cpp"/>
+      <FILE id="GHztv1" name="ReverbTypeSwitch.h" compile="0" resource="0"
+            file="Source/ReverbTypeSwitch.h"/>
+      <FILE id="c9AMiz" name="DBGrid.cpp" compile="1" resource="0" file="Source/DBGrid.cpp"/>
+      <FILE id="aKNVYt" name="DBGrid.h" compile="0" resource="0" file="Source/DBGrid.h"/>
     </GROUP>
     <FILE id="wivgJ8" name="Parametres.h" compile="0" resource="0" file="Source/Parametres.h"/>
   </MAINGROUP>

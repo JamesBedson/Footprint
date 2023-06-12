@@ -19,37 +19,37 @@ Reverb::~Reverb(){
 }
 
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
-    //Setup before execution. Executed when play is pressed
-    this->sampleRate = sampleRate;
-    this->samplesPerBlock = samplesPerBlock;
+    ////Setup before execution. Executed when play is pressed
+    //this->sampleRate = sampleRate;
+    //this->samplesPerBlock = samplesPerBlock;
 
-    //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-    //loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
+    ////loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
+    ////loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
 
-    loadIR("../../IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
+    //loadIR("../../IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
 
-    blockSize = samplesPerBlock;
+    //blockSize = samplesPerBlock;
 
-    num_samples_ir = impulseResponse.getNumSamples();
+    //num_samples_ir = impulseResponse.getNumSamples();
 
-    impulseResponse_fft.makeCopyOf(impulseResponse);
-    fft_IR(impulseResponse_fft);
+    //impulseResponse_fft.makeCopyOf(impulseResponse);
+    //fft_IR(impulseResponse_fft);
 
-    num_samples_fft_ir = impulseResponse_fft.getNumSamples();
-    
-    // Reverb buffer setup
-    
-    blocksIR = ceil(num_samples_ir / blockSize); //50;
-    revBuffer.setSize(numChannels, blocksIR * samplesPerBlock);
-    revBuffer.clear();
-    count = 0;
+    //num_samples_fft_ir = impulseResponse_fft.getNumSamples();
+    //
+    //// Reverb buffer setup
+    //
+    //blocksIR = ceil(num_samples_ir / blockSize); //50;
+    //revBuffer.setSize(numChannels, blocksIR * samplesPerBlock);
+    //revBuffer.clear();
+    //count = 0;
 
-    // Get reverb buffer pointers
-    revBufferWrite = revBuffer.getWritePointer(0);
-    revBufferRead = revBuffer.getReadPointer(0);
+    //// Get reverb buffer pointers
+    //revBufferWrite = revBuffer.getWritePointer(0);
+    //revBufferRead = revBuffer.getReadPointer(0);
 
-    //reverb.setSampleRate(sampleRate);
-    //reverb.setParameters({0.9f, 0.9f, 0.9f, false});
+    ////reverb.setSampleRate(sampleRate);
+    ////reverb.setParameters({0.9f, 0.9f, 0.9f, false});
 }
 
 void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
@@ -77,71 +77,71 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     //    processedMonoChannel.copyTo(buffer);
     //}
 
-    // Get parameters
-    wetValue = wet->load();
+    //// Get parameters
+    //wetValue = wet->load();
 
-    // Get input data pointers
-    auto* channelDataWrite = buffer.getWritePointer(0);
-    auto* channelDataRead = buffer.getReadPointer(0);
+    //// Get input data pointers
+    //auto* channelDataWrite = buffer.getWritePointer(0);
+    //auto* channelDataRead = buffer.getReadPointer(0);
 
-    // Calculate reverbBlock -> IFFT( FFT(channelDataRead) * FFT(IR) )
-    reverbBlock = fft_block(buffer);
+    //// Calculate reverbBlock -> IFFT( FFT(channelDataRead) * FFT(IR) )
+    //reverbBlock = fft_block(buffer);
 
-    auto* impulseResponseRead = impulseResponse.getReadPointer(0);
+    //auto* impulseResponseRead = impulseResponse.getReadPointer(0);
 
-    auto* reverbBlockWrite = reverbBlock.getWritePointer(0);
-    auto* reverbBlockRead = reverbBlock.getReadPointer(0);
+    //auto* reverbBlockWrite = reverbBlock.getWritePointer(0);
+    //auto* reverbBlockRead = reverbBlock.getReadPointer(0);
 
-    for (int sample = 0; sample < num_samples_fft_ir; sample++)
-    {
-        reverbBlockWrite[sample] = reverbBlockRead[sample] * impulseResponseRead[sample];
-    }
+    //for (int sample = 0; sample < num_samples_fft_ir; sample++)
+    //{
+    //    reverbBlockWrite[sample] = reverbBlockRead[sample] * impulseResponseRead[sample];
+    //}
 
-    juce::dsp::FFT fft_L(calculateLog2(num_samples_fft_ir / 2));
-    //juce::dsp::FFT fft_R(calculateLog2(num_samples_fft_ir / 2));
+    //juce::dsp::FFT fft_L(calculateLog2(num_samples_fft_ir / 2));
+    ////juce::dsp::FFT fft_R(calculateLog2(num_samples_fft_ir / 2));
 
-    // Perform the FFT
-    fft_L.performRealOnlyInverseTransform(reverbBlockWrite);
-    //fft_R.performRealOnlyForwardTransform(channelData_R);
-    reverbBlock;
+    //// Perform the FFT
+    //fft_L.performRealOnlyInverseTransform(reverbBlockWrite);
+    ////fft_R.performRealOnlyForwardTransform(channelData_R);
+    //reverbBlock;
 
-    // Counter for the ciruclar offset.
-    if (count >= blocksIR) {
-        count = 0;
-    }
+    //// Counter for the ciruclar offset.
+    //if (count >= blocksIR) {
+    //    count = 0;
+    //}
 
-    // Traversal of samples.
-    for (int sample = 0;  sample < samplesPerBlock;  sample++)
-    //for (int sample = 0; sample < 1; sample++)
-    {
-        // Traversal of blocks. Blocks go always 0-blocksIR. An offset is set to the revBuffer.
-        // This offset is a circular offset. To avoid creating an infinite revBuffer, samples are
-        // overwritten in a circular way. The offset is calculated as (block + count) % blocksIR.
-        for (int block = 0; block < blocksIR; block++)
-        {
-            // Position in the reverbBlock (does not take circular offset into account).
-            int channelPos = sample + (block * samplesPerBlock);
+    //// Traversal of samples.
+    //for (int sample = 0;  sample < samplesPerBlock;  sample++)
+    ////for (int sample = 0; sample < 1; sample++)
+    //{
+    //    // Traversal of blocks. Blocks go always 0-blocksIR. An offset is set to the revBuffer.
+    //    // This offset is a circular offset. To avoid creating an infinite revBuffer, samples are
+    //    // overwritten in a circular way. The offset is calculated as (block + count) % blocksIR.
+    //    for (int block = 0; block < blocksIR; block++)
+    //    {
+    //        // Position in the reverbBlock (does not take circular offset into account).
+    //        int channelPos = sample + (block * samplesPerBlock);
 
-            // Position in the revBuffer (takes circular offset into account).
-            int offset = (block + count) % blocksIR;
-            int bufferPos = sample + (offset * samplesPerBlock);
+    //        // Position in the revBuffer (takes circular offset into account).
+    //        int offset = (block + count) % blocksIR;
+    //        int bufferPos = sample + (offset * samplesPerBlock);
 
-            // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
-            //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
-            revBufferWrite[bufferPos] = revBufferRead[bufferPos] + 5.0f*reverbBlockRead[channelPos]; //THIS is the line
-        }
+    //        // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
+    //        //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
+    //        revBufferWrite[bufferPos] = revBufferRead[bufferPos] + 5.0f*reverbBlockRead[channelPos]; //THIS is the line
+    //    }
 
-        // Output addition.
-        channelDataWrite[sample] = (1 - wetValue) * channelDataRead[sample] + wetValue * revBufferRead[sample + (count * samplesPerBlock)];
-        
-        // Buffer clearance.
-        revBuffer.setSample(0, sample + (count * samplesPerBlock), 0);  // Clear buffer at block #0. This is the block that will be renewed in the next iteration
-    }
+    //    // Output addition.
+    //    channelDataWrite[sample] = (1 - wetValue) * channelDataRead[sample] + wetValue * revBufferRead[sample + (count * samplesPerBlock)];
+    //    
+    //    // Buffer clearance.
+    //    revBuffer.setSample(0, sample + (count * samplesPerBlock), 0);  // Clear buffer at block #0. This is the block that will be renewed in the next iteration
+    //}
 
-    // Counter update.
-    count += 1;
+    //// Counter update.
+    //count += 1;
 
-    //processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    ////processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
 }
 
 void Reverb::fft_IR(juce::AudioBuffer<float>& buffer_IR) {

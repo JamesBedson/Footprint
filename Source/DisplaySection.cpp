@@ -25,7 +25,9 @@ DisplaySection::DisplaySection()
     outputWaveform.setBufferSize(1024);
     
     addAndMakeVisible(WaveformZoom);
-        
+    addAndMakeVisible(dBGridIn);
+    addAndMakeVisible(dBGridOut);
+
     WaveformZoom.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     WaveformZoom.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
 
@@ -46,7 +48,6 @@ DisplaySection::DisplaySection()
     
     inputWaveform.setColours(juce::Colours::white, juce::Colours::black);
     outputWaveform.setColours(juce::Colours::white, juce::Colours::black);
-    
 }
 
 DisplaySection::~DisplaySection()
@@ -68,14 +69,14 @@ void DisplaySection::paint (juce::Graphics& g)
     font.setHeight(GUIAttributes::DisplayFontSizes::h2);
     g.setFont(font); // Set the updated font
     g.drawText("Zoom", 639, 75, 40, 210, juce::Justification::centred);
-    g.drawText("In", 20, 118, 40, 210, juce::Justification::centred);
-    g.drawText("Out", 71, 118, 40, 210, juce::Justification::centred);
+    g.drawText("In", 30, 118, 40, 210, juce::Justification::centred);
+    g.drawText("Out", 91, 118, 40, 210, juce::Justification::centred);
     font.setHeight(GUIAttributes::DisplayFontSizes::h3);
     g.setFont(font); // Set the updated font
     g.drawText("Peak RMS", 17, 19, 100, 10, juce::Justification::centred);
 
     g.setColour(juce::Colours::black.brighter());
-    juce::Line<float> vLine (juce::Point<float>((getLocalBounds().getX()) + 125.f, getLocalBounds().getY() + 30.f), juce::Point<float>((getLocalBounds().getX()) + 125.f, getLocalBounds().getY() + 220.f));
+    juce::Line<float> vLine (juce::Point<float>((getLocalBounds().getX()) + 130.f, getLocalBounds().getY() + 30.f), juce::Point<float>((getLocalBounds().getX()) + 130.f, getLocalBounds().getY() + 220.f));
     g.drawLine(vLine, 2.0f);
 }
 
@@ -85,7 +86,8 @@ void DisplaySection::resized()
     // components that your component contains..
     inputWaveform.setBounds(140, 18, 500, 100);
     outputWaveform.setBounds(140, 125, 500, 100);
-    
+    dBGridIn.setBounds(7, 37, 45, 180);
+    dBGridOut.setBounds(67, 37, 45, 180);
     WaveformZoom.setBounds(639, 75, 40, 100);
 
 
