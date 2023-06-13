@@ -102,12 +102,6 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
         returnBlock.setSample(0, sample, 0);
         //returnBlock.setSample(1, sample, 0);
     }
-    
-    // Get reverbBlock data pointers
-    //auto* reverbBlockWrite_L = reverbBlock.getWritePointer(0);
-    //auto* reverbBlockWrite_R = reverbBlock.getWritePointer(1);
-    //auto* reverbBlockRead_L = reverbBlock.getReadPointer(0);
-    //auto* reverbBlockRead_R = reverbBlock.getReadPointer(1);
 
     // Counter for the ciruclar offset.
     if (count >= blocksIR) {
@@ -213,7 +207,7 @@ void Reverb::loadIR(const char* filePath) {
         impulseResponse.setSize(numChannelsIR, numSamples);
 
         reader->read(&impulseResponse, 0, numSamples, 0, true, true);
-        //delete reader;
+        delete reader;
     }
 }
 
