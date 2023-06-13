@@ -37,8 +37,7 @@ public:
     
 private:
 
-    static constexpr auto fftOrder = 17;
-    static constexpr auto fftSize = 1 << fftOrder;
+    
 
     juce::dsp::AudioBlock<float> monoChannel;
     juce::dsp::AudioBlock<float> processedMonoChannel;
@@ -50,10 +49,12 @@ private:
     juce::AudioBuffer<float> reverbBlock;
     juce::AudioBuffer<float> returnBlock;
 
-    int num_samples_ir;
-    int num_samples_fft_ir;
+    //int num_samples_ir;
+    //int num_samples_fft_ir;
 
     int blockSize;
+    static constexpr auto fftOrder = 17;
+    static constexpr auto fftSize = 1 << fftOrder;
     
     // Reverb buffer related variables
     juce::AudioBuffer<float> revBuffer;
