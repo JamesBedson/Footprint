@@ -39,7 +39,7 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     
     // Reverb buffer setup
     
-    blocksIR = ceil(num_samples_ir / blockSize); //50;
+    blocksIR = ceil(fftSize / blockSize); //50;
     revBuffer.setSize(numChannels, blocksIR * samplesPerBlock);
     revBuffer.clear();
     count = 0;
@@ -85,30 +85,67 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     auto* channelDataRead = buffer.getReadPointer(0);
 
     // Calculate reverbBlock -> FFT(channelDataRead)
-    reverbBlock = fft_block(buffer);
+    returnBlock = fft_block(buffer);
 
-    auto* impulseResponseRead = impulseResponse.getReadPointer(0);
-    //auto* impulseResponseRead = impulseResponse_fft.getReadPointer(0);
+    //auto* impulseResponseRead = impulseResponse.getReadPointer(0);
+    auto* impulseResponseRead = impulseResponse_fft.getReadPointer(0);
     //should this be impulseResponse_fft?
+
+    auto* returnBlockWrite = returnBlock.getWritePointer(0);
+    auto* returnBlockRead = returnBlock.getReadPointer(0);
+
+    for (int sample = 0; sample < fftSize / 2; sample++) //maybe fftSize / 2?
+    {
+        returnBlockWrite[sample] = returnBlockRead[sample] * impulseResponseRead[sample];
+    }
+
+
+
+    juce::dsp::FFT inverseFFT(fftOrder);
+    returnBlockWrite = returnBlock.getWritePointer(0);
+
+    //buffer_IR.setSize(buffer_IR.getNumChannels(), fftSize * 2, true, true, true);
+
+    /*for (int frame = fftSize; frame < 2 * fftSize - 1; frame++)
+    {
+        buffer_IR.setSample(0, frame, 0);
+        buffer_IR.setSample(1, frame, 0);
+    }*/
+
+    //float* channelData_L = buffer_IR.getWritePointer(0);
+    //float* channelData_R = buffer_IR.getWritePointer(1);
+
+    inverseFFT.performRealOnlyInverseTransform(returnBlockWrite);
+
+    for (int sample = fftSize / 2; sample < 2 * fftSize - 1; sample++)
+    {
+        returnBlock.setSample(0, sample, 0);
+        returnBlock.setSample(1, sample, 0);
+    }
+    
+    
+    //returnBlock.setSize(returnBlock.getNumChannels(), fftSize, true, true, true);
+
+
+
+
+
+
+    //juce::dsp::FFT fft_L(num_samples_fft_ir * 2);
+    //juce::dsp::FFT fft_L(calculateLog2(num_samples_fft_ir / 2));
+    //juce::dsp::FFT fft_R(calculateLog2(num_samples_fft_ir / 2));
+
+    //reverbBlock.setSize(reverbBlock.getNumChannels(), num_samples_fft_ir * 2, true, true, true);
+    //reverbBlockWrite = reverbBlock.getWritePointer(0);
+
+    // Perform the FFT
+    //fft_L.performRealOnlyInverseTransform(reverbBlockWrite);
+    //fft_R.performRealOnlyForwardTransform(channelData_R);
+
+    //reverbBlock.setSize(reverbBlock.getNumChannels(), num_samples_fft_ir, true, true, true);
 
     auto* reverbBlockWrite = reverbBlock.getWritePointer(0);
     auto* reverbBlockRead = reverbBlock.getReadPointer(0);
-
-    for (int sample = 0; sample < num_samples_fft_ir; sample++)
-    {
-        reverbBlockWrite[sample] = reverbBlockRead[sample] * impulseResponseRead[sample];
-    }
-
-    juce::dsp::FFT fft_L(calculateLog2(num_samples_fft_ir / 2));
-    //juce::dsp::FFT fft_R(calculateLog2(num_samples_fft_ir / 2));
-
-    // Perform the FFT
-    fft_L.performRealOnlyInverseTransform(reverbBlockWrite);
-    //fft_R.performRealOnlyForwardTransform(channelData_R);
-    //reverbBlock.setSize(reverbBlock.getNumChannels(), reverbBlock.getNumSamples() / 2, true, false, false);
-
-    reverbBlockWrite = reverbBlock.getWritePointer(0);
-    reverbBlockRead = reverbBlock.getReadPointer(0);
 
     // Counter for the ciruclar offset.
     if (count >= blocksIR) {
@@ -133,8 +170,8 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
             // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
             //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + channelDataRead[sample]; //DELETE! testing only 
-            revBufferWrite[bufferPos] = revBufferRead[bufferPos] + 5.0f*reverbBlockRead[channelPos]; //THIS is the line
-            //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + reverbBlockRead[channelPos]; //THIS is the line
+            //revBufferWrite[bufferPos] = revBufferRead[bufferPos] + 5.0f*reverbBlockRead[channelPos]; //THIS is the line
+            revBufferWrite[bufferPos] = revBufferRead[bufferPos] + 0.1f*returnBlockRead[channelPos]; //THIS is the line
         }
 
         // Output addition.
@@ -151,27 +188,48 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 }
 
 void Reverb::fft_IR(juce::AudioBuffer<float>& buffer_IR) {
-    // Get the audio buffer information
-    num_samples_fft_ir = buffer_IR.getNumSamples();
 
+    juce::dsp::FFT forwardFFT(fftOrder);
 
-    // Get the channel data
+    buffer_IR.setSize(buffer_IR.getNumChannels(), fftSize * 2, true, true, true);
+
+    for (int frame = fftSize; frame < 2 * fftSize - 1; frame++)
+    {
+        buffer_IR.setSample(0, frame, 0);
+        buffer_IR.setSample(1, frame, 0);
+    }
+
     float* channelData_L = buffer_IR.getWritePointer(0);
     float* channelData_R = buffer_IR.getWritePointer(1);
 
+    forwardFFT.performRealOnlyForwardTransform(channelData_L);
 
-    // Create a temporary buffer for FFT
-    juce::dsp::FFT fft_L(calculateLog2(num_samples_fft_ir / 2));
-    juce::dsp::FFT fft_R(calculateLog2(num_samples_fft_ir / 2));
+    // Get the audio buffer information
+    //num_samples_fft_ir = buffer_IR.getNumSamples();
 
-    // Perform the FFT
-    /*fft_L.performRealOnlyForwardTransform(channelData_L, true);
-    fft_R.performRealOnlyForwardTransform(channelData_R, true);*/
+    // Calculate the FFT size
+    //int fft_size = calculateNextPow(num_samples_ir);
 
-    //buffer_IR.setSize(buffer_IR.getNumChannels(), (buffer_IR.getNumSamples() / 2) + 1, true, true, false);
+    //Resize the buffer for the FFT
+    //buffer_IR.setSize(buffer_IR.getNumChannels(), fft_size * 2, true, true, true);
 
-    fft_L.performRealOnlyForwardTransform(channelData_L);
-    fft_R.performRealOnlyForwardTransform(channelData_R);
+    //// Get the channel data
+    //float* channelData_L = buffer_IR.getWritePointer(0);
+    //float* channelData_R = buffer_IR.getWritePointer(1);
+
+    //// Create a temporary buffer for FFT
+    //juce::dsp::FFT fft_L(fft_size * 2);
+    //juce::dsp::FFT fft_R(fft_size * 2);
+
+    ////juce::dsp::FFT fft_L(calculateLog2(num_samples_ir / 2));
+    ////juce::dsp::FFT fft_R(calculateLog2(num_samples_ir / 2));
+
+    //// Perform the FFT
+    //fft_L.performRealOnlyForwardTransform(channelData_L);
+    //fft_R.performRealOnlyForwardTransform(channelData_R);
+
+    //Resize the buffer for the FFT
+    //buffer_IR.setSize(buffer_IR.getNumChannels(), fft_size, true, true, true);
 
     //juce::AudioBuffer<float> test = impulseResponse_fft;
     // Process the frequency domain data here (e.g., magnitude calculation, spectral processing)
@@ -182,24 +240,52 @@ void Reverb::fft_IR(juce::AudioBuffer<float>& buffer_IR) {
 
 juce::AudioBuffer<float> Reverb::fft_block(juce::AudioBuffer<float>& buffer_block) {
 
+    juce::dsp::FFT forwardFFT(fftOrder);
+
     juce::AudioBuffer<float> padded_block;
     padded_block.makeCopyOf(buffer_block);
 
-    zero_pad(padded_block, num_samples_ir);
+    zero_pad(padded_block, fftSize);
 
-    // Get the channel data
+    padded_block.setSize(padded_block.getNumChannels(), fftSize * 2, true, true, true);
+
+    for (int frame = fftSize; frame < 2 * fftSize - 1; frame++)
+    {
+        padded_block.setSample(0, frame, 0);
+        padded_block.setSample(1, frame, 0);
+    }
+
     float* channelData_L = padded_block.getWritePointer(0);
     float* channelData_R = padded_block.getWritePointer(1);
 
-    const int numSamples = padded_block.getNumSamples();
+    forwardFFT.performRealOnlyForwardTransform(channelData_L);
 
-    // Create a temporary buffer for FFT
-    juce::dsp::FFT fft_L(calculateLog2(numSamples / 2));
-    juce::dsp::FFT fft_R(calculateLog2(numSamples / 2));
 
-    // Perform the FFT
-    fft_L.performRealOnlyForwardTransform(channelData_L);
-    fft_R.performRealOnlyForwardTransform(channelData_R);
+    //juce::AudioBuffer<float> padded_block;
+    //padded_block.makeCopyOf(buffer_block);
+
+    //zero_pad(padded_block, num_samples_fft_ir);
+
+    //// Get the channel data
+    //float* channelData_L = padded_block.getWritePointer(0);
+    //float* channelData_R = padded_block.getWritePointer(1);
+
+    ////const int numSamples = padded_block.getNumSamples();
+
+    //// Create a temporary buffer for 
+    ////juce::dsp::FFT fft_L(num_samples_fft_ir);
+    ////juce::dsp::FFT fft_R(num_samples_fft_ir);
+
+    //int log2 = calculateLog2(num_samples_fft_ir / 2);
+
+    //juce::dsp::FFT fft_L(10);
+    ////juce::dsp::FFT fft_R(log2);
+
+    //// Perform the FFT
+    //fft_L.performRealOnlyForwardTransform(channelData_L);
+    //fft_R.performRealOnlyForwardTransform(channelData_R);
+
+    //padded_block.setSize(padded_block.getNumChannels(), num_samples_fft_ir, true, true, true);
 
     return padded_block;
 }
@@ -235,6 +321,10 @@ int Reverb::calculateLog2(int x)
     int log2Value = logE / log2E;
 
     return log2Value;
+}
+
+int Reverb::calculateNextPow(int x) {
+    return pow(2, ceil(log(x) / log(2)));
 }
 
 void Reverb::zero_pad(juce::AudioBuffer<float>& buffer_to_pad, int num_samples_ir)
