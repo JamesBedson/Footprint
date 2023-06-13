@@ -50,6 +50,7 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
 }
 
 void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+    if (this->isBypassed()) return;
     /*Some notes on implementation:
     The number of samples in these buffers is NOT guaranteed to be the same for every callback,
     and may be more or less than the estimated value given to prepareToPlay(). Your code must be able
