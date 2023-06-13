@@ -19,6 +19,7 @@ Reverb::~Reverb(){
 }
 
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
+    return;
     //Setup before execution. Executed when play is pressed
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
