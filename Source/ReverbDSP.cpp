@@ -27,10 +27,9 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     //loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
 
     // IR setup
-    loadIR("../../IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
-    
-    //fftOrder = 17;
-    //fftSize = 1 << fftOrder;
+    loadIR("../../IR_UPF_formated/48kHz/UPF_toilete_48kHz.wav");
+    fftOrder = calculateLog2(impulseResponse.getNumSamples());
+    fftSize = 1 << fftOrder;
 
     // Calculate FFT of the IR
     impulseResponse_fft.makeCopyOf(impulseResponse);
@@ -83,7 +82,7 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     auto* returnBlockRead_R = returnBlock.getReadPointer(1);
 
     // Do the convolution FFT(returnBlock * impulseResponse)
-    for (int sample = 0; sample < fftSize / 2; sample++) //maybe fftSize / 2?
+    for (int sample = 0; sample < fftSize / 2; sample++)
     {
         returnBlockWrite_L[sample] = returnBlockRead_L[sample] * impulseResponseRead_L[sample];
         returnBlockWrite_R[sample] = returnBlockRead_R[sample] * impulseResponseRead_R[sample];

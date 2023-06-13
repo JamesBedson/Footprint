@@ -39,29 +39,30 @@ private:
 
     
 
-    juce::dsp::AudioBlock<float> monoChannel;
-    juce::dsp::AudioBlock<float> processedMonoChannel;
+    //juce::dsp::AudioBlock<float> monoChannel;
+    //juce::dsp::AudioBlock<float> processedMonoChannel;
 
+    // AudioBuffer initialization
     juce::AudioBuffer<float> impulseResponse;
     juce::AudioBuffer<float> impulseResponse_fft;
 
     juce::AudioBuffer<float> block_fft;
     juce::AudioBuffer<float> reverbBlock;
     juce::AudioBuffer<float> returnBlock;
-
-    int blockSize;
-    static constexpr auto fftOrder = 17;
-    static constexpr auto fftSize = 1 << fftOrder;
-    
-    // Reverb buffer related variables
     juce::AudioBuffer<float> revBuffer;
-    int count = 0;
-    int blocksIR;
     float* revBufferWrite_L;
     float* revBufferWrite_R;
     const float* revBufferRead_L;
-    const float* revBufferRead_R;
-
+    const float* revBufferRead_R;    
+       
+    // Reverb buffer related variables
+    int fftOrder; // = 17;
+    int fftSize; // = 1 << fftOrder;
+    int count = 0;
+    int blockSize;
+    int blocksIR;
+    
+    // Reverb parameters
     float wetValue;
     std::atomic<float>* wet;
     std::atomic<float>* lowpassCutoff;
