@@ -12,11 +12,20 @@
 #include "ReverbPedal.h"
 
 //==============================================================================
-ReverbPedal::ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs)
-: mixAttachment(processor->apvts, parameterIDs[0], mix),
+ReverbPedal::ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs, const int& pedalSlot)
+: Pedal(pedalSlot),
+mixAttachment(processor->apvts, parameterIDs[0], mix),
 lowpassAttachment(processor->apvts, parameterIDs[1], lowCut),
 highpassAttachment(processor->apvts, parameterIDs[2], highCut)
 {
+    p = processor;
+    
+    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed1));
+    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed2));
+    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed3));
+    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed4));
+    else jassertfalse;
+    
     for (auto& slider : sliders){
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -27,12 +36,21 @@ highpassAttachment(processor->apvts, parameterIDs[2], highCut)
         addAndMakeVisible(label);
         label->setJustificationType(juce::Justification::horizontallyCentred);
     }
-    type.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+    addAndMakeVisible(reverbTypeSwitch);
+    //type.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+    //type.setRange(0, 3, 1); // Range from 0 to 3 with a step size of 1
+    //type.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0); // Hide the text box
+    //type.setNumDecimalPlacesToDisplay(0); // Display integers only
+    //type.setPopupDisplayEnabled(true, false, this); // Enable the popup display
+    //type.setColour(juce::Slider::backgroundColourId, juce::Colours::white.withAlpha(0.5f));
+    //type.setColour(juce::Slider::trackColourId, juce::Colours::lightblue);
+    //type.setColour(juce::Slider::thumbColourId, juce::Colours::white);
+
 
     mixLabel.attachToComponent(&mix, false);
     highCutLabel.attachToComponent(&highCut, false);
     lowCutLabel.attachToComponent(&lowCut, false);
-    typeLabel.attachToComponent(&type, false);
+    typeLabel.attachToComponent(&reverbTypeSwitch, false);
 
     juce::Font labelFont;
     labelFont.setTypefaceName("Futura");
@@ -45,7 +63,7 @@ highpassAttachment(processor->apvts, parameterIDs[2], highCut)
     mixLabel.setText("Mix", juce::dontSendNotification);
     highCutLabel.setText("H.Cut", juce::dontSendNotification);
     lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
-    typeLabel.setText("Type", juce::dontSendNotification);
+    //typeLabel.setText("Type", juce::dontSendNotification);
 }
 
 ReverbPedal::~ReverbPedal()
@@ -66,23 +84,30 @@ void ReverbPedal::paintAdditionalComponents(juce::Graphics& g)
 
     g.drawText ("REVERB", textBounds,
                 juce::Justification::centred, true);   // draw some placeholder text
+}
 
+void ReverbPedal::paint(juce::Graphics& g)
+{
+    Pedal::paint(g); // Call the base class paint function
+    paintAdditionalComponents(g);
 }
 
 void ReverbPedal::resizeChild(){
     
-    for (auto& slider : sliders){
-        if (slider != &type){
-            slider->setSize(sliderWidth, sliderHeight);
+    //for (auto& slider : sliders){
+    //    if (slider != &reverbTypeSwitch){
+    //        slider->setSize(sliderWidth, sliderHeight);
+    //    }
+    //    else type.setSize(150, 50);
+    //}
+    for (auto& slider : sliders) {
+        slider->setSize(sliderWidth, sliderHeight);
         }
-        else type.setSize(150, 50);
-    }
-    
-    mix.setCentrePosition       (sliderCol2CentreX, sliderRow2CentreY);
-    highCut.setCentrePosition   (sliderCol3CentreX, sliderRow1CentreY);
-    lowCut.setCentrePosition    (sliderCol1CentreX, sliderRow1CentreY);
-    type.setCentrePosition      (sliderCol2CentreX, sliderRow3CentreY);
-    
+    mix.setCentrePosition                       (sliderCol2CentreX, sliderRow2CentreY - 20);
+    highCut.setCentrePosition                   (sliderCol3CentreX, sliderRow1CentreY);
+    lowCut.setCentrePosition                    (sliderCol1CentreX, sliderRow1CentreY);
+    reverbTypeSwitch.setCentrePosition          (sliderCol2CentreX, sliderRow3CentreY);
+
     for (auto& label : sliderLabels) {
 
         auto sliderBounds   = label->getAttachedComponent()->getBounds();
@@ -91,17 +116,23 @@ void ReverbPedal::resizeChild(){
 
         label->setBounds(bottomX, bottomY, sliderLabelWidth, sliderLabelHeight);
     }
+    int switchWidth = 140;
+    int switchHeight = 20;
+    int switchX = sliderCol2CentreX - switchWidth / 2;
+    int switchY = sliderRow3CentreY - switchHeight / 2 - 10;
+    juce::Rectangle<int> switchBounds(switchX, switchY, switchWidth, switchHeight);
+    reverbTypeSwitch.setBounds(switchBounds);
 }
 
 void ReverbPedal::paintBackground(juce::Graphics& g){
     
-    if (slot == 1){
+    if (pedalSlot == 1){
         g.drawImage(backgroundSlot1, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 2){
+    } else if (pedalSlot == 2){
         g.drawImage(backgroundSlot2, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 3){
+    } else if (pedalSlot == 3){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 4){
+    } else if (pedalSlot == 4){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else {
         return;

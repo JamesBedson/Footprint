@@ -20,7 +20,10 @@
 class CompressorPedal : public Pedal
 {
 public:
-    CompressorPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs);
+    CompressorPedal(FootprintAudioProcessor* processor,
+                    juce::StringArray parameterIDs,
+                    const int& pedalSlot);
+    
     ~CompressorPedal()                                  override;
 
     void paintBackground(juce::Graphics&)               override;
@@ -28,7 +31,9 @@ public:
     void resizeChild()                                  override;
 
 private:
-
+    
+    FootprintAudioProcessor* p;
+    
     juce::Slider ratio, threshold, attack, release;
     std::vector<juce::Slider*> sliders {&ratio, &threshold, &attack, &release};
     

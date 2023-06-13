@@ -20,7 +20,10 @@
 class EnvelopePedal  : public Pedal
 {
 public:
-    EnvelopePedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs);
+    EnvelopePedal(FootprintAudioProcessor* processor,
+                  juce::StringArray parameterIDs,
+                  const int& pedalSlot);
+    
     ~EnvelopePedal()                                    override;
 
     void paintBackground(juce::Graphics&)               override;
@@ -28,6 +31,9 @@ public:
     void resizeChild() override;
     
 private:
+    
+    FootprintAudioProcessor* p;
+    
     juce::Slider qualityFactor, sensitivity, cutoffThreshold;
     std::vector<juce::Slider*> sliders {&qualityFactor, &sensitivity, &cutoffThreshold};
     

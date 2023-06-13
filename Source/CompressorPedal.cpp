@@ -12,12 +12,21 @@
 #include "CompressorPedal.h"
 
 //==============================================================================
-CompressorPedal::CompressorPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs)
-: attackAttachment(processor->apvts, parameterIDs[0], attack),
+CompressorPedal::CompressorPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs, const int& pedalSlot)
+: Pedal(pedalSlot),
+attackAttachment(processor->apvts, parameterIDs[0], attack),
 releaseAttachment(processor->apvts, parameterIDs[1], release),
 thresholdAttachment(processor->apvts, parameterIDs[2], threshold),
 ratioAttachment(processor->apvts, parameterIDs[3], ratio)
 {
+    p = processor;
+    
+    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed1));
+    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed2));
+    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed3));
+    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed4));
+    else jassertfalse;
+    
     for (auto& slider : sliders) {
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -95,13 +104,13 @@ void CompressorPedal::resizeChild(){
 
 void CompressorPedal::paintBackground(juce::Graphics &g){
     
-    if (slot == 1){
+    if (pedalSlot == 1){
         g.drawImage(backgroundSlot1, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 2){
+    } else if (pedalSlot == 2){
         g.drawImage(backgroundSlot2, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 3){
+    } else if (pedalSlot == 3){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 4){
+    } else if (pedalSlot == 4){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else {
         return;

@@ -149,40 +149,36 @@ void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
 
                 if (optionSelected == 1) { // Compressor
                     this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<CompressorPedal>(this->processorPtr, getCompressorParameterIDs(componentIdx));
+                    activeComponents[componentIdx] = std::make_unique<CompressorPedal>(this->processorPtr, getCompressorParameterIDs(componentIdx), componentIdx + 1);
                     auto* pedal = dynamic_cast<CompressorPedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
-                    pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
                     *slotChoice = 1.f;
                 }
                 
                 else if (optionSelected == 2) { // Distortion
                     this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<DistortionPedal>(this->processorPtr, getDistortionParameterIDs(componentIdx));
+                    activeComponents[componentIdx] = std::make_unique<DistortionPedal>(this->processorPtr, getDistortionParameterIDs(componentIdx), componentIdx + 1);
                     auto* pedal = dynamic_cast<DistortionPedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
-                    pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
                     *slotChoice = 2.f;
                 }
                 
                 else if (optionSelected == 3) { // Envelope Filter
                     this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<EnvelopePedal>(this->processorPtr, getEnvelopeFilterParameterIDs(componentIdx));
+                    activeComponents[componentIdx] = std::make_unique<EnvelopePedal>(this->processorPtr, getEnvelopeFilterParameterIDs(componentIdx), componentIdx + 1);
                     auto* pedal = dynamic_cast<EnvelopePedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
-                    pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
                     *slotChoice = 3.f;
                 }
                 
                 else if (optionSelected == 4) { // Reverb
                     this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<ReverbPedal>(this->processorPtr, getReverbParameterIDs(componentIdx));
+                    activeComponents[componentIdx] = std::make_unique<ReverbPedal>(this->processorPtr, getReverbParameterIDs(componentIdx), componentIdx + 1);
                     auto* pedal = dynamic_cast<ReverbPedal*>(activeComponents[componentIdx].get());
                     addAndMakeVisible(pedal);
-                    pedal->setSlot(componentIdx + 1);
                     pedal->setBounds(*pedalSlots[componentIdx]);
                     *slotChoice = 4.f;
                 }
