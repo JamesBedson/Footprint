@@ -19,12 +19,12 @@ Reverb::~Reverb(){
 }
 
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
-    ////Setup before execution. Executed when play is pressed
-    //this->sampleRate = sampleRate;
-    //this->samplesPerBlock = samplesPerBlock;
+    //Setup before execution. Executed when play is pressed
+    this->sampleRate = sampleRate;
+    this->samplesPerBlock = samplesPerBlock;
 
-    ////loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-    ////loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
+    //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
+    //loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
 
     // IR setup
     loadIR("../../IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
@@ -104,15 +104,15 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     }
     
     // Get reverbBlock data pointers
-    auto* reverbBlockWrite_L = reverbBlock.getWritePointer(0);
+    //auto* reverbBlockWrite_L = reverbBlock.getWritePointer(0);
     //auto* reverbBlockWrite_R = reverbBlock.getWritePointer(1);
-    auto* reverbBlockRead_L = reverbBlock.getReadPointer(0);
+    //auto* reverbBlockRead_L = reverbBlock.getReadPointer(0);
     //auto* reverbBlockRead_R = reverbBlock.getReadPointer(1);
 
-    //// Counter for the ciruclar offset.
-    //if (count >= blocksIR) {
-    //    count = 0;
-    //}
+    // Counter for the ciruclar offset.
+    if (count >= blocksIR) {
+        count = 0;
+    }
 
     // Traversal of samples.
     for (int sample = 0;  sample < samplesPerBlock;  sample++)
@@ -264,4 +264,3 @@ void Reverb::setLowpassCutoff(std::atomic<float>* lowpassCutoff){
 void Reverb::setHighpassCutoff(std::atomic<float>* highpassCutoff){
     this->highpassCutoff = highpassCutoff;
 }
-
