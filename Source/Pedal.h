@@ -25,7 +25,7 @@ using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 class Pedal : public juce::Component, public juce::Button::Listener
 {
 public:
-    Pedal();
+    Pedal(const int& pedalSlot);
     ~Pedal()                                            override;
 
     void paint (juce::Graphics&)                        override;
@@ -38,10 +38,10 @@ public:
     void buttonClicked(juce::Button* button)            override;
     void mouseEnter(const juce::MouseEvent& event)      override;
     void mouseExit(const juce::MouseEvent& event)       override;
-    void setSlot(int slot);
     bool isDeleted();
 
 protected:
+    const int pedalSlot;
     
     int sliderCol1CentreX;
     int sliderCol2CentreX;
@@ -55,6 +55,8 @@ protected:
     int sliderLabelWidth, sliderLabelHeight;
     
     juce::ToggleButton  bypassSwitch;
+    juce::Value         bypassState;
+    
     juce::ToggleButton  deleteSwitch;
     PedalLookAndFeel    pedalLookAndFeel;
     DeleteSwitchLookandFeel deleteSwitchLookandFeel;
@@ -62,8 +64,6 @@ protected:
     juce::Image         backgroundSlot1 = juce::ImageCache::getFromMemory(BinaryData::Slot1PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
     juce::Image         backgroundSlot2 = juce::ImageCache::getFromMemory(BinaryData::Slot2PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
     juce::Image         backgroundSlot3 = juce::ImageCache::getFromMemory(BinaryData::Slot3PurpleBlue_png, BinaryData::Slot3PurpleBlue_pngSize);
-    
-    int slot = 0;
 
     bool isInside = true;
 

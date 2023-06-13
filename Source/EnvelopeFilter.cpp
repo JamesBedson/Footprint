@@ -49,9 +49,9 @@ void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChann
     }
 }
 
-void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer,
-    juce::MidiBuffer& midiMessages) {
-
+void EnvelopeFilter::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) {
+    if (this->isBypassed()) return;
+    
     juce::AudioBuffer<float> ampBuffer = getAmplitudeEnvelope(buffer);
     double currentCutoff, amplitude;
     double averageCutoffFreq = 0.0;

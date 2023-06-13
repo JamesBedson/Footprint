@@ -122,6 +122,7 @@ const juce::StringArray choiceArray
         const std::string compressotReleaseID   = "Compressor Release";
         const std::string compressorThresholdID = "Compressor Threshold";
         const std::string compressorRatioID     = "Compressor Ratio";
+        const std::string compressorBypassID    = "Compressor Bypass";
 
         const std::string compressorAttack1     = "attack_1";
         const std::string compressorAttack2     = "attack_2";
@@ -142,6 +143,11 @@ const juce::StringArray choiceArray
         const std::string compressorRatio2      = "ratio_2";
         const std::string compressorRatio3      = "ratio_3";
         const std::string compressorRatio4      = "ratio_4";
+        
+        const std::string compressorBypassed1   = "compressor_bypassed_1";
+        const std::string compressorBypassed2   = "compressor_bypassed_2";
+        const std::string compressorBypassed3   = "compressor_bypassed_3";
+        const std::string compressorBypassed4   = "compressor_bypassed_4";
 
         } // IDs
     
@@ -178,6 +184,7 @@ const juce::StringArray choiceArray
         const std::string reverbWetMixID        = "Reverb Mix";
         const std::string reverbLowpassID       = "Reverb Cutoff (Lowpass)";
         const std::string reverbHighpassID      = "Reverb Cutoff (Highpass)";
+        const std::string reverbBypassID        = "Reverb Bypass";
         
         const std::string reverbWetMix1         = "wet_mix_1";
         const std::string reverbWetMix2         = "wet_mix_2";
@@ -193,6 +200,11 @@ const juce::StringArray choiceArray
         const std::string reverbCutoffHighpass2 = "cutoff_high_2";
         const std::string reverbCutoffHighpass3 = "cutoff_high_3";
         const std::string reverbCutoffHighpass4 = "cutoff_high_4";
+        
+        const std::string reverbBypassed1       = "reverb_bypassed_1";
+        const std::string reverbBypassed2       = "reverb_bypassed_2";
+        const std::string reverbBypassed3       = "reverb_bypassed_3";
+        const std::string reverbBypassed4       = "reverb_bypassed_4";
 
         }
 
@@ -235,24 +247,30 @@ const juce::StringArray choiceArray
 
         namespace Identifiers {
         
-        const std::string distortionGainID  = "Distortion Gain";
-        const std::string distortionLevelID = "Distortion Level";
-        const std::string distortionToneID  = "Distortion Tone";
+        const std::string distortionGainID      = "Distortion Gain";
+        const std::string distortionLevelID     = "Distortion Level";
+        const std::string distortionToneID      = "Distortion Tone";
+        const std::string distortionBypassID    = "Distortion Bypass";
 
-        const std::string distortionGain1   = "gain_1";
-        const std::string distortionGain2   = "gain_2";
-        const std::string distortionGain3   = "gain_3";
-        const std::string distortionGain4   = "gain_4";
+        const std::string distortionGain1       = "gain_1";
+        const std::string distortionGain2       = "gain_2";
+        const std::string distortionGain3       = "gain_3";
+        const std::string distortionGain4       = "gain_4";
 
-        const std::string distortionLevel1  = "level_1";
-        const std::string distortionLevel2  = "level_2";
-        const std::string distortionLevel3  = "level_3";
-        const std::string distortionLevel4  = "level_4";
+        const std::string distortionLevel1      = "level_1";
+        const std::string distortionLevel2      = "level_2";
+        const std::string distortionLevel3      = "level_3";
+        const std::string distortionLevel4      = "level_4";
 
-        const std::string distortionTone1   = "tone_1";
-        const std::string distortionTone2   = "tone_2";
-        const std::string distortionTone3   = "tone_3";
-        const std::string distortionTone4   = "tone_4";
+        const std::string distortionTone1       = "tone_1";
+        const std::string distortionTone2       = "tone_2";
+        const std::string distortionTone3       = "tone_3";
+        const std::string distortionTone4       = "tone_4";
+        
+        const std::string distortionBypassed1   = "distortion_bypassed_1";
+        const std::string distortionBypassed2   = "distortion_bypassed_2";
+        const std::string distortionBypassed3   = "distortion_bypassed_3";
+        const std::string distortionBypassed4   = "distortion_bypassed_4";
 
         }
 
@@ -288,6 +306,7 @@ const juce::StringArray choiceArray
         const std::string envelopeFilterQualityID           = "Envelope Filter Quality";
         const std::string envelopeFilterSensitivityID       = "Envelope Filter Sensitivity";
         const std::string envelopeFilterCutoffThresholdID   = "Envelope Filter Cutoff Threshold";
+        const std::string envelopeFilterBypassID            = "Envelope Filter Bypass";
 
         const std::string envelopeFilterQuality1            = "quality_1";
         const std::string envelopeFilterQuality2            = "quality_2";
@@ -303,6 +322,11 @@ const juce::StringArray choiceArray
         const std::string envelopeFilterCutoffThreshold2    = "cutoff_threshold_2";
         const std::string envelopeFilterCutoffThreshold3    = "cutoff_threshold_3";
         const std::string envelopeFilterCutoffThreshold4    = "cutoff_threshold_4";
+        
+        const std::string envelopeFilterBypassed1           = "envelope_filter_bypassed_1";
+        const std::string envelopeFilterBypassed2           = "envelope_filter_bypassed_2";
+        const std::string envelopeFilterBypassed3           = "envelope_filter_bypassed_3";
+        const std::string envelopeFilterBypassed4           = "envelope_filter_bypassed_4";
 
         }
 

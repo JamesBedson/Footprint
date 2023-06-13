@@ -28,8 +28,8 @@ void Compressor::prepare(double sampleRate, int samplesPerBlock, int numChannels
 }
 
 void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+    if (this->isBypassed()) return;
     
-    DBG("Processing Compressor");
     juce::AudioBuffer<float> gainEnvelope;
     gainEnvelope.makeCopyOf(buffer);
     

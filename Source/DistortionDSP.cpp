@@ -36,6 +36,7 @@ void Distortion::prepare(double sampleRate, int samplesPerBlock, int numChannels
 }
 
 void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
+    if (this->isBypassed()) return;
     
     float value, cutoff, toneVal, gainVal, waveShaper, levelVal;
     int sign;

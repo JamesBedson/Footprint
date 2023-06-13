@@ -107,6 +107,11 @@ private:
     std::atomic<float>* ratio3;
     std::atomic<float>* ratio4;
     
+    std::atomic<float>* compressorBypass1;
+    std::atomic<float>* compressorBypass2;
+    std::atomic<float>* compressorBypass3;
+    std::atomic<float>* compressorBypass4;
+    
     // Reverb Parameters
     std::atomic<float>* wetDryMix1;
     std::atomic<float>* wetDryMix2;
@@ -122,6 +127,11 @@ private:
     std::atomic<float>* cutoffHighpass2;
     std::atomic<float>* cutoffHighpass3;
     std::atomic<float>* cutoffHighpass4;
+    
+    std::atomic<float>* reverbBypass1;
+    std::atomic<float>* reverbBypass2;
+    std::atomic<float>* reverbBypass3;
+    std::atomic<float>* reverbBypass4;
     
     // Distortion Parameters
     std::atomic<float>* distGain1;
@@ -139,6 +149,11 @@ private:
     std::atomic<float>* tone3;
     std::atomic<float>* tone4;
     
+    std::atomic<float>* distortionBypass1;
+    std::atomic<float>* distortionBypass2;
+    std::atomic<float>* distortionBypass3;
+    std::atomic<float>* distortionBypass4;
+    
     // Envelope Filter Parameters
     std::atomic<float>* quality1;
     std::atomic<float>* quality2;
@@ -154,6 +169,11 @@ private:
     std::atomic<float>* cutoffThreshold2;
     std::atomic<float>* cutoffThreshold3;
     std::atomic<float>* cutoffThreshold4;
+    
+    std::atomic<float>* envelopeFilterBypass1;
+    std::atomic<float>* envelopeFilterBypass2;
+    std::atomic<float>* envelopeFilterBypass3;
+    std::atomic<float>* envelopeFilterBypass4;
     
     Gain inputGainModule;
     Gain outputGainModule;

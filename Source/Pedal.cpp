@@ -12,7 +12,8 @@
 #include "Pedal.h"
 
 //==============================================================================
-Pedal::Pedal()
+Pedal::Pedal(const int& pedalSlot)
+: pedalSlot(pedalSlot)
 {
     addAndMakeVisible(bypassSwitch);
     bypassSwitch.setToggleState(true, juce::dontSendNotification);
@@ -88,9 +89,15 @@ void Pedal::resized()
 
 void Pedal::buttonClicked(juce::Button* button)
 {
-    if (button == &bypassSwitch)
-    {
-        repaint();
+    if (button == &bypassSwitch) {
+        
+        if (bypassSwitch.getToggleState() == true) {
+            bypassState = false;
+        }
+        else {
+            bypassState = true;
+        }
+            repaint();
     }
 }
 
@@ -104,12 +111,6 @@ void Pedal::mouseExit(const juce::MouseEvent& event)
 {
     isInside = false;
     repaint();
-}
-
-void Pedal::setSlot(int slot){
-    
-    jassert(slot >= 1 & slot <= 4);
-    this->slot = slot;
 }
 
 bool Pedal::isDeleted(){
