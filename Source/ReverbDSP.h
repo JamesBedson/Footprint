@@ -49,9 +49,6 @@ private:
     juce::AudioBuffer<float> reverbBlock;
     juce::AudioBuffer<float> returnBlock;
 
-    //int num_samples_ir;
-    //int num_samples_fft_ir;
-
     int blockSize;
     static constexpr auto fftOrder = 17;
     static constexpr auto fftSize = 1 << fftOrder;
@@ -60,31 +57,10 @@ private:
     juce::AudioBuffer<float> revBuffer;
     int count = 0;
     int blocksIR;
-    float* revBufferWrite;
-    const float* revBufferRead;
-
-
-    //juce::dsp::AudioBlock<float> revBlock;
-    //juce::AudioBuffer<float> impulseResponse;
-    //juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock);
-    //juce::AudioBuffer<float> H_IR;
-    //juce::dsp::Complex<float>* input;
-    //juce::dsp::Complex<float>* inputSpectrum;
-    //
-    //static constexpr auto fftOrder = 10;                // [1]
-    //static constexpr auto fftSize = 1 << fftOrder;      // [2]
-    //juce::dsp::FFT forwardFFT;
-    //std::array<float, fftSize> fifo;                    // [4]
-    //std::array<float, fftSize * 2> fftData;             // [5]
-    //int fifoIndex = 0;                                  // [6]
-    //bool nextFFTBlockReady = false;                     // [7]
-    
-    //juce::dsp::Reverb::Parameters params;
-    
-    
-    //juce::Reverb reverb;
-
-    //juce::dsp::Convolution convolution;
+    float* revBufferWrite_L;
+    float* revBufferWrite_R;
+    const float* revBufferRead_L;
+    const float* revBufferRead_R;
 
     float wetValue;
     std::atomic<float>* wet;
