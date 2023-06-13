@@ -163,13 +163,13 @@ const juce::StringArray choiceArray
         const float wetIncrement            = 0.05f;
         const float wetSkew                 = 1.f;
         
-        const float cutoffLowpassMin        = 150.f;
-        const float cutoffLowpassMax        = 999.f;
+        const float cutoffLowpassMin        = 0.f;
+        const float cutoffLowpassMax        = 20000.f;
         const float cutoffLowpassIncrement  = 1.f;
         const float cutoffLowpassSkew       = 0.3f;
         
-        const float cutoffHighpassMin       = 1000.f;
-        const float cutoffHighpassMax       = 5000.f;
+        const float cutoffHighpassMin       = 0.f;
+        const float cutoffHighpassMax       = 20000.f;
         const float cutoffHighpassIncrement = 1.f;
         const float cutoffHighpassSkew      = 0.3f;
         
