@@ -28,6 +28,7 @@ public:
     juce::AudioBuffer<float> fft_block(juce::AudioBuffer<float>& buffer_IR);
 
     int calculateLog2(int x);
+    int calculateNextPow(int x);
     void zero_pad(juce::AudioBuffer<float>& buffer_to_pad, int num_samples_to_pad);
 
     void setWet(std::atomic<float>*);
@@ -35,50 +36,33 @@ public:
     void setHighpassCutoff(std::atomic<float>*);
     
 private:
-    juce::dsp::AudioBlock<float> monoChannel;
-    juce::dsp::AudioBlock<float> processedMonoChannel;
 
+    
+
+    //juce::dsp::AudioBlock<float> monoChannel;
+    //juce::dsp::AudioBlock<float> processedMonoChannel;
+
+    // AudioBuffer initialization
     juce::AudioBuffer<float> impulseResponse;
     juce::AudioBuffer<float> impulseResponse_fft;
 
     juce::AudioBuffer<float> block_fft;
     juce::AudioBuffer<float> reverbBlock;
-
-    int num_samples_ir;
-    int num_samples_fft_ir;
-
-    int blockSize;
-    
-    // Reverb buffer related variables
+    juce::AudioBuffer<float> returnBlock;
     juce::AudioBuffer<float> revBuffer;
+    float* revBufferWrite_L;
+    float* revBufferWrite_R;
+    const float* revBufferRead_L;
+    const float* revBufferRead_R;    
+       
+    // Reverb buffer related variables
+    int fftOrder; // = 17;
+    int fftSize; // = 1 << fftOrder;
     int count = 0;
+    int blockSize;
     int blocksIR;
-    float* revBufferWrite;
-    const float* revBufferRead;
-
-
-    //juce::dsp::AudioBlock<float> revBlock;
-    //juce::AudioBuffer<float> impulseResponse;
-    //juce::dsp::AudioBlock<float> processMono(juce::dsp::AudioBlock<float> channelData, double sampleRate, int samplesPerBlock);
-    //juce::AudioBuffer<float> H_IR;
-    //juce::dsp::Complex<float>* input;
-    //juce::dsp::Complex<float>* inputSpectrum;
-    //
-    //static constexpr auto fftOrder = 10;                // [1]
-    //static constexpr auto fftSize = 1 << fftOrder;      // [2]
-    //juce::dsp::FFT forwardFFT;
-    //std::array<float, fftSize> fifo;                    // [4]
-    //std::array<float, fftSize * 2> fftData;             // [5]
-    //int fifoIndex = 0;                                  // [6]
-    //bool nextFFTBlockReady = false;                     // [7]
     
-    //juce::dsp::Reverb::Parameters params;
-    
-    
-    //juce::Reverb reverb;
-
-    //juce::dsp::Convolution convolution;
-
+    // Reverb parameters
     float wetValue;
     std::atomic<float>* wet;
     std::atomic<float>* lowpassCutoff;
