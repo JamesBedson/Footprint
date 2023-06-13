@@ -20,3 +20,11 @@ AudioProcessingModule::AudioProcessingModule(){
 AudioProcessingModule::~AudioProcessingModule(){
     
 }
+
+void AudioProcessingModule::setBypassParam(std::atomic<float> *bypassParam){
+    this->bypassed = bypassParam;
+}
+
+bool AudioProcessingModule::isBypassed() {
+    return this->bypassed->load();
+}

@@ -181,6 +181,20 @@
                                               ProcessingConstants::Compressor::Numeric::ratioMax,
                                               ProcessingConstants::Compressor::Numeric::defaultRatio),
     
+        // Bypass
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Compressor::Identifiers::compressorBypassed1, 1},
+                                               ProcessingConstants::Compressor::Identifiers::compressorBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Compressor::Identifiers::compressorBypassed2, 2},
+                                               ProcessingConstants::Compressor::Identifiers::compressorBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Compressor::Identifiers::compressorBypassed3, 3},
+                                               ProcessingConstants::Compressor::Identifiers::compressorBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Compressor::Identifiers::compressorBypassed4, 4},
+                                               ProcessingConstants::Compressor::Identifiers::compressorBypassID, false),
+
+    
     // Reverb
     // ================================================================================================================================
     
@@ -282,6 +296,20 @@
                                                                                ProcessingConstants::Reverb::Numeric::cutoffHighpassIncrement,
                                                                                ProcessingConstants::Reverb::Numeric::cutoffHighpassSkew),
                                                 ProcessingConstants::Reverb::Numeric::defaultCutoffHighpass),
+    
+        // Bypass
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbBypassed1, 1},
+                                               ProcessingConstants::Reverb::Identifiers::reverbBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbBypassed2, 2},
+                                               ProcessingConstants::Reverb::Identifiers::reverbBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbBypassed3, 3},
+                                               ProcessingConstants::Reverb::Identifiers::reverbBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbBypassed4, 4},
+                                               ProcessingConstants::Reverb::Identifiers::reverbBypassID, false),
+    
     
     
     // Distortion
@@ -388,6 +416,20 @@
                                                                                ProcessingConstants::Distortion::Numeric::toneSkew),
                                                 ProcessingConstants::Distortion::Numeric::defaultTone),
     
+        // Bypass
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Distortion::Identifiers::distortionBypassed1, 1},
+                                               ProcessingConstants::Distortion::Identifiers::distortionBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Distortion::Identifiers::distortionBypassed2, 2},
+                                               ProcessingConstants::Distortion::Identifiers::distortionBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Distortion::Identifiers::distortionBypassed3, 3},
+                                               ProcessingConstants::Distortion::Identifiers::distortionBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Distortion::Identifiers::distortionBypassed4, 4},
+                                               ProcessingConstants::Distortion::Identifiers::distortionBypassID, false),
+    
     // Envelope Filter
     // ================================================================================================================================
     
@@ -492,6 +534,20 @@
                                                                                ProcessingConstants::EnvelopeFilter::Numeric::cutoffThresholdIncrement,
                                                                                ProcessingConstants::EnvelopeFilter::Numeric::cutoffThresholdSkew),
                                                 ProcessingConstants::EnvelopeFilter::Numeric::defaultCutoffThreshold),
+    
+        // Bypass
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed1, 1},
+                                               ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed2, 2},
+                                               ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed3, 3},
+                                               ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassID, false),
+    
+    std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed4, 4},
+                                               ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassID, false),
     
     
 }

@@ -22,5 +22,6 @@ namespace GUIAttributes {
         const int h1 = 20; //Titles
         const int h2 = 17; //Sliders
         const int h3 = 19; //Title v2
+        const int h4 = 13; //RMS GRID
     }
 }
