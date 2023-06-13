@@ -12,11 +12,20 @@
 #include "ReverbPedal.h"
 
 //==============================================================================
-ReverbPedal::ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs)
-: mixAttachment(processor->apvts, parameterIDs[0], mix),
+ReverbPedal::ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs, const int& pedalSlot)
+: Pedal(pedalSlot),
+mixAttachment(processor->apvts, parameterIDs[0], mix),
 lowpassAttachment(processor->apvts, parameterIDs[1], lowCut),
 highpassAttachment(processor->apvts, parameterIDs[2], highCut)
 {
+    p = processor;
+    
+    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed1));
+    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed2));
+    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed3));
+    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed4));
+    else jassertfalse;
+    
     for (auto& slider : sliders){
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -117,13 +126,13 @@ void ReverbPedal::resizeChild(){
 
 void ReverbPedal::paintBackground(juce::Graphics& g){
     
-    if (slot == 1){
+    if (pedalSlot == 1){
         g.drawImage(backgroundSlot1, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 2){
+    } else if (pedalSlot == 2){
         g.drawImage(backgroundSlot2, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 3){
+    } else if (pedalSlot == 3){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
-    } else if (slot == 4){
+    } else if (pedalSlot == 4){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else {
         return;

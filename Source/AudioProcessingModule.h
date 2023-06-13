@@ -24,7 +24,9 @@ public:
     virtual void prepare(double sampleRate, int samplesPerBlock, int numChannels) = 0;
     virtual void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) = 0;
     
+    void setBypassParam(std::atomic<float>* bypassParam);
+    bool isBypassed();
 private:
-    
+    std::atomic<float>* bypassed;
     
 };
