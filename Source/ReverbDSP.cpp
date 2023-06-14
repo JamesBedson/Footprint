@@ -19,15 +19,16 @@ Reverb::~Reverb(){
 }
 
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
+    //return;
     //Setup before execution. Executed when play is pressed
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
 
     //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-    //loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
+    loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
 
     // IR setup
-    loadIR("../../IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
+    //loadIR("../../IR_UPF_formated/48kHz/UPF_toilete_48kHz.wav");
     fftOrder = calculateLog2(impulseResponse.getNumSamples());
     fftSize = 1 << fftOrder;
 
@@ -51,6 +52,9 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
 
 void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
     if (this->isBypassed()) return;
+    if (buffer.getNumSamples() == 0) return;
+    //if (buffer.getNumSamples() != samplesPerBlock) return;
+
     /*Some notes on implementation:
     The number of samples in these buffers is NOT guaranteed to be the same for every callback,
     and may be more or less than the estimated value given to prepareToPlay(). Your code must be able
@@ -83,10 +87,17 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     //auto* returnBlockRead_R = returnBlock.getReadPointer(1);
 
     // Do the convolution FFT(returnBlock * impulseResponse)
-    for (int sample = 0; sample < fftSize / 2; sample++)
+    for (int sample = 0; sample < 2 * fftSize; sample++)
     {
         returnBlockWrite_L[sample] = returnBlockRead_L[sample] * impulseResponseRead_L[sample];
         //returnBlockWrite_R[sample] = returnBlockRead_R[sample] * impulseResponseRead_R[sample];
+
+        if (returnBlockRead_L[sample] > lowpassCutoff->load()) {
+			returnBlockWrite_L[sample] = 0 * returnBlockRead_L[sample];
+		}
+        if (returnBlockRead_L[sample] < highpassCutoff->load()) {
+            returnBlockWrite_L[sample] = 0 * returnBlockRead_L[sample];
+        }
     }
 
     // Calculate inverse FFT of the convolution
@@ -124,7 +135,8 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
             int bufferPos = sample + (offset * samplesPerBlock);
 
             // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
-            revBufferWrite_L[bufferPos] = revBufferRead_L[bufferPos] + 0.1f * returnBlockRead_L[channelPos];
+            revBufferWrite_L[bufferPos] = revBufferRead_L[bufferPos] + 0.05f * returnBlockRead_L[channelPos];
+            //revBufferWrite_L[bufferPos] = revBufferRead_L[bufferPos] + returnBlockRead_L[channelPos];
             //revBufferWrite_R[bufferPos] = revBufferRead_R[bufferPos] + 0.1f * returnBlockRead_R[channelPos];
         }
 
