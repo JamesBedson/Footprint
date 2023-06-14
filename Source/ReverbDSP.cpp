@@ -19,14 +19,12 @@ Reverb::~Reverb(){
 }
 
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
-    return;
     //Setup before execution. Executed when play is pressed
     this->sampleRate = sampleRate;
     this->samplesPerBlock = samplesPerBlock;
 
     //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-    loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
-
+    loadIR("C:/Documents/GitHub/Footprint/IR_UPF_formated/48kHz/UPF_corridor_balloon_1_48kHz.wav");
     // IR setup
     //loadIR("../../IR_UPF_formated/48kHz/UPF_toilete_48kHz.wav");
     fftOrder = calculateLog2(impulseResponse.getNumSamples());
