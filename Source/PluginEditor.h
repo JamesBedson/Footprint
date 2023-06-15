@@ -18,14 +18,13 @@
 //==============================================================================
 /**
 */
-class FootprintAudioProcessorEditor : public juce::AudioProcessorEditor, public juce::Timer
+class FootprintAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
     FootprintAudioProcessorEditor (FootprintAudioProcessor&);
     ~FootprintAudioProcessorEditor() override;
 
     //==============================================================================
-    void timerCallback()                override;
     void paint (juce::Graphics&)        override;
     void resized()                      override;
 
@@ -40,8 +39,6 @@ private:
     
     juce::Image                 background = juce::ImageCache::getFromMemory(BinaryData::backgroundPurpleBlue_png,
                                                                              BinaryData::backgroundPurpleBlue_pngSize);
-    LevelMeter levelInMeterLeft, levelInMeterRight;
-    LevelMeter levelOutMeterLeft, levelOutMeterRight;
 
     void paintDecor(juce::Graphics&);
 

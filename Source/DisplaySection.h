@@ -15,6 +15,7 @@
 #include "GUIAttributes.h"
 #include "DBGrid.h"
 #include "PluginProcessor.h"
+#include "LevelMeter.h"
 
 //==============================================================================
 /*
@@ -35,8 +36,11 @@ public:
 
     juce::Slider bufferSizeView;
     juce::Slider WaveformZoom;
-    DBGrid dBGridIn;
-    DBGrid dBGridOut;
+
+    LevelMeter levelInMeterLeft, levelInMeterRight;
+    LevelMeter levelOutMeterLeft, levelOutMeterRight;
+
+    DBGrid dBGrid;
 
 private:
     
