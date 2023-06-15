@@ -15,6 +15,7 @@
 class Reverb : public AudioProcessingModule {
     
 public:
+    
     Reverb();
     ~Reverb() override;
     
@@ -23,7 +24,6 @@ public:
 
     void processStereo(const juce::AudioBuffer<float>& inputBuffer, juce::AudioBuffer<float>& outputBuffer);
 
-    void loadIR(const char* filePath);
     void fft_IR(juce::AudioBuffer<float>& buffer_IR);
     juce::AudioBuffer<float> fft_block(juce::AudioBuffer<float>& buffer_IR);
 
@@ -36,14 +36,13 @@ public:
     void setHighpassCutoff(std::atomic<float>*);
     
 private:
-
     
-
+    const int numIRs;
     //juce::dsp::AudioBlock<float> monoChannel;
     //juce::dsp::AudioBlock<float> processedMonoChannel;
 
     // AudioBuffer initialization
-    juce::AudioBuffer<float> impulseResponse;
+    //juce::AudioBuffer<float> impulseResponse;
     juce::AudioBuffer<float> impulseResponse_fft;
 
     juce::AudioBuffer<float> block_fft;
@@ -70,5 +69,19 @@ private:
 
     double sampleRate;
     int samplesPerBlock;
+    
+    std::vector<juce::AudioBuffer<float>> impulseResponses {
+        juce::AudioBuffer<float>(),
+        juce::AudioBuffer<float>(),
+        juce::AudioBuffer<float>(),
+        juce::AudioBuffer<float>()
+    };
+    
+    std::vector<juce::AudioBuffer<float>> fftImpulseResponses {
+        juce::AudioBuffer<float>(),
+        juce::AudioBuffer<float>(),
+        juce::AudioBuffer<float>(),
+        juce::AudioBuffer<float>()
+    };
     
 };

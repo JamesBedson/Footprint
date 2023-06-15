@@ -155,7 +155,7 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
         
         compressorVector[slotIdx]       ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         envelopeFilterVector[slotIdx]   ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
-        //reverbVector[slotIdx]           ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+        reverbVector[slotIdx]           ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         distortionVector[slotIdx]       ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         
     }
