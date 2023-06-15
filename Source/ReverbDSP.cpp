@@ -10,8 +10,86 @@
 
 #include "ReverbDSP.h"
 
-Reverb::Reverb(){
+Reverb::Reverb()
+: numIRs(4)
+
+{
     
+    juce::AudioFormatManager formatManager;
+    formatManager.registerBasicFormats();
+    std::vector<juce::AudioFormatReader*> readers;
+    
+    auto bathroom       = std::make_unique<juce::MemoryInputStream>(BinaryData::UPF_toilete_48kHz_wav,
+                                                                    BinaryData::UPF_toilete_48kHz_wavSize,
+                                                                    false);
+    
+    auto aranyoShort    = std::make_unique<juce::MemoryInputStream>(BinaryData::UPF_Aranyo_short_48kHz_wav,
+                                                                    BinaryData::UPF_Aranyo_short_48kHz_wavSize,
+                                                                    false);
+    
+    auto aranyoLarge    = std::make_unique<juce::MemoryInputStream>(BinaryData::UPF_Aranyo_large_48kHz_wav,
+                                                                    BinaryData::UPF_Aranyo_large_48kHz_wavSize,
+                                                                    false);
+    
+    auto tanger         = std::make_unique<juce::MemoryInputStream>(BinaryData::UPF_corridor_balloon_1_48kHz_wav,
+                                                                    BinaryData::UPF_corridor_balloon_1_48kHz_wavSize,
+                                                                    false);
+    
+    readers.push_back(formatManager.createReaderFor(std::move(bathroom)));
+    readers.push_back(formatManager.createReaderFor(std::move(aranyoShort)));
+    readers.push_back(formatManager.createReaderFor(std::move(aranyoLarge)));
+    readers.push_back(formatManager.createReaderFor(std::move(tanger)));
+    
+    for (int irIndex = 0; irIndex < numIRs; irIndex++) {
+        auto* currentReader = readers.at(irIndex);
+        
+        if (currentReader != nullptr) {
+            const int numSamples        = static_cast<int>(currentReader->lengthInSamples);
+            
+            const int numChannelsIR     = currentReader->numChannels;
+            auto& currentBuffer         = impulseResponses.at(irIndex);
+            currentBuffer.setSize(numChannelsIR, numSamples);
+            
+            currentReader->read(&currentBuffer, 0, numSamples, 0, true, true);
+            delete currentReader;
+        }
+    }
+    
+    for (int irIndex = 0; irIndex < numIRs; irIndex++) {
+        juce::AudioBuffer<float> tempFFTBuffer;
+        auto& targetFFTImpulseResponse  = fftImpulseResponses.at(irIndex);
+        auto& currentImpulseResponse    = impulseResponses.at(irIndex);
+        
+        const int currentNumSamples     = currentImpulseResponse.getNumSamples();
+        const int currentNumChannels    = currentImpulseResponse.getNumChannels();
+        
+        int sizePowerOfTwo = 1;
+        
+        // Computing closest power of 2
+        while (sizePowerOfTwo < currentNumSamples) {
+            sizePowerOfTwo *= 2;
+        }
+        
+        // Zero padding
+        tempFFTBuffer.setSize(currentNumChannels, sizePowerOfTwo * 2);
+        targetFFTImpulseResponse.setSize(currentNumChannels, currentNumSamples);
+        
+        tempFFTBuffer.clear();
+        targetFFTImpulseResponse.clear();
+        
+        // Creating FFT Object
+        const int fftOrder  = calculateLog2(sizePowerOfTwo);
+        const int fftSize   = 1 << fftOrder;
+
+        juce::dsp::FFT forwardFFT {fftOrder};
+        
+        // Copying data and performing FFT
+        for (int ch = 0; ch < currentNumChannels; ch++) {
+            tempFFTBuffer.copyFrom(ch, 0, currentImpulseResponse, ch, 0, currentNumSamples);
+            forwardFFT.performRealOnlyForwardTransform(tempFFTBuffer.getWritePointer(ch), true);
+            targetFFTImpulseResponse.copyFrom(ch, 0, tempFFTBuffer, ch, 0, currentNumSamples);
+        }
+    }
 }
 
 Reverb::~Reverb(){
@@ -21,20 +99,20 @@ Reverb::~Reverb(){
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     //return;
     //Setup before execution. Executed when play is pressed
-    this->sampleRate = sampleRate;
-    this->samplesPerBlock = samplesPerBlock;
-
-    //loadIR("/Users/pausegalestorres/Desktop/Footprint/ReverbAudios/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-    loadIR("C:/Downloads/IR_UPF_formated/48kHz/UPF_Aranyo_large_48kHz.wav");
-
-    // IR setup
-    //loadIR("../../IR_UPF_formated/48kHz/UPF_toilete_48kHz.wav");
+    this->sampleRate        = sampleRate;
+    this->samplesPerBlock   = samplesPerBlock;
+    
+    auto& impulseResponse   = impulseResponses[0];
+    impulseResponse_fft     = fftImpulseResponses[0];
+    
+    // Calculate FFT of the IR
+    /*
     fftOrder = calculateLog2(impulseResponse.getNumSamples());
     fftSize = 1 << fftOrder;
 
-    // Calculate FFT of the IR
     impulseResponse_fft.makeCopyOf(impulseResponse);
     fft_IR(impulseResponse_fft);
+    */
     
     // Reverb buffer setup
     blockSize = samplesPerBlock;
@@ -54,15 +132,6 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     if (this->isBypassed()) return;
     if (buffer.getNumSamples() == 0) return;
     //if (buffer.getNumSamples() != samplesPerBlock) return;
-
-    /*Some notes on implementation:
-    The number of samples in these buffers is NOT guaranteed to be the same for every callback,
-    and may be more or less than the estimated value given to prepareToPlay(). Your code must be able
-    to cope with variable-sized blocks, or you're going to get clicks and crashes!
-
-    Also note that some hosts will occasionally decide to pass a buffer containing zero samples,
-    so make sure that your algorithm can deal with that!
-    */
 
     // Get parameters
     wetValue = wet->load();
@@ -91,8 +160,8 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     {
         returnBlockWrite_L[sample] = returnBlockRead_L[sample] * impulseResponseRead_L[sample];
         //returnBlockWrite_R[sample] = returnBlockRead_R[sample] * impulseResponseRead_R[sample];
-
-        if (returnBlockRead_L[sample] > lowpassCutoff->load()) {
+        
+        if (returnBlockRead_L[sample] > lowpassCutoff->load()) {            // Este tipo de filtro no funciona
 			returnBlockWrite_L[sample] = 0 * returnBlockRead_L[sample];
 		}
         if (returnBlockRead_L[sample] < highpassCutoff->load()) {
@@ -205,23 +274,6 @@ juce::AudioBuffer<float> Reverb::fft_block(juce::AudioBuffer<float>& buffer_bloc
     return padded_block;
 }
 
-void Reverb::loadIR(const char* filePath) {
-
-    juce::File IR_file = IR_file.getCurrentWorkingDirectory().getChildFile(filePath);
-
-    juce::AudioFormatManager formatManager;
-    formatManager.registerBasicFormats();
-    juce::AudioFormatReader* reader = formatManager.createReaderFor(IR_file);
-    
-    if (reader != nullptr) {
-        const int numSamples = reader->lengthInSamples;
-        const int numChannelsIR = reader->numChannels;
-        impulseResponse.setSize(numChannelsIR, numSamples);
-
-        reader->read(&impulseResponse, 0, numSamples, 0, true, true);
-        delete reader;
-    }
-}
 
 int Reverb::calculateLog2(int x)
 {
