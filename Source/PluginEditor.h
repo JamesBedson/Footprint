@@ -18,7 +18,7 @@
 //==============================================================================
 /**
 */
-class FootprintAudioProcessorEditor : public juce::AudioProcessorEditor, public juce::Timer
+class FootprintAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
     FootprintAudioProcessorEditor (FootprintAudioProcessor&);
