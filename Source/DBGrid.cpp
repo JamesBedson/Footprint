@@ -83,37 +83,33 @@ DBGrid::~DBGrid()
 //        g.drawFittedText(dBText, textBounds, juce::Justification::centred, 1);
 //    }
 //}
+
+//labelBounds.setBounds(bounds.getX(), y, bounds.getX() + 30, y + 20);
+//g.setColour(juce::Colours::white.darker());
+//juce::Font labelFont;
+//labelFont.setTypefaceName("Futura");
+//labelFont.setHeight(GUIAttributes::DisplayFontSizes::h4);
+//g.setFont(labelFont);
+//g.drawFittedText(label, labelBounds, juce::Justification::centredRight, 1);
 void DBGrid::paint(juce::Graphics& g)
 {
-    juce::Rectangle<int> bounds = getLocalBounds();
-
     g.setColour(juce::Colours::red);
-    //g.fillRect(bounds);
-
-    juce::StringArray dbValues = { "+6dB -", "+3dB -", "0dB -", "-3dB -", "-6dB -", "-12dB -", "-24dB -", "-48dB -", "-60dB -", "-96dB -" };
-    int numIntervals = dbValues.size() - 1;
-    int intervalHeight = bounds.getHeight() / numIntervals / 1.65;
-
-    // Draw the grid lines and labels
-    for (int i = 0; i <= numIntervals; ++i)
+    g.fillAll();
+    g.setColour(juce::Colours::white.darker());
+    juce::Rectangle<int> bounds = getLocalBounds();
+    juce::Array<float> dbValues = {6.f, 3.f, 0.f, -3.f, -12.f, -24.f, -48.f, -60.f, -96.f};
+    float top = bounds.getY();
+    float bottom = bounds.getBottom();
+    juce::Array<float> normPositions;
+    for (auto value : dbValues)
     {
-        // Calculate the y-coordinate of the grid line and label
-        int y = bounds.getY() + i * intervalHeight;
-
-        // Draw the grid line
-        g.setColour(juce::Colours::grey);
-        //g.drawLine(bounds.getX(), y, bounds.getRight(), y);
-
-        // Draw the dB label
-        juce::String label = dbValues[i];
-        juce::Rectangle<int> labelBounds;
-        labelBounds.setBounds(bounds.getX(), y, bounds.getX() + 30, y + 20);
-        g.setColour(juce::Colours::white.darker());
-        juce::Font labelFont;
-        labelFont.setTypefaceName("Futura");
-        labelFont.setHeight(GUIAttributes::DisplayFontSizes::h4);
-        g.setFont(labelFont);
-        g.drawFittedText(label, labelBounds, juce::Justification::centredRight, 1);
-        //g.fillAll();
+        float y = juce::jmap(value, -96.f, 6.f, top, bottom);
+        normPositions.add(y);
+        juce::Line<float> line{float(bounds.getX()), y, float(bounds.getRight()), y };
+        g.drawLine(line);
     }
+}
+
+void DBGrid::resized()
+{
 }

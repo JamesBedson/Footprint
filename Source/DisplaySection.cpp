@@ -12,7 +12,7 @@
 #include "DisplaySection.h"
 
 //==============================================================================
-DisplaySection::DisplaySection()
+DisplaySection::DisplaySection(FootprintAudioProcessor& p) : audioProcessor(p)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -25,8 +25,11 @@ DisplaySection::DisplaySection()
     outputWaveform.setBufferSize(1024);
     
     addAndMakeVisible(WaveformZoom);
-    addAndMakeVisible(dBGridIn);
-    addAndMakeVisible(dBGridOut);
+    addAndMakeVisible(dBGrid);
+    addAndMakeVisible(levelInMeterLeft);
+    addAndMakeVisible(levelInMeterRight);
+    addAndMakeVisible(levelOutMeterLeft);
+    addAndMakeVisible(levelOutMeterRight);
 
     WaveformZoom.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     WaveformZoom.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -52,6 +55,20 @@ DisplaySection::DisplaySection()
 
 DisplaySection::~DisplaySection()
 {
+}
+
+void DisplaySection::timerCallback()
+{
+    levelInMeterLeft.setLevel(audioProcessor.getInRmsValue(0));
+    levelInMeterRight.setLevel(audioProcessor.getInRmsValue(1));
+
+    levelOutMeterLeft.setLevel(audioProcessor.getOutRmsValue(0));
+    levelOutMeterRight.setLevel(audioProcessor.getOutRmsValue(1));
+
+    levelInMeterLeft.repaint();
+    levelInMeterRight.repaint();
+    levelOutMeterLeft.repaint();
+    levelOutMeterRight.repaint();
 }
 
 void DisplaySection::paint (juce::Graphics& g)
@@ -86,12 +103,16 @@ void DisplaySection::resized()
     // components that your component contains..
     inputWaveform.setBounds(140, 18, 500, 100);
     outputWaveform.setBounds(140, 125, 500, 100);
-    dBGridIn.setBounds(7, 37, 45, 180);
-    dBGridOut.setBounds(67, 37, 45, 180);
+    dBGrid.setBounds(67, 37, 45, 180);
     WaveformZoom.setBounds(639, 75, 40, 100);
 
 
     inputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
     outputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
 
+    levelInMeterLeft.setBounds(365, 80, 9, 168);
+    levelInMeterRight.setBounds(380, 80, 9, 168);
+
+    levelOutMeterLeft.setBounds(415, 80, 9, 168);
+    levelOutMeterRight.setBounds(430, 80, 9, 168);
 }

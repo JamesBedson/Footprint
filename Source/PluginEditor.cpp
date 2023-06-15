@@ -10,8 +10,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), pedalSection(&p), controlSection(&p)
+FootprintAudioProcessorEditor::FootprintAudioProcessorEditor(FootprintAudioProcessor& p)
+    : AudioProcessorEditor(&p), audioProcessor(p), pedalSection(&p), controlSection(&p), displaySection(p)
 {
     audioProcessor.setDisplaySection(&displaySection);
     // "Add and make visible" all child components of the editor
@@ -19,10 +19,6 @@ FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProc
     addAndMakeVisible(displaySection);
     addAndMakeVisible(pedalSection);
     addAndMakeVisible(controlSection);
-    addAndMakeVisible(levelInMeterLeft);
-    addAndMakeVisible(levelInMeterRight);
-    addAndMakeVisible(levelOutMeterLeft);
-    addAndMakeVisible(levelOutMeterRight);
 
     
     setSize (1100, 700);
@@ -84,27 +80,6 @@ void FootprintAudioProcessorEditor::resized()
 
     controlSection.setSize(controlSectionWidth, controlSectionHeight);
     controlSection.setTopLeftPosition(controlSectionTopLeftX, controlSectionTopLeftY);
-
-    float n = 10.f;
-    levelInMeterLeft.setBounds(365 + n, 80, 9, 168);
-    levelInMeterRight.setBounds(380 + n, 80, 9, 168);
-
-    levelOutMeterLeft.setBounds(415 + n + 10, 80, 9, 168);
-    levelOutMeterRight.setBounds(430 + n + 10, 80, 9, 168);
-}
-
-void FootprintAudioProcessorEditor::timerCallback()
-{
-    levelInMeterLeft.setLevel(audioProcessor.getInRmsValue(0));
-    levelInMeterRight.setLevel(audioProcessor.getInRmsValue(1));
-
-    levelOutMeterLeft.setLevel(audioProcessor.getOutRmsValue(0));
-    levelOutMeterRight.setLevel(audioProcessor.getOutRmsValue(1));
-
-    levelInMeterLeft.repaint();
-    levelInMeterRight.repaint();
-    levelOutMeterLeft.repaint();
-    levelOutMeterRight.repaint();
 }
 
 void FootprintAudioProcessorEditor::paintDecor(juce::Graphics& g) {
@@ -124,5 +99,4 @@ void FootprintAudioProcessorEditor::paintDecor(juce::Graphics& g) {
     g.drawLine(line5, 2.0f);
     g.drawLine(line6, 2.0f);
     g.drawLine(line7, 2.0f);
-
 }
