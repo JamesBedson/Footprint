@@ -135,6 +135,9 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
 
+    guiFifoInput.prepare(getTotalNumInputChannels(), samplesPerBlock);
+    guiFifoOutput.prepare(getTotalNumInputChannels(), samplesPerBlock);
+    
     rmsInLevelLeft.reset(sampleRate, 0.5);
     rmsInLevelRight.reset(sampleRate, 0.5);
     rmsOutLevelLeft.reset(sampleRate, 0.5);
@@ -152,7 +155,7 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
         
         compressorVector[slotIdx]       ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         envelopeFilterVector[slotIdx]   ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
-        reverbVector[slotIdx]           ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+        //reverbVector[slotIdx]           ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         distortionVector[slotIdx]       ->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels());
         
     }
@@ -209,10 +212,7 @@ bool FootprintAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 
 void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    //////////////////////////////////////////////// input WAVEFORM VIEWER //////////////////////////////////////////////////
-    if (displaySection != nullptr){
-        displaySection->inputWaveform.pushBuffer(buffer);
-    }
+    guiFifoInput.push(buffer);
 
     /////////////////////////////////////////////INPUT RMS LEVEL METER//////////////////////////////////////////////////
     juce::ScopedNoDenormals noInDenormals;
@@ -290,10 +290,7 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////// output WAVEFORM VIEWER //////////////////////////////////////////////////
-    if (displaySection != nullptr){
-        displaySection->outputWaveform.pushBuffer(buffer);
-    }
+    guiFifoOutput.push(buffer);
 
 }
 
@@ -446,11 +443,6 @@ float FootprintAudioProcessor::getOutRmsValue(const int channel) const
     if (channel == 1)
         return rmsOutLevelRight.getCurrentValue();
     return 0.0f;
-}
-
-void FootprintAudioProcessor::setDisplaySection(DisplaySection* section)
-{
-    this->displaySection = section;
 }
 
 void FootprintAudioProcessor::initCompressorParameters(const int &slotIdx){

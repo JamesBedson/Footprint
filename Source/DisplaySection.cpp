@@ -12,8 +12,10 @@
 #include "DisplaySection.h"
 
 //==============================================================================
-DisplaySection::DisplaySection()
+DisplaySection::DisplaySection(FootprintAudioProcessor& p)
+: audioProcessor(p)
 {
+    startTimerHz(120);
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     addAndMakeVisible(inputWaveform);
@@ -54,6 +56,15 @@ DisplaySection::~DisplaySection()
 {
 }
 
+void DisplaySection::timerCallback() {
+    
+    juce::AudioBuffer<float> inputBuffer, outputBuffer;
+    bool pullStatusIn = audioProcessor.guiFifoInput.pull(inputBuffer);
+    bool pullStatusOut = audioProcessor.guiFifoOutput.pull(outputBuffer);
+    if (pullStatusIn) inputWaveform.pushBuffer(inputBuffer);
+    if (pullStatusOut) outputWaveform.pushBuffer(outputBuffer);
+}
+
 void DisplaySection::paint (juce::Graphics& g)
 {
     g.drawImage(displayBackground, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);    
@@ -89,7 +100,6 @@ void DisplaySection::resized()
     dBGridIn.setBounds(7, 37, 45, 180);
     dBGridOut.setBounds(67, 37, 45, 180);
     WaveformZoom.setBounds(639, 75, 40, 100);
-
 
     inputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
     outputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
