@@ -110,6 +110,23 @@ void DBGrid::paint(juce::Graphics& g)
     }
 }
 
+juce::Array<float> DBGrid::getPositions()
+{
+    juce::Rectangle<int> bounds = getLocalBounds();
+    juce::Array<float> dbValues = { 6.f, 3.f, 0.f, -3.f, -12.f, -24.f, -48.f, -60.f, -96.f };
+    float top = bounds.getY();
+    float bottom = bounds.getBottom();
+    juce::Array<float> normPositions;
+    for (auto value : dbValues)
+    {
+        float y = juce::jmap(value, -96.f, 6.f, top, bottom);
+        normPositions.add(y);
+    }
+    return normPositions;
+}
+
+
 void DBGrid::resized()
 {
 }
+

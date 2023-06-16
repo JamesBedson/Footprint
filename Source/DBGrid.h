@@ -20,6 +20,7 @@ public:
     ~DBGrid() override;
 
     void paint(juce::Graphics& g) override;
+    juce::Array<float> getPositions();
     void resized()                override;
 
 private:

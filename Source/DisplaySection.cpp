@@ -117,8 +117,8 @@ void DisplaySection::resized()
     inputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
     outputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
 
-    levelInMeterLeft.setBounds(365, 80, 9, 168);
-    levelInMeterRight.setBounds(380, 80, 9, 168);
+    levelInMeterLeft.setBounds(0, 0, 9, 168);
+    levelInMeterRight.setBounds(0, 0, 9, 168);
 
     levelOutMeterLeft.setBounds(415, 80, 9, 168);
     levelOutMeterRight.setBounds(430, 80, 9, 168);
