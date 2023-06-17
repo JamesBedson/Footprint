@@ -96,9 +96,8 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
         }
     }
     
-    
-    
-    
+    tempInputBuffer.setSize(numChannels, samplesPerBlock * 2);
+    tempInputBuffer.clear();
     
     
     /* ============================== OLD
@@ -144,6 +143,49 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     // Get parameters
     wetValue = wet->load();
 
+    const int samplesPerBlock = buffer.getNumSamples();
+
+    auto& impulseResponseFrequency = fftImpulseResponses[0];
+    const int maxNumBlocks = static_cast<int>(impulseResponseFrequency.getNumSamples() / (samplesPerBlock * 2 ));
+
+    const int fftOrder = std::log2(samplesPerBlock);
+    juce::dsp::FFT forwardFFT {fftOrder};
+    juce::dsp::FFT inverseFFT {fftOrder};
+
+    for (int ch = 0; ch < buffer.getNumChannels(); ch++)
+    {
+        tempInputBuffer.copyFrom(ch, 0, buffer, ch, 0, samplesPerBlock);
+
+        auto* tempInputWritePtr = tempInputBuffer.getWritePointer(ch);
+        forwardFFT.performRealOnlyForwardTransform(tempInputWritePtr);
+        
+        auto* impulseResponseFrequencyReadPtr = impulseResponseFrequency.getReadPointer(ch);
+
+        for (int block = 0; block < maxNumBlocks; block++)
+        {
+            for (int sample = 0; sample < samplesPerBlock * 2; sample++)
+            {
+                tempInputWritePtr[sample] *= impulseResponseFrequencyReadPtr[sample + (block * samplesPerBlock * 2)];
+            }
+            //inverseFFT.performRealOnlyInverseTransform();
+            
+        }
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+    /*
     // Get input data pointers
     auto* channelDataWrite_L = buffer.getWritePointer(0);
     auto* channelDataWrite_R = buffer.getWritePointer(1);
@@ -213,6 +255,7 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
             // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
             revBufferWrite_L[bufferPos] = revBufferRead_L[bufferPos] + 0.05f * returnBlockRead_L[channelPos];
+            //ciruclarBuffer = circularBuffer + IFFT(FFT(input)*FFT(IR))
             //revBufferWrite_L[bufferPos] = revBufferRead_L[bufferPos] + returnBlockRead_L[channelPos];
             //revBufferWrite_R[bufferPos] = revBufferRead_R[bufferPos] + 0.1f * returnBlockRead_R[channelPos];
         }
@@ -228,7 +271,7 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     }
 
     // Counter update.
-    count += 1;
+    count += 1; */
 }
 
 void Reverb::fft_IR(juce::AudioBuffer<float>& buffer_IR) {
