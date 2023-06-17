@@ -48,46 +48,13 @@ Reverb::Reverb()
             
             const int numChannelsIR     = currentReader->numChannels;
             auto& currentBuffer         = impulseResponses.at(irIndex);
-            currentBuffer.setSize(numChannelsIR, numSamples);
+            
+            const int nextPower2        = calculateNextPow(numSamples);
+            currentBuffer.setSize(numChannelsIR, nextPower2);
+            currentBuffer.clear();
             
             currentReader->read(&currentBuffer, 0, numSamples, 0, true, true);
             delete currentReader;
-        }
-    }
-    
-    for (int irIndex = 0; irIndex < numIRs; irIndex++) {
-        juce::AudioBuffer<float> tempFFTBuffer;
-        auto& targetFFTImpulseResponse  = fftImpulseResponses.at(irIndex);
-        auto& currentImpulseResponse    = impulseResponses.at(irIndex);
-        
-        const int currentNumSamples     = currentImpulseResponse.getNumSamples();
-        const int currentNumChannels    = currentImpulseResponse.getNumChannels();
-        
-        int sizePowerOfTwo = 1;
-        
-        // Computing closest power of 2
-        while (sizePowerOfTwo < currentNumSamples) {
-            sizePowerOfTwo *= 2;
-        }
-        
-        // Zero padding
-        tempFFTBuffer.setSize(currentNumChannels, sizePowerOfTwo * 2);
-        targetFFTImpulseResponse.setSize(currentNumChannels, currentNumSamples);
-        
-        tempFFTBuffer.clear();
-        targetFFTImpulseResponse.clear();
-        
-        // Creating FFT Object
-        const int fftOrder  = calculateLog2(sizePowerOfTwo);
-        const int fftSize   = 1 << fftOrder;
-
-        juce::dsp::FFT forwardFFT {fftOrder};
-        
-        // Copying data and performing FFT
-        for (int ch = 0; ch < currentNumChannels; ch++) {
-            tempFFTBuffer.copyFrom(ch, 0, currentImpulseResponse, ch, 0, currentNumSamples);
-            forwardFFT.performRealOnlyForwardTransform(tempFFTBuffer.getWritePointer(ch), true);
-            targetFFTImpulseResponse.copyFrom(ch, 0, tempFFTBuffer, ch, 0, currentNumSamples);
         }
     }
 }
@@ -97,6 +64,45 @@ Reverb::~Reverb(){
 }
 
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
+    
+    for (int irIdx = 0; irIdx < impulseResponses.size(); irIdx++) {
+        
+        auto& currentImpulseResponseTime    = impulseResponses[irIdx];
+        auto& currentImpulseResponseFreq    = fftImpulseResponses[irIdx];
+        currentImpulseResponseFreq.setSize(currentImpulseResponseTime.getNumChannels(),
+                                           currentImpulseResponseTime.getNumSamples() * 2);
+        
+        const int maxNumBlocks = static_cast<int>(currentImpulseResponseTime.getNumSamples() / samplesPerBlock);
+        
+        const int fftOrder = std::log2(samplesPerBlock);
+        juce::dsp::FFT forwardFFT {fftOrder};
+        
+        for (int blockIdx = 0; blockIdx < maxNumBlocks; blockIdx++) {
+            
+            juce::AudioBuffer<float> tempIRBuffer;
+            tempIRBuffer.setSize(numChannels, samplesPerBlock * 2);
+            tempIRBuffer.clear();
+            
+            for (int ch = 0; ch < numChannels; ch++) {
+                
+                tempIRBuffer.copyFrom(ch, 0, currentImpulseResponseTime, ch, blockIdx * samplesPerBlock, samplesPerBlock);
+                
+                auto* tempIRWritePtr = tempIRBuffer.getWritePointer(ch);
+                forwardFFT.performRealOnlyForwardTransform(tempIRWritePtr);
+                
+                currentImpulseResponseFreq.copyFrom(ch, blockIdx * samplesPerBlock * 2, tempIRBuffer, ch, 0, samplesPerBlock * 2);
+            }
+            
+        }
+    }
+    
+    
+    
+    
+    
+    
+    /* ============================== OLD
+    
     //return;
     //Setup before execution. Executed when play is pressed
     this->sampleRate        = sampleRate;
@@ -106,13 +112,13 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     impulseResponse_fft     = fftImpulseResponses[0];
     
     // Calculate FFT of the IR
-    /*
+    
     fftOrder = calculateLog2(impulseResponse.getNumSamples());
     fftSize = 1 << fftOrder;
 
     impulseResponse_fft.makeCopyOf(impulseResponse);
     fft_IR(impulseResponse_fft);
-    */
+    
     
     // Reverb buffer setup
     blockSize = samplesPerBlock;
@@ -126,6 +132,8 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     //revBufferWrite_R = revBuffer.getWritePointer(1);
     revBufferRead_L = revBuffer.getReadPointer(0);
     //revBufferRead_R = revBuffer.getReadPointer(1);
+    
+    */
 }
 
 void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
