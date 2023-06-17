@@ -52,7 +52,9 @@ private:
     float* revBufferWrite_L;
     float* revBufferWrite_R;
     const float* revBufferRead_L;
-    const float* revBufferRead_R;    
+    const float* revBufferRead_R;
+
+    juce::AudioBuffer<float> tempInputBuffer;
        
     // Reverb buffer related variables
     int fftOrder; // = 17;
@@ -68,7 +70,7 @@ private:
     std::atomic<float>* highpassCutoff;
 
     double sampleRate;
-    int samplesPerBlock;
+    //int samplesPerBlock;
     
     std::vector<juce::AudioBuffer<float>> impulseResponses {
         juce::AudioBuffer<float>(),
@@ -82,6 +84,50 @@ private:
         juce::AudioBuffer<float>(),
         juce::AudioBuffer<float>(),
         juce::AudioBuffer<float>()
+    };
+
+    class CircularBuffer {
+
+        CircularBuffer(int fifoSize):fifo(fifoSize) {
+            buffers.resize(fifoSize);
+        }
+
+    public:
+        void prepare(int numChannels, int numSamples) {
+            for (auto& buffer : buffers) {
+                buffer.setSize(numChannels, numSamples, false, true, true);
+                buffer.clear();
+            }
+        };
+
+        bool push(const juce::AudioBuffer<float>& bufferToPush) {
+            auto write = fifo.write(1);
+
+            if (write.blockSize1 > 0) {
+                buffers[write.startIndex1] = bufferToPush;
+                return true;
+            }
+            return false;
+        }
+
+        bool pull(juce::AudioBuffer<float>& bufferToFill) {
+            auto read = fifo.read(1);
+
+            if (read.blockSize1 > 0) {
+                bufferToFill = buffers[read.startIndex1];
+                return true;
+            }
+            return false;
+        }
+
+        int getNumAvailableBuffers() const {
+            return fifo.getNumReady();
+        }
+
+        std::vector<juce::AudioBuffer<float>> buffers;
+
+    private:
+        juce::AbstractFifo fifo;
     };
     
 };
