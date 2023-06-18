@@ -14,13 +14,14 @@ Reverb::Reverb()
 : numIRs(4)
 
 {
-    
+    // Uncomment when working on own implementation
+    /*
     juce::AudioFormatManager formatManager;
     formatManager.registerBasicFormats();
     std::vector<juce::AudioFormatReader*> readers;
     
-    auto bathroom       = std::make_unique<juce::MemoryInputStream>(BinaryData::UPF_toilete_48kHz_wav,
-                                                                    BinaryData::UPF_toilete_48kHz_wavSize,
+    auto bathroom       = std::make_unique<juce::MemoryInputStream>(BinaryData::UPF_toilete_44_1kHz_wav,
+                                                                    BinaryData::UPF_toilete_44_1kHz_wavSize,
                                                                     false);
     
     auto aranyoShort    = std::make_unique<juce::MemoryInputStream>(BinaryData::UPF_Aranyo_short_48kHz_wav,
@@ -40,6 +41,7 @@ Reverb::Reverb()
     readers.push_back(formatManager.createReaderFor(std::move(aranyoLarge)));
     readers.push_back(formatManager.createReaderFor(std::move(tanger)));
     
+    
     for (int irIndex = 0; irIndex < numIRs; irIndex++) {
         auto* currentReader = readers.at(irIndex);
         
@@ -57,50 +59,101 @@ Reverb::Reverb()
             delete currentReader;
         }
     }
+     */
 }
 
 Reverb::~Reverb(){
     
 }
 
+void Reverb::setWet(std::atomic<float>* wetParam){
+    this->wet = wetParam;
+}
+
+void Reverb::setLowpassCutoff(std::atomic<float>* lowpassCutoff){
+    this->lowpassCutoff = lowpassCutoff;
+}
+
+void Reverb::setHighpassCutoff(std::atomic<float>* highpassCutoff){
+    this->highpassCutoff = highpassCutoff;
+}
+
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     
-    for (int irIdx = 0; irIdx < impulseResponses.size(); irIdx++) {
-        
-        auto& currentImpulseResponseTime    = impulseResponses[irIdx];
-        auto& currentImpulseResponseFreq    = fftImpulseResponses[irIdx];
-        currentImpulseResponseFreq.setSize(currentImpulseResponseTime.getNumChannels(),
-                                           currentImpulseResponseTime.getNumSamples() * 2);
-        
-        const int maxNumBlocks = static_cast<int>(currentImpulseResponseTime.getNumSamples() / samplesPerBlock);
-        
-        const int fftOrder = std::log2(samplesPerBlock);
-        juce::dsp::FFT forwardFFT {fftOrder};
-        
-        for (int blockIdx = 0; blockIdx < maxNumBlocks; blockIdx++) {
-            
-            juce::AudioBuffer<float> tempIRBuffer;
-            tempIRBuffer.setSize(numChannels, samplesPerBlock * 2);
-            tempIRBuffer.clear();
-            
-            for (int ch = 0; ch < numChannels; ch++) {
-                
-                tempIRBuffer.copyFrom(ch, 0, currentImpulseResponseTime, ch, blockIdx * samplesPerBlock, samplesPerBlock);
-                
-                auto* tempIRWritePtr = tempIRBuffer.getWritePointer(ch);
-                forwardFFT.performRealOnlyForwardTransform(tempIRWritePtr);
-                
-                currentImpulseResponseFreq.copyFrom(ch, blockIdx * samplesPerBlock * 2, tempIRBuffer, ch, 0, samplesPerBlock * 2);
-            }
-            
-        }
-    }
+    // JUCE Convolver Implementation
+    juce::dsp::ProcessSpec spec;
+    spec.numChannels = numChannels;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.sampleRate = sampleRate;
     
-    tempInputBuffer.setSize(numChannels, samplesPerBlock * 2);
-    tempInputBuffer.clear();
+    aranyoShort.prepare(spec);
+    aranyoLarge.prepare(spec);
+    bathroom.prepare(spec);
+    corridor.prepare(spec);
+    
+    /*
+    convolution.loadImpulseResponse(BinaryData::UPF_corridor_balloon_1_44_1kHz_wav, BinaryData::UPF_corridor_balloon_1_44_1kHz_wavSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::no, 0);
+    */
+     
     
     
-    /* ============================== OLD
+    
+    
+    
+     
+    /* Modified FFT Implementation ==============================================
+     
+     for (int irIdx = 0; irIdx < impulseResponses.size(); irIdx++) {
+         
+         auto& currentImpulseResponseTime    = impulseResponses[irIdx];
+         auto& currentImpulseResponseFreq    = fftImpulseResponses[irIdx];
+         currentImpulseResponseFreq.setSize(currentImpulseResponseTime.getNumChannels(),
+                                            currentImpulseResponseTime.getNumSamples() * 2);
+         
+         const int maxNumBlocks  = static_cast<int>(currentImpulseResponseTime.getNumSamples() / samplesPerBlock);
+         circularBuffer          = std::make_unique<CircularBuffer>(maxNumBlocks);
+         circularBuffer->prepare(numChannels, samplesPerBlock * 2);
+         
+         const int fftOrder = std::log2(samplesPerBlock);
+         juce::dsp::FFT forwardFFT {fftOrder};
+         
+         for (int blockIdx = 0; blockIdx < maxNumBlocks; blockIdx++) {
+             
+             juce::AudioBuffer<float> tempIRBuffer;
+             tempIRBuffer.setSize(numChannels, samplesPerBlock * 2);
+             tempIRBuffer.clear();
+             
+             for (int ch = 0; ch < numChannels; ch++) {
+                 
+                 tempIRBuffer.copyFrom(ch, 0, currentImpulseResponseTime, ch, blockIdx * samplesPerBlock, samplesPerBlock);
+                 
+                 auto* tempIRWritePtr = tempIRBuffer.getWritePointer(ch);
+                 forwardFFT.performRealOnlyForwardTransform(tempIRWritePtr);
+                 
+                 currentImpulseResponseFreq.copyFrom(ch, blockIdx * samplesPerBlock * 2, tempIRBuffer, ch, 0, samplesPerBlock * 2);
+             }
+             
+         }
+     }
+     
+     tempInputBuffer.setSize(numChannels, samplesPerBlock * 2);
+     tempInputBuffer.clear();
+     
+     tempInputFFTBuffer.setSize(numChannels, samplesPerBlock * 2);
+     tempInputFFTBuffer.clear();
+    
+    bufferToAdd.setSize(numChannels, samplesPerBlock * 2);
+    bufferToAdd.clear();
+     
+     */
+    
+    
+    
+    
+    
+    
+    
+    /* Original Implementation ===============================================
     
     //return;
     //Setup before execution. Executed when play is pressed
@@ -138,11 +191,35 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
 void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
     if (this->isBypassed()) return;
     if (buffer.getNumSamples() == 0) return;
-    //if (buffer.getNumSamples() != samplesPerBlock) return;
-
-    // Get parameters
+    
+    // Global
     wetValue = wet->load();
+    
+    // JUCE Convolver Implementation =====================================================
+    
+    juce::dsp::AudioBlock<float> audioBlock {buffer};
+    
+    /*
+    if (convolution.getCurrentIRSize() > 0 ) {
+    convolution.process(juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    }
+    */
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* Modified FFT Implementation ========================================================
+    
     const int samplesPerBlock = buffer.getNumSamples();
 
     auto& impulseResponseFrequency = fftImpulseResponses[0];
@@ -151,41 +228,83 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     const int fftOrder = std::log2(samplesPerBlock);
     juce::dsp::FFT forwardFFT {fftOrder};
     juce::dsp::FFT inverseFFT {fftOrder};
-
-    for (int ch = 0; ch < buffer.getNumChannels(); ch++)
-    {
-        tempInputBuffer.copyFrom(ch, 0, buffer, ch, 0, samplesPerBlock);
-
-        auto* tempInputWritePtr = tempInputBuffer.getWritePointer(ch);
-        forwardFFT.performRealOnlyForwardTransform(tempInputWritePtr);
+    
+    
+    for (int ch = 0; ch < buffer.getNumChannels(); ch++) {
         
-        auto* impulseResponseFrequencyReadPtr = impulseResponseFrequency.getReadPointer(ch);
-
-        for (int block = 0; block < maxNumBlocks; block++)
-        {
-            for (int sample = 0; sample < samplesPerBlock * 2; sample++)
-            {
-                tempInputWritePtr[sample] *= impulseResponseFrequencyReadPtr[sample + (block * samplesPerBlock * 2)];
-            }
-            //inverseFFT.performRealOnlyInverseTransform();
+        tempInputBuffer.copyFrom(ch, 0, buffer, ch, 0, samplesPerBlock);
+        auto* fftBufferWritePtr     = tempInputBuffer.getWritePointer(ch);
+        auto* impulseFFTReadPtr     = impulseResponseFrequency.getReadPointer(ch);
+        
+        forwardFFT.performRealOnlyForwardTransform(fftBufferWritePtr);
+        
+        auto* fftBufferReadPtr      = tempInputBuffer.getReadPointer(ch);
+        
+        for (int blockIdx = 0; blockIdx < maxNumBlocks; blockIdx++) {
             
+            for (int n = 0; n < samplesPerBlock; n++){
+                bufferToAdd.setSample(ch, n, buffer.getSample(ch, n));
+            }
+            circularBuffer->addToBuffer(bufferToAdd, blockIdx, ch, samplesPerBlock * 2);
         }
-
-
-
-
+        
+        circularBuffer->incrementWrite();
+        circularBuffer->pull(tempInputBuffer);
+        inverseFFT.performRealOnlyInverseTransform(tempInputBuffer.getWritePointer(ch));
+        buffer.copyFrom(ch, 0, tempInputBuffer, ch, 0, samplesPerBlock);
     }
-
-
-
-
-
-
-
-
-
+    
 
     /*
+     for (int ch = 0; ch < buffer.getNumChannels(); ch++)
+     {
+         tempInputBuffer.copyFrom(ch, 0, buffer, ch, 0, samplesPerBlock);
+         
+         auto* tempInputWritePtr = tempInputBuffer.getWritePointer(ch);
+         
+         forwardFFT.performRealOnlyForwardTransform(tempInputWritePtr);
+         
+         tempInputFFTBuffer.copyFrom(ch, 0, tempInputBuffer, ch, 0, samplesPerBlock * 2);
+         auto* tempInputFFTWritePtr = tempInputFFTBuffer.getWritePointer(ch);
+         auto* impulseResponseFrequencyReadPtr = impulseResponseFrequency.getReadPointer(ch);
+         
+         inverseFFT.performRealOnlyInverseTransform(tempInputFFTWritePtr);
+         buffer.copyFrom(ch, 0, tempInputFFTBuffer, ch, 0, samplesPerBlock);
+         
+         for (int block = 0; block < maxNumBlocks; block++)
+         {
+             for (int sample = 0; sample < samplesPerBlock * 2; sample++)
+             {
+                 tempInputFFTWritePtr[sample] = tempInputWritePtr[sample] * impulseResponseFrequencyReadPtr[sample + (block * samplesPerBlock * 2)];
+             }
+             circularBuffer->addToBuffer(tempInputBuffer, block, ch, samplesPerBlock * 2);
+         }
+         
+         circularBuffer->pull(tempInputBuffer);
+         inverseFFT.performRealOnlyInverseTransform(tempInputFFTWritePtr);
+         buffer.copyFrom(ch, 0, tempInputFFTBuffer, ch, 0, samplesPerBlock);
+         
+     }
+     
+     //circularBuffer->push(buffer);
+     //bool pull = circularBuffer->pull(buffer);
+    */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+    // Original Implementation =========================================================
+     
     // Get input data pointers
     auto* channelDataWrite_L = buffer.getWritePointer(0);
     auto* channelDataWrite_R = buffer.getWritePointer(1);
@@ -255,7 +374,7 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
 
             // Update the revBuffer with the newly added reverb plus the previous exising reverb cue from past samples.
             revBufferWrite_L[bufferPos] = revBufferRead_L[bufferPos] + 0.05f * returnBlockRead_L[channelPos];
-            //ciruclarBuffer = circularBuffer + IFFT(FFT(input)*FFT(IR))
+            //ciruclarBuffer = circularBuffer + 0.05f * IFFT(FFT(input)*FFT(IR))
             //revBufferWrite_L[bufferPos] = revBufferRead_L[bufferPos] + returnBlockRead_L[channelPos];
             //revBufferWrite_R[bufferPos] = revBufferRead_R[bufferPos] + 0.1f * returnBlockRead_R[channelPos];
         }
@@ -273,6 +392,16 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     // Counter update.
     count += 1; */
 }
+
+int Reverb::calculateNextPow(int x)
+{
+    // Calculate next power of 2
+    return pow(2, ceil(log(x) / log(2)));
+}
+
+
+// Original Implementation ===========================================================
+/*
 
 void Reverb::fft_IR(juce::AudioBuffer<float>& buffer_IR) {
 
@@ -340,12 +469,6 @@ int Reverb::calculateLog2(int x)
     return log2Value;
 }
 
-int Reverb::calculateNextPow(int x)
-{
-    // Calculate next power of 2
-    return pow(2, ceil(log(x) / log(2)));
-}
-
 void Reverb::zero_pad(juce::AudioBuffer<float>& buffer_to_pad, int num_samples_ir)
 {
     int numChannels = buffer_to_pad.getNumChannels();
@@ -362,14 +485,4 @@ void Reverb::zero_pad(juce::AudioBuffer<float>& buffer_to_pad, int num_samples_i
     }
 }
 
-void Reverb::setWet(std::atomic<float>* wetParam){
-    this->wet = wetParam;
-}
-
-void Reverb::setLowpassCutoff(std::atomic<float>* lowpassCutoff){
-    this->lowpassCutoff = lowpassCutoff;
-}
-
-void Reverb::setHighpassCutoff(std::atomic<float>* highpassCutoff){
-    this->highpassCutoff = highpassCutoff;
-}
+*/
