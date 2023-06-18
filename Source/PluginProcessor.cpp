@@ -613,8 +613,8 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
         
         case 3:{
             
-            reverbVector[slotIdx]->setWet(wetDryMix1);
-            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
+            reverbVector[slotIdx]->setWet(wetDryMix4);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass4);
             reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass4);
             reverbVector[slotIdx]->setBypassParam(reverbBypass4);
             reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice4);

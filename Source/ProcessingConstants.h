@@ -171,7 +171,7 @@ const juce::StringArray choiceArray
 
         const float wetMin                  = 0.f;
         const float wetMax                  = 1.f;
-        const float wetIncrement            = 0.05f;
+        const float wetIncrement            = 0.01f;
         const float wetSkew                 = 1.f;
         
         const float cutoffLowpassMin        = 0.f;

@@ -17,6 +17,7 @@ ControlSection::ControlSection(FootprintAudioProcessor* p)
 outputAttachment        (p->apvts, ProcessingConstants::EditorControls::Identifiers::outputGainParam, output),
 monoSwitchAttachment    (p->apvts, ProcessingConstants::EditorControls::Identifiers::monoStereoParam, monoStereoSwitch)
 {
+    monoStereoSwitch.setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
     for (auto& slider : sliders) {
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
