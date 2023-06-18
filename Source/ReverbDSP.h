@@ -83,6 +83,7 @@ public:
     void setWet(std::atomic<float>*);
     void setLowpassCutoff(std::atomic<float>*);
     void setHighpassCutoff(std::atomic<float>*);
+    void setIRChoiceParameter(std::atomic<float>*);
     
 private:
     // Global ==================================================
@@ -93,6 +94,7 @@ private:
     std::atomic<float>* wet;
     std::atomic<float>* lowpassCutoff;
     std::atomic<float>* highpassCutoff;
+    std::atomic<float>* choiceParameterIR;
     
     std::vector<juce::AudioBuffer<float>> impulseResponses {
         juce::AudioBuffer<float>(),
@@ -107,6 +109,8 @@ private:
     juce::dsp::Convolution aranyoLarge;
     juce::dsp::Convolution bathroom;
     juce::dsp::Convolution corridor;
+    
+    juce::dsp::DryWetMixer<float> dryWetMixer;
     
     // Modified FFT Implementation =============================
     

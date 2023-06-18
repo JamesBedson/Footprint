@@ -234,28 +234,32 @@ juce::StringArray PedalSection::getReverbParameterIDs(const int &idx){
             return {
                 ProcessingConstants::Reverb::Identifiers::reverbWetMix1,
                 ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass1,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass1
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass1,
+                ProcessingConstants::Reverb::Identifiers::reverbIRChoice1
             };
             
         case 1:
             return {
                 ProcessingConstants::Reverb::Identifiers::reverbWetMix2,
                 ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass2,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass2
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass2,
+                ProcessingConstants::Reverb::Identifiers::reverbIRChoice2
             };
             
         case 2:
             return {
                 ProcessingConstants::Reverb::Identifiers::reverbWetMix3,
                 ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass3,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass3
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass3,
+                ProcessingConstants::Reverb::Identifiers::reverbIRChoice3
             };
             
         case 3:
             return {
                 ProcessingConstants::Reverb::Identifiers::reverbWetMix4,
                 ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass4,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass4
+                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass4,
+                ProcessingConstants::Reverb::Identifiers::reverbIRChoice4
             };
     }
     return {};

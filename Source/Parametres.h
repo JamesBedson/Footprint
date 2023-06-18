@@ -297,6 +297,17 @@
                                                                                ProcessingConstants::Reverb::Numeric::cutoffHighpassSkew),
                                                 ProcessingConstants::Reverb::Numeric::defaultCutoffHighpass),
     
+    // Impulse Response Choice
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbIRChoice1, 1}, ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID, ProcessingConstants::Reverb::IRChoices::irChoiceArray, 3),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbIRChoice2, 2}, ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID, ProcessingConstants::Reverb::IRChoices::irChoiceArray, 3),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbIRChoice3, 3}, ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID, ProcessingConstants::Reverb::IRChoices::irChoiceArray, 3),
+    
+    std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbIRChoice4, 4}, ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID, ProcessingConstants::Reverb::IRChoices::irChoiceArray, 3),
+    
+    
         // Bypass
     std::make_unique<juce::AudioParameterBool>(juce::ParameterID {ProcessingConstants::Reverb::Identifiers::reverbBypassed1, 1},
                                                ProcessingConstants::Reverb::Identifiers::reverbBypassID, false),
