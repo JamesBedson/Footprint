@@ -18,7 +18,6 @@ FootprintAudioProcessorEditor::FootprintAudioProcessorEditor (FootprintAudioProc
     addAndMakeVisible(displaySection);
     addAndMakeVisible(pedalSection);
     addAndMakeVisible(controlSection);
-
     setSize (1100, 700);
 }
 

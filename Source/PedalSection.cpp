@@ -15,11 +15,16 @@
 PedalSection::PedalSection(FootprintAudioProcessor* processor)
 {
     processorPtr = processor;
+    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot1Param, this);
+    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
+    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
+    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
     activeComponents.resize(4);
     slotParameterVector.resize(4);
     
     for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++){
         activeComponents[componentIdx] = createComboBox();
+        activeComponents[componentIdx]->setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
         addAndMakeVisible(activeComponents[componentIdx].get());
     }
     startTimerHz(25);
@@ -110,6 +115,7 @@ std::unique_ptr<juce::ComboBox> PedalSection::createComboBox(){
     auto newComboBox = std::make_unique<juce::ComboBox>();
     
     addAndMakeVisible(newComboBox.get());
+    newComboBox->setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
     newComboBox->setLookAndFeel(&comboBoxLookandFeel);
     newComboBox->setJustificationType(juce::Justification::centred);
     newComboBox->setText("Add Pedal");
@@ -334,4 +340,8 @@ juce::StringArray PedalSection::getEnvelopeFilterParameterIDs(const int &idx){
             };
     }
     return {};
+}
+
+void PedalSection::parameterChanged (const juce::String& parameterID, float newValue) {
+    
 }
