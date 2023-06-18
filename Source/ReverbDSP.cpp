@@ -78,6 +78,10 @@ void Reverb::setHighpassCutoff(std::atomic<float>* highpassCutoff){
     this->highpassCutoff = highpassCutoff;
 }
 
+void Reverb::setIRChoiceParameter(std::atomic<float> *choiceParam){
+    this->choiceParameterIR = choiceParam;
+}
+
 void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     
     // JUCE Convolver Implementation
@@ -86,10 +90,30 @@ void Reverb::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     spec.maximumBlockSize = samplesPerBlock;
     spec.sampleRate = sampleRate;
     
-    aranyoShort.prepare(spec);
-    aranyoLarge.prepare(spec);
     bathroom.prepare(spec);
+    bathroom.loadImpulseResponse(BinaryData::UPF_toilete_44_1kHz_wav,
+                                 BinaryData::UPF_toilete_44_1kHz_wavSize,
+                                 juce::dsp::Convolution::Stereo::yes,
+                                 juce::dsp::Convolution::Trim::no, 0);
+    
+    aranyoShort.prepare(spec);
+    aranyoShort.loadImpulseResponse(BinaryData::UPF_Aranyo_short_44_1kHz_wav,
+                                    BinaryData::UPF_Aranyo_short_44_1kHz_wavSize, juce::dsp::Convolution::Stereo::yes,
+                                    juce::dsp::Convolution::Trim::no, 0);
+    
+    aranyoLarge.prepare(spec);
+    aranyoLarge.loadImpulseResponse(BinaryData::UPF_Aranyo_large_44_1kHz_wav,
+                                    BinaryData::UPF_Aranyo_large_44_1kHz_wavSize, juce::dsp::Convolution::Stereo::yes,
+                                    juce::dsp::Convolution::Trim::no, 0);
+    
     corridor.prepare(spec);
+    corridor.loadImpulseResponse(BinaryData::UPF_corridor_balloon_1_44_1kHz_wav,
+                                 BinaryData::UPF_corridor_balloon_1_44_1kHz_wavSize, juce::dsp::Convolution::Stereo::yes,
+                                 juce::dsp::Convolution::Trim::no, 0);
+    
+    dryWetMixer.setMixingRule(juce::dsp::DryWetMixingRule::sin6dB);
+    dryWetMixer.setWetLatency(corridor.getLatency());
+    dryWetMixer.prepare(spec);
     
     /*
     convolution.loadImpulseResponse(BinaryData::UPF_corridor_balloon_1_44_1kHz_wav, BinaryData::UPF_corridor_balloon_1_44_1kHz_wavSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::no, 0);
@@ -193,21 +217,52 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
     if (buffer.getNumSamples() == 0) return;
     
     // Global
-    wetValue = wet->load();
+    wetValue            = wet->load();
+    const int irChoice  = static_cast<int>(choiceParameterIR->load());
+    dryWetMixer.setWetMixProportion(wetValue);
     
     // JUCE Convolver Implementation =====================================================
     
     juce::dsp::AudioBlock<float> audioBlock {buffer};
     
-    /*
-    if (convolution.getCurrentIRSize() > 0 ) {
-    convolution.process(juce::dsp::ProcessContextReplacing<float> (audioBlock));
+    if (irChoice == 0) {
+        if (bathroom.getCurrentIRSize() > 0) {
+            dryWetMixer.setWetLatency(bathroom.getLatency());
+            dryWetMixer.pushDrySamples(buffer);
+            bathroom.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            dryWetMixer.mixWetSamples(buffer);
+        }
     }
-    */
-
     
+    else if (irChoice == 1) {
+        if (aranyoShort.getCurrentIRSize() > 0) {
+            dryWetMixer.setWetLatency(aranyoShort.getLatency());
+            dryWetMixer.pushDrySamples(buffer);
+            aranyoShort.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            dryWetMixer.mixWetSamples(buffer);
+        }
+    }
     
+    else if (irChoice == 2) {
+        if (aranyoLarge.getCurrentIRSize() > 0) {
+            dryWetMixer.setWetLatency(aranyoLarge.getLatency());
+            dryWetMixer.pushDrySamples(buffer);
+            aranyoLarge.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            dryWetMixer.mixWetSamples(buffer);
+        }
+    }
     
+    else if (irChoice == 3) {
+        if (corridor.getCurrentIRSize() > 0) {
+            dryWetMixer.pushDrySamples(buffer);
+            corridor.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            dryWetMixer.mixWetSamples(buffer);
+        }
+    }
+    
+    else {
+        return;
+    }
     
     
     

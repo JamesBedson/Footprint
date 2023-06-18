@@ -169,6 +169,11 @@ private:
     std::atomic<float>* cutoffHighpass3;
     std::atomic<float>* cutoffHighpass4;
     
+    std::atomic<float>* reverbIRChoice1;
+    std::atomic<float>* reverbIRChoice2;
+    std::atomic<float>* reverbIRChoice3;
+    std::atomic<float>* reverbIRChoice4;
+    
     std::atomic<float>* reverbBypass1;
     std::atomic<float>* reverbBypass2;
     std::atomic<float>* reverbBypass3;
