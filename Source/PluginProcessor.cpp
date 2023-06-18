@@ -134,7 +134,7 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-
+    //setLatencySamples(4096*32);
     guiFifoInput.prepare(getTotalNumInputChannels(), samplesPerBlock);
     guiFifoOutput.prepare(getTotalNumInputChannels(), samplesPerBlock);
     
@@ -175,7 +175,7 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     //compressorVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
     //envelopeFilterVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
     //reverbVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
-
+    
 }
 
 void FootprintAudioProcessor::releaseResources()
