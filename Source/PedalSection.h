@@ -27,7 +27,12 @@
 
 using ComponentVector = std::vector<std::unique_ptr<juce::Component>>;
 
-class PedalSection  : public juce::Component, public juce::ComboBox::Listener, public juce::Timer
+class PedalSection
+: public juce::Component,
+public juce::ComboBox::Listener,
+public juce::Timer,
+public juce::AudioProcessorValueTreeState::Listener
+
 {
 public:
     PedalSection(FootprintAudioProcessor* p);
@@ -37,6 +42,7 @@ public:
     void resized() override;
     void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
     void timerCallback() override;
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
 
     ComboBoxLookandFeel comboBoxLookandFeel;
 

@@ -16,14 +16,30 @@ ReverbPedal::ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray p
 : Pedal(pedalSlot),
 mixAttachment(processor->apvts, parameterIDs[0], mix),
 lowpassAttachment(processor->apvts, parameterIDs[1], lowCut),
-highpassAttachment(processor->apvts, parameterIDs[2], highCut)
+highpassAttachment(processor->apvts, parameterIDs[2], highCut),
+reverbTypeSwitch(processor, parameterIDs[3].toStdString())
 {
     p = processor;
     
-    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed1));
-    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed2));
-    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed3));
-    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed4));
+    if          (pedalSlot == 1) {
+        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed1));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice1));
+    }
+    
+    else if     (pedalSlot == 2) {
+        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed2));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice1));
+    }
+    
+    else if     (pedalSlot == 3) {
+        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed3));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice3));
+    }
+    
+    else if     (pedalSlot == 4) {
+        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed4));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice4));
+    }
     else jassertfalse;
     
     for (auto& slider : sliders){
@@ -37,6 +53,7 @@ highpassAttachment(processor->apvts, parameterIDs[2], highCut)
         label->setJustificationType(juce::Justification::horizontallyCentred);
     }
     addAndMakeVisible(reverbTypeSwitch);
+    startTimerHz(30);
     //type.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     //type.setRange(0, 3, 1); // Range from 0 to 3 with a step size of 1
     //type.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0); // Hide the text box
@@ -137,4 +154,31 @@ void ReverbPedal::paintBackground(juce::Graphics& g){
     } else {
         return;
     }
+}
+
+void ReverbPedal::timerCallback() {
+    
+    if (reverbTypeSwitch.currentSettingChanged){
+        
+        float choice;
+        
+        if (pedalSlot == 1)
+            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice1)->load();
+        
+        else if (pedalSlot == 2)
+            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice2)->load();
+        
+        else if (pedalSlot == 3)
+            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice3)->load();
+        
+        else if (pedalSlot == 4)
+            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice4)->load();
+        
+        else return;
+        
+        irSetting = static_cast<int>(choice + 1) % 4;
+        reverbTypeSwitch.currentSettingChanged = false;
+        
+    }
+    
 }

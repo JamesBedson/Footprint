@@ -10,10 +10,12 @@
 
 #include "ReverbTypeSwitch.h"
 
-ReverbTypeSwitch::ReverbTypeSwitch()
+ReverbTypeSwitch::ReverbTypeSwitch(FootprintAudioProcessor* p, const std::string& parameterID)
+: choiceAttachment(*p->apvts.getParameter(parameterID), [this](float newValue) {parameterChanged(newValue);})
 {
-    currentSetting = 0;
+    currentSetting = 3;
     setInterceptsMouseClicks(true, true);
+    currentSettingChanged = false;
 }
 
 ReverbTypeSwitch::~ReverbTypeSwitch()
@@ -46,10 +48,18 @@ void ReverbTypeSwitch::paint(juce::Graphics& g)
 void ReverbTypeSwitch::mouseDown(const juce::MouseEvent& event)
 {
     currentSetting = (currentSetting + 1) % 4;
+    currentSettingChanged = true;
     repaint();
 }
 
 int ReverbTypeSwitch::getCurrentSetting() const
 {
     return currentSetting;
+}
+
+void ReverbTypeSwitch::parameterChanged(float newValue) {
+    
+    currentSetting = int(newValue);
+    repaint();
+    
 }

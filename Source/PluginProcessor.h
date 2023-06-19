@@ -16,13 +16,55 @@
 #include "GainDSP.h"
 #include "MonoDSP.h"
 #include "PassThrough.h"
-#include "DisplaySection.h"
 #include "ProcessingConstants.h"
 //==============================================================================
 /**
 */
 
 using APVTS = juce::AudioProcessorValueTreeState;
+
+
+struct GUIBufferFifo{
+    
+    void prepare(int numChannels, int numSamples){
+        
+        for (auto& buffer : buffers) {
+            buffer.setSize(numChannels, numSamples, false, true, true);
+            buffer.clear();
+        }
+    };
+    
+    bool push(const juce::AudioBuffer<float>& bufferToPush) {
+        
+        auto write = fifo.write(1);
+        
+        if (write.blockSize1 > 0) {
+            buffers[write.startIndex1] = bufferToPush;
+            return true;
+        }
+        return false;
+    }
+    
+    bool pull(juce::AudioBuffer<float>& bufferToFill) {
+        
+        auto read = fifo.read(1);
+        
+        if (read.blockSize1 > 0) {
+            bufferToFill = buffers[read.startIndex1];
+            return true;
+        }
+        return false;
+    }
+    
+    int getNumAvailableBuffers() const {
+        return fifo.getNumReady();
+    }
+    
+    static constexpr int fifoSize = 35;
+    std::array<juce::AudioBuffer<float>, fifoSize> buffers;
+    juce::AbstractFifo fifo {fifoSize};
+};
+
 
 class FootprintAudioProcessor  : public juce::AudioProcessor, public juce::AudioProcessorValueTreeState::Listener
                             #if JucePlugin_Enable_ARA
@@ -51,7 +93,6 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
-
     bool acceptsMidi() const override;
     bool producesMidi() const override;
     bool isMidiEffect() const override;
@@ -73,11 +114,11 @@ public:
     float getInRmsValue(const int channel) const;
     float getOutRmsValue(const int channel) const;
     
-    DisplaySection* displaySection = nullptr;
-    void setDisplaySection(DisplaySection* section);
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     void assignActiveModules(const juce::String& paramID, int value);
-
+    
+    GUIBufferFifo guiFifoInput;
+    GUIBufferFifo guiFifoOutput;
 private:
     void initParameters();
     
@@ -127,6 +168,11 @@ private:
     std::atomic<float>* cutoffHighpass2;
     std::atomic<float>* cutoffHighpass3;
     std::atomic<float>* cutoffHighpass4;
+    
+    std::atomic<float>* reverbIRChoice1;
+    std::atomic<float>* reverbIRChoice2;
+    std::atomic<float>* reverbIRChoice3;
+    std::atomic<float>* reverbIRChoice4;
     
     std::atomic<float>* reverbBypass1;
     std::atomic<float>* reverbBypass2;
