@@ -93,7 +93,6 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
-
     bool acceptsMidi() const override;
     bool producesMidi() const override;
     bool isMidiEffect() const override;
@@ -169,6 +168,11 @@ private:
     std::atomic<float>* cutoffHighpass2;
     std::atomic<float>* cutoffHighpass3;
     std::atomic<float>* cutoffHighpass4;
+    
+    std::atomic<float>* reverbIRChoice1;
+    std::atomic<float>* reverbIRChoice2;
+    std::atomic<float>* reverbIRChoice3;
+    std::atomic<float>* reverbIRChoice4;
     
     std::atomic<float>* reverbBypass1;
     std::atomic<float>* reverbBypass2;

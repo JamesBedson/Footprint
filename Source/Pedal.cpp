@@ -19,10 +19,12 @@ Pedal::Pedal(const int& pedalSlot)
     bypassSwitch.setToggleState(true, juce::dontSendNotification);
     bypassSwitch.setLookAndFeel(&pedalLookAndFeel);
     bypassSwitch.addListener(this);
+    bypassSwitch.setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
     
     addAndMakeVisible(deleteSwitch);
     deleteSwitch.setLookAndFeel(&deleteSwitchLookandFeel);
     deleteSwitch.setToggleState(false, juce::dontSendNotification);
+    deleteSwitch.setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
     
 }
 
