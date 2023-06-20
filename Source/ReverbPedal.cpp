@@ -43,11 +43,11 @@ reverbTypeSwitch(processor, parameterIDs[3].toStdString())
     else jassertfalse;
     
     for (auto& slider : sliders){
-        addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         slider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0,0);
         slider->setLookAndFeel(&pedalLookAndFeel);
     }
+    addAndMakeVisible(mix);
     for (auto& label : sliderLabels) {
         addAndMakeVisible(label);
         label->setJustificationType(juce::Justification::horizontallyCentred);
@@ -78,9 +78,9 @@ reverbTypeSwitch(processor, parameterIDs[3].toStdString())
     typeLabel.setFont(labelFont);
 
     mixLabel.setText("Mix", juce::dontSendNotification);
-    highCutLabel.setText("H.Cut", juce::dontSendNotification);
-    lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
-    typeLabel.setText("Type", juce::dontSendNotification);
+    //highCutLabel.setText("H.Cut", juce::dontSendNotification);
+    //lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
+    //typeLabel.setText("Type", juce::dontSendNotification);
 }
 
 ReverbPedal::~ReverbPedal()
