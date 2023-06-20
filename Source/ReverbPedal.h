@@ -37,7 +37,7 @@ private:
     
     FootprintAudioProcessor* p;
     
-    juce::Slider mix;
+    juce::Slider mix, lowCut, highCut;
     ReverbTypeSwitch reverbTypeSwitch;
     juce::Value irSetting;
     

@@ -92,13 +92,13 @@ void ReverbTypeSwitch::paint(juce::Graphics& g)
         g.drawText("Bathroom", infoRect, juce::Justification::centred, true);
         break;
     case 1:
-        g.drawText("Arany� Short", infoRect, juce::Justification::centred, true);
+        g.drawText("Aranyo Short", infoRect, juce::Justification::centred, true);
         break;
     case 2:
-        g.drawText("Arany� Long", infoRect, juce::Justification::centred, true);
+        g.drawText("Aranyo Long", infoRect, juce::Justification::centred, true);
         break;
     case 3:
-        g.drawText("T�nger", infoRect, juce::Justification::centred, true);
+        g.drawText("Tanger", infoRect, juce::Justification::centred, true);
         break;
     default:
         break;

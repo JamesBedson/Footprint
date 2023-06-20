@@ -106,7 +106,7 @@ void DisplaySection::paint (juce::Graphics& g)
     g.drawText("Peak RMS", 17, 19, 100, 10, juce::Justification::centred);
 
     g.setColour(juce::Colours::black.brighter());
-    juce::Line<float> vLine (juce::Point<float>((getLocalBounds().getX()) + 125.f, getLocalBounds().getY() + 30.f), juce::Point<float>((getLocalBounds().getX()) + 125.f, getLocalBounds().getY() + 220.f));
+    juce::Line<float> vLine (juce::Point<float>(levelMeterLineX, getLocalBounds().getY() + 30.f), juce::Point<float>(levelMeterLineX, getLocalBounds().getY() + 220.f));
     g.drawLine(vLine, 2.0f);
 }
 
@@ -124,10 +124,29 @@ void DisplaySection::resized()
     outputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
 
     float m = 60.f; //out displacement
+    
+    const int distanceOuterToBounds         = bounds.getWidth() * 0.04f;
+    const int levelMeterHeight              = bounds.getHeight() * 0.6f;
+    const int levelMeterWidth               = bounds.getWidth() * 0.01f;
+    const int distanceLRChannel             = bounds.getWidth() * 0.01f;
+    const int levelMeterY                   = bounds.getY() + getHeight() * 0.25f;
+    
+    levelMeterLineX = bounds.getX() + getWidth() * 0.19f;
+    
+    levelInMeterLeft.setBounds(bounds.getX() + distanceOuterToBounds,
+                               levelMeterY,
+                               levelMeterWidth,
+                               levelMeterHeight);
+    
+    levelInMeterRight.setBounds(levelInMeterLeft.getRight() + distanceLRChannel,
+                                levelMeterY,
+                                levelMeterWidth,
+                                levelMeterHeight);
 
-    levelInMeterLeft.setBounds(bounds.getWidth() * 0.043, bounds.getHeight() * 0.18, 9, 168);
-    levelInMeterRight.setBounds(bounds.getWidth() * 0.064, bounds.getHeight() * 0.18, 9, 168);
-
-    levelOutMeterLeft.setBounds(bounds.getWidth() * 0.043 + m, bounds.getHeight() * 0.18, 9, 168);
-    levelOutMeterRight.setBounds(bounds.getWidth() * 0.064 + m, bounds.getHeight() * 0.18, 9, 168);
+    levelOutMeterRight.setSize(levelMeterWidth, levelMeterHeight);
+    levelOutMeterRight.setTopRightPosition(levelMeterLineX - distanceOuterToBounds, levelMeterY);
+    
+    levelOutMeterLeft.setSize(levelMeterWidth, levelMeterHeight);
+    levelOutMeterLeft.setTopRightPosition(levelOutMeterRight.getX() - distanceLRChannel, levelMeterY);
+    
 }
