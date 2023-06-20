@@ -155,12 +155,23 @@ const juce::StringArray choiceArray
 
 
     namespace Reverb {
-
+        
+        namespace IRChoices {
+        
+        const juce::StringArray irChoiceArray {
+            "bathroom",
+            "aranyoShort",
+            "aranyoLarge",
+            "corridor"
+        };
+        
+        }
+    
         namespace Numeric {
 
         const float wetMin                  = 0.f;
         const float wetMax                  = 1.f;
-        const float wetIncrement            = 0.05f;
+        const float wetIncrement            = 0.01f;
         const float wetSkew                 = 1.f;
         
         const float cutoffLowpassMin        = 0.f;
@@ -185,6 +196,7 @@ const juce::StringArray choiceArray
         const std::string reverbLowpassID       = "Reverb Cutoff (Lowpass)";
         const std::string reverbHighpassID      = "Reverb Cutoff (Highpass)";
         const std::string reverbBypassID        = "Reverb Bypass";
+        const std::string reverbIRChoiceID      = "Reverb Impulse Response";
         
         const std::string reverbWetMix1         = "wet_mix_1";
         const std::string reverbWetMix2         = "wet_mix_2";
@@ -205,7 +217,13 @@ const juce::StringArray choiceArray
         const std::string reverbBypassed2       = "reverb_bypassed_2";
         const std::string reverbBypassed3       = "reverb_bypassed_3";
         const std::string reverbBypassed4       = "reverb_bypassed_4";
-
+        
+        const std::string reverbIRChoice1       = "reverb_IR_choice1";
+        const std::string reverbIRChoice2       = "reverb_IR_choice2";
+        const std::string reverbIRChoice3       = "reverb_IR_choice3";
+        const std::string reverbIRChoice4       = "reverb_IR_choice4";
+        
+        
         }
 
     }

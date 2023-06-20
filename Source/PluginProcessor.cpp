@@ -134,7 +134,7 @@ void FootprintAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-
+    //setLatencySamples(4096*32);
     guiFifoInput.prepare(getTotalNumInputChannels(), samplesPerBlock);
     guiFifoOutput.prepare(getTotalNumInputChannels(), samplesPerBlock);
     
@@ -175,7 +175,7 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     //compressorVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
     //envelopeFilterVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
     //reverbVector[0]->prepare(sampleRate, samplesPerBlock, getTotalNumInputChannels()); //AQUIIIIIIIIIIIIIIIIIIII
-
+    
 }
 
 void FootprintAudioProcessor::releaseResources()
@@ -212,12 +212,12 @@ bool FootprintAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 
 void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    guiFifoInput.push(buffer);
 
     /////////////////////////////////////////////INPUT RMS LEVEL METER//////////////////////////////////////////////////
     juce::ScopedNoDenormals noInDenormals;
     
     inputGainModule.processBlock(buffer, midiMessages);
+    guiFifoInput.push(buffer);
     
     rmsInLevelLeft.skip(buffer.getNumSamples());
     rmsInLevelRight.skip(buffer.getNumSamples());
@@ -256,16 +256,14 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     activeModules[2]->processBlock(buffer, midiMessages);
     activeModules[3]->processBlock(buffer, midiMessages);
 
-    //compressorVector[0]->processBlock(buffer, midiMessages);                            // AQUIIIIIIIIIIIIIIIIIII
-    //envelopeFilterVector[0]->processBlock(buffer, midiMessages);
-    //reverbVector[0]->processBlock(buffer, midiMessages);
-
     //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
 
     /////////////////////////////////////////////OUTPUT RMS LEVEL METER//////////////////////////////////////////////////
     juce::ScopedNoDenormals noOutDenormals;
     bool isStereo = static_cast<bool>(apvts.getRawParameterValue(ProcessingConstants::EditorControls::Identifiers::monoStereoParam)->load());
     if (!isStereo) monoStereoModule.processBlock(buffer, midiMessages);
+    outputGainModule.processBlock(buffer, midiMessages);
+    guiFifoOutput.push(buffer);
     
     rmsOutLevelLeft.skip(buffer.getNumSamples());
     rmsOutLevelRight.skip(buffer.getNumSamples());
@@ -289,8 +287,6 @@ void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             rmsOutLevelRight.setCurrentAndTargetValue(value);
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    guiFifoOutput.push(buffer);
 
 }
 
@@ -379,6 +375,11 @@ void FootprintAudioProcessor::initParameters(){
     reverbBypass2   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed2);
     reverbBypass3   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed3);
     reverbBypass4   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed4);
+    
+    reverbIRChoice1 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice1);
+    reverbIRChoice2 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice2);
+    reverbIRChoice3 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice3);
+    reverbIRChoice4 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice4);
     
     // Distortion
     distGain1   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain1);
@@ -586,6 +587,7 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
             reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
             reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass1);
             reverbVector[slotIdx]->setBypassParam(reverbBypass1);
+            reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice1);
         }
             break;
             
@@ -595,6 +597,7 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
             reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass2);
             reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass2);
             reverbVector[slotIdx]->setBypassParam(reverbBypass2);
+            reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice2);
         }
             break;
             
@@ -604,15 +607,17 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
             reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass3);
             reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass3);
             reverbVector[slotIdx]->setBypassParam(reverbBypass3);
+            reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice3);
         }
             break;
         
         case 3:{
             
-            reverbVector[slotIdx]->setWet(wetDryMix1);
-            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
+            reverbVector[slotIdx]->setWet(wetDryMix4);
+            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass4);
             reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass4);
             reverbVector[slotIdx]->setBypassParam(reverbBypass4);
+            reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice4);
         }
             break;
     }

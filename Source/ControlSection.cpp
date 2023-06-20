@@ -17,6 +17,7 @@ ControlSection::ControlSection(FootprintAudioProcessor* p)
 outputAttachment        (p->apvts, ProcessingConstants::EditorControls::Identifiers::outputGainParam, output),
 monoSwitchAttachment    (p->apvts, ProcessingConstants::EditorControls::Identifiers::monoStereoParam, monoStereoSwitch)
 {
+    monoStereoSwitch.setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
     for (auto& slider : sliders) {
         addAndMakeVisible(slider);
         slider->setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -77,6 +78,7 @@ void ControlSection::paint(juce::Graphics& g)
 {
     g.setColour(juce::Colours::white);
     paintDecor(g);
+
     
     if (monoStereoSwitch.getToggleState()){
         switchLabel.setText("Stereo", juce::dontSendNotification);

@@ -18,7 +18,7 @@
 //==============================================================================
 /*
 */
-class ReverbPedal  : public Pedal
+class ReverbPedal  : public Pedal, public juce::Timer
 {
 public:
     ReverbPedal(FootprintAudioProcessor* processor,
@@ -31,16 +31,20 @@ public:
     void paintAdditionalComponents(juce::Graphics&)     override;
     void paint(juce::Graphics& g)                       override;
     void resizeChild()                                  override;
+    void timerCallback()                                override;
 
 private:
     
     FootprintAudioProcessor* p;
     
-    juce::Slider mix, highCut, lowCut;
+    juce::Slider mix, lowCut, highCut;
     ReverbTypeSwitch reverbTypeSwitch;
+    juce::Value irSetting;
+    
     std::vector<juce::Slider*> sliders {&mix, &highCut, &lowCut};
     
     SliderAttachment mixAttachment, lowpassAttachment, highpassAttachment;
+    juce::Value impulseResponseChoice;
     
     juce::Label mixLabel, highCutLabel, lowCutLabel, typeLabel;
     std::vector<juce::Label*> sliderLabels{ &mixLabel, &highCutLabel, &lowCutLabel, &typeLabel};
