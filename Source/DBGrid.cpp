@@ -106,7 +106,7 @@ void DBGrid::paint(juce::Graphics& g)
         float y = juce::jmap(value, GUIAttributes::LevelMeterRange::minLMR, GUIAttributes::LevelMeterRange::maxLMR, top, bottom);
         normPositions.add(y);
         juce::Line<float> line{float(bounds.getX()), y, float(bounds.getRight()), y };
-        g.drawLine(line);
+        //g.drawLine(line);
     }
 
     juce::Array<float> positions = getPositions();
@@ -128,7 +128,7 @@ void DBGrid::paint(juce::Graphics& g)
         float fontSize = juce::jmap(std::abs(value), GUIAttributes::LevelMeterRange::maxLMR, GUIAttributes::LevelMeterRange::minLMR, float(GUIAttributes::DisplayFontSizes::h7), float(GUIAttributes::DisplayFontSizes::h8));
         font.setHeight(fontSize);
         g.setFont(font);
-        g.drawText(label, (bounds.getWidth() / 2) * 0.45f, positionsRev[i], 30, 10, juce::Justification::centred);
+        //g.drawText(label, (bounds.getWidth() / 2) * 0.45f, positionsRev[i], 30, 10, juce::Justification::centred);
         i += 1;
     }
 }

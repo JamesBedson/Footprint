@@ -116,8 +116,8 @@ void ReverbTypeSwitch::paint(juce::Graphics& g)
         }
     }
     juce::Rectangle<int> infoRect(bounds.getX() + 5, bounds.getY() + bounds.getHeight() * 0.7f * 0.85f, bounds.getWidth() * 0.9f, bounds.getHeight() * 0.35);
-    juce::Colour baseColor = juce::Colours::lightgrey;
-    juce::Colour darkerColor = baseColor.darker(0.4f);
+    juce::Colour baseColor = juce::Colours::lightgrey.darker();
+    juce::Colour darkerColor = juce::Colours::grey;
     juce::Colour lighterColor = baseColor.brighter(0.1f);
 
     g.setColour(darkerColor);

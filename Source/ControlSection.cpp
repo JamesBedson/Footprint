@@ -78,6 +78,7 @@ void ControlSection::paint(juce::Graphics& g)
 {
     g.setColour(juce::Colours::white);
     paintDecor(g);
+
     
     if (monoStereoSwitch.getToggleState()){
         switchLabel.setText("Stereo", juce::dontSendNotification);
