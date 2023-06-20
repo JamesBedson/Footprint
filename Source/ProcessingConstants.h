@@ -232,34 +232,24 @@ const juce::StringArray choiceArray
 
         namespace Numeric {
 
-        /*const float minGainDecibels         = -64.f;
-        const float maxGainDecibels         = 10.f;
-        const float gainIncrement           = 0.5f;
-        const float gainskew                = 1.f;*/
+        const float minGainDecibels             = 1.f;
+        const float maxGainDecibels             = 30.f;
+        const float gainIncrement               = 0.5f;
+        const float gainskew                    = 1.f;
+        
+        const float minLevel                    = 0.f;
+        const float maxLevel                    = 1.f;
+        const float levelIncrement              = 0.01f;
+        const float levelSkew                   = 1.f;
 
-        const float minGainDecibels = 0.5f;
-        const float maxGainDecibels = 30.f;
-        const float gainIncrement = 0.5f;
-        const float gainskew = 1.f;
+        const float minTone                     = 0.05f;
+        const float maxTone                     = 1.f;
+        const float toneIncrement               = 0.01f;
+        const float toneSkew                    = 1.f;
         
-        const float minLevel                = 0.f;
-        const float maxLevel                = 1.f;
-        const float levelIncrement          = 0.01f;
-        const float levelSkew               = 1.f;
-        
-        /*const float minTone                 = 0.1f;
-        const float maxTone                 = 1.f;
-        const float toneIncrement           = 0.01f;
-        const float toneSkew                = 1.f;*/
-
-        const float minTone = 0.05f;
-        const float maxTone = 1.f;
-        const float toneIncrement = 0.01f;
-        const float toneSkew = 1.f;
-        
-        const float defaultGainDecibels     = 0.f;
-        const float defaultLevel            = 1.f;
-        const float defaultTone             = 0.6f;
+        const float defaultGainDecibels         = 0.f;
+        const float defaultLevel                = 1.f;
+        const float defaultTone                 = 0.6f;
 
         }
 

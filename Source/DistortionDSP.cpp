@@ -55,20 +55,18 @@ void Distortion::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
         for (int n = 0; n < buffer.getNumSamples(); n++) {
             
             // Tone:            
-            if (toneVal < 0.65f) applyFilter(true, buffer, ch, n, cutoff, previousXsignal, previousYsignal); // Low pass filter
-            else applyFilter(false, buffer, ch, n, 400.f * toneVal, previousXsignal, previousYsignal); // High pass filter
+            if (toneVal < 0.5f) applyFilter(true, buffer, ch, n, cutoff, previousXsignal, previousYsignal); // Low pass filter
+            else if (toneVal > 0.65f) applyFilter(false, buffer, ch, n, 500.f * toneVal * toneVal, previousXsignal, previousYsignal); // High pass filter
 
             // Gain:
-            if (gainVal > 0.f) {
-                value = channelDataRead[n];
-                waveShaper = 1.f - std::exp(-gainVal * std::abs(value));
+            value = channelDataRead[n];
 
-                if (value >= 0.f) sign = 1.f;
-                else            sign = -1.f;
+            waveShaper = 1.f - std::exp(-gainVal * std::abs(value));
+            if (value >= 0.f) sign = 1.f;
+            else            sign = -1.f;
 
-                channelDataWrite[n] = sign * waveShaper;
-            }
-            
+            channelDataWrite[n] = sign * waveShaper;
+
             // Level:
             channelDataWrite[n] *= levelVal;
         }
