@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "GUIAttributes.h"
 
 class ReverbTypeSwitch : public juce::Component
 {
