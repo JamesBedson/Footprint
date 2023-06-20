@@ -219,8 +219,8 @@ const juce::StringArray choiceArray
         const float gainIncrement           = 0.5f;
         const float gainskew                = 1.f;*/
 
-        const float minGainDecibels = 0.f;
-        const float maxGainDecibels = 20.f;
+        const float minGainDecibels = 0.5f;
+        const float maxGainDecibels = 30.f;
         const float gainIncrement = 0.5f;
         const float gainskew = 1.f;
         

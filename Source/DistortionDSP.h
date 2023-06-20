@@ -24,11 +24,9 @@ public:
     void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer& midiMessages) override;
 
     FMatrix getLPFCoefficients(float cutoffFreq);
-    void applyLPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY);
-    
     FMatrix getHPFCoefficients(float cutoffFreq);
-    void applyHPF(juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY);
-
+    void applyFilter(bool type, juce::AudioBuffer<float>& buffer, int ch, int n, double cutoff, FMatrix& previousX, FMatrix& previousY);
+    
     void setGain(std::atomic<float>*);
     void setLevel(std::atomic<float>*);
     void setTone(std::atomic<float>*);
