@@ -41,16 +41,13 @@ private:
     ReverbTypeSwitch reverbTypeSwitch;
     juce::Value irSetting;
     
-    //std::vector<juce::Slider*> sliders {&mix, &highCut, &lowCut};
-    //SliderAttachment mixAttachment, lowpassAttachment, highpassAttachment;
-    std::vector<juce::Slider*> sliders{ &mix};
-    SliderAttachment mixAttachment;
+    std::vector<juce::Slider*> sliders {&mix, &highCut, &lowCut};
+    
+    SliderAttachment mixAttachment, lowpassAttachment, highpassAttachment;
     juce::Value impulseResponseChoice;
     
-    //juce::Label mixLabel, highCutLabel, lowCutLabel, typeLabel;
-    //std::vector<juce::Label*> sliderLabels{ &mixLabel, &highCutLabel, &lowCutLabel, &typeLabel};
-    juce::Label mixLabel, typeLabel;
-    std::vector<juce::Label*> sliderLabels{ &mixLabel, &typeLabel };
+    juce::Label mixLabel, highCutLabel, lowCutLabel, typeLabel;
+    std::vector<juce::Label*> sliderLabels{ &mixLabel, &highCutLabel, &lowCutLabel, &typeLabel};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbPedal)
 };

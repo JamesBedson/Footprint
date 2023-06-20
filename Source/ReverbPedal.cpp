@@ -15,8 +15,8 @@
 ReverbPedal::ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs, const int& pedalSlot)
 : Pedal(pedalSlot),
 mixAttachment(processor->apvts, parameterIDs[0], mix),
-//lowpassAttachment(processor->apvts, parameterIDs[1], lowCut),
-//highpassAttachment(processor->apvts, parameterIDs[2], highCut),
+lowpassAttachment(processor->apvts, parameterIDs[1], lowCut),
+highpassAttachment(processor->apvts, parameterIDs[2], highCut),
 reverbTypeSwitch(processor, parameterIDs[3].toStdString())
 {
     p = processor;
@@ -65,22 +65,22 @@ reverbTypeSwitch(processor, parameterIDs[3].toStdString())
 
 
     mixLabel.attachToComponent(&mix, false);
-    //highCutLabel.attachToComponent(&highCut, false);
-    //lowCutLabel.attachToComponent(&lowCut, false);
+    highCutLabel.attachToComponent(&highCut, false);
+    lowCutLabel.attachToComponent(&lowCut, false);
     typeLabel.attachToComponent(&reverbTypeSwitch, false);
 
     juce::Font labelFont;
     labelFont.setTypefaceName("Futura");
     labelFont.setHeight(GUIAttributes::PedalFontSizes::h2);
     mixLabel.setFont(labelFont);
-    //highCutLabel.setFont(labelFont);
-    //lowCutLabel.setFont(labelFont);
+    highCutLabel.setFont(labelFont);
+    lowCutLabel.setFont(labelFont);
     typeLabel.setFont(labelFont);
 
     mixLabel.setText("Mix", juce::dontSendNotification);
-    //highCutLabel.setText("H.Cut", juce::dontSendNotification);
-    //lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
-    //typeLabel.setText("Type", juce::dontSendNotification);
+    highCutLabel.setText("H.Cut", juce::dontSendNotification);
+    lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
+    typeLabel.setText("Type", juce::dontSendNotification);
 }
 
 ReverbPedal::~ReverbPedal()
@@ -121,8 +121,8 @@ void ReverbPedal::resizeChild(){
         slider->setSize(sliderWidth, sliderHeight);
         }
     mix.setCentrePosition                       (sliderCol2CentreX, sliderRow2CentreY - 85);
-    //highCut.setCentrePosition                   (sliderCol3CentreX, sliderRow1CentreY);
-    //lowCut.setCentrePosition                    (sliderCol1CentreX, sliderRow1CentreY);
+    highCut.setCentrePosition                   (sliderCol3CentreX, sliderRow1CentreY);
+    lowCut.setCentrePosition                    (sliderCol1CentreX, sliderRow1CentreY);
     reverbTypeSwitch.setCentrePosition          (sliderCol2CentreX, sliderRow3CentreY);
 
     for (auto& label : sliderLabels) {

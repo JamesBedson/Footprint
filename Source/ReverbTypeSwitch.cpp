@@ -22,57 +22,6 @@ ReverbTypeSwitch::~ReverbTypeSwitch()
 {
 }
 
-//void ReverbTypeSwitch::paint(juce::Graphics& g)
-//{
-//    juce::Rectangle<int> bounds = getLocalBounds();
-//    int settingWidth = bounds.getWidth() / 4;
-//    int settingHeight = bounds.getHeight();
-//    int switchHeight = 20;
-//
-//    // Calculate the position and rectangle for the background rounded rectangle
-//    juce::Rectangle<int> backgroundRect(bounds.getX(), (settingHeight - switchHeight) / 2, bounds.getWidth(), switchHeight);
-//    g.setColour(juce::Colours::white);
-//    g.drawRoundedRectangle(backgroundRect.reduced(5.f, 2.f).toFloat(), 7.f, 1.2f);
-//
-//    for (int i = 0; i < 4; ++i)
-//    {
-//        juce::Rectangle<int> settingRect(i * settingWidth, (settingHeight - switchHeight) / 2, settingWidth, switchHeight);
-//        if (i == currentSetting)
-//        {
-//            g.setColour(juce::Colours::white);
-//            g.fillRoundedRectangle(settingRect.reduced(6.f, 2.f).toFloat(), 7.f);
-//        }
-//    }
-//}
-
-//void ReverbTypeSwitch::paint(juce::Graphics& g)
-//{
-//    juce::Rectangle<int> bounds = getLocalBounds();
-//    int settingWidth = bounds.getWidth() / 4;
-//    int settingHeight = bounds.getHeight();
-//    int switchHeight = 15;
-//    int ledHeight = 20;
-//    float ledInterSpace = 0.88f;
-//    float ledSectionDisplacement = 35.f;
-//
-//    juce::Rectangle<int> buttonRect(bounds.getX(), (settingHeight - switchHeight) / 2, switchHeight, switchHeight);
-//    g.setColour(juce::Colours::white);
-//    g.fillRoundedRectangle(buttonRect.toFloat(), 5.f);
-//
-//    int ledSize = ledHeight * 0.5;
-//    for (int i = 0; i < 4; ++i)
-//    {
-//        // Calculate the position and rectangle for each LED
-//        juce::Rectangle<int> ledRect((i * settingWidth * ledInterSpace) + ledSectionDisplacement, (settingHeight - ledSize) / 2, ledSize, ledSize);
-//
-//        // Customize the LED appearance
-//        g.setColour(juce::Colours::lightgrey);
-//        if (i == currentSetting)
-//            g.setColour(juce::Colours::green);
-//        g.fillEllipse(ledRect.toFloat());
-//    }
-//}
-
 void ReverbTypeSwitch::paint(juce::Graphics& g)
 {
     //g.fillAll();
@@ -143,13 +92,13 @@ void ReverbTypeSwitch::paint(juce::Graphics& g)
         g.drawText("Bathroom", infoRect, juce::Justification::centred, true);
         break;
     case 1:
-        g.drawText("Aranyó Short", infoRect, juce::Justification::centred, true);
+        g.drawText("Aranyï¿½ Short", infoRect, juce::Justification::centred, true);
         break;
     case 2:
-        g.drawText("Aranyó Long", infoRect, juce::Justification::centred, true);
+        g.drawText("Aranyï¿½ Long", infoRect, juce::Justification::centred, true);
         break;
     case 3:
-        g.drawText("Tànger", infoRect, juce::Justification::centred, true);
+        g.drawText("Tï¿½nger", infoRect, juce::Justification::centred, true);
         break;
     default:
         break;
