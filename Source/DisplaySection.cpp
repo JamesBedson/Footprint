@@ -99,14 +99,14 @@ void DisplaySection::paint (juce::Graphics& g)
     g.drawText("+", 639, 25, 40, 100, juce::Justification::centred);
     font.setHeight(GUIAttributes::DisplayFontSizes::h2);
     g.setFont(font); // Set the updated font
-    g.drawText("In", 20, 118, 40, 210, juce::Justification::centred);
-    g.drawText("Out", 80, 118, 40, 210, juce::Justification::centred);
+    g.drawText("In", 17, 118, 40, 210, juce::Justification::centred);
+    g.drawText("Out", 85, 118, 40, 210, juce::Justification::centred);
     font.setHeight(GUIAttributes::DisplayFontSizes::h3);
     g.setFont(font); // Set the updated font
     g.drawText("Peak RMS", 17, 19, 100, 10, juce::Justification::centred);
 
     g.setColour(juce::Colours::black.brighter());
-    juce::Line<float> vLine (juce::Point<float>(levelMeterLineX, getLocalBounds().getY() + 30.f), juce::Point<float>(levelMeterLineX, getLocalBounds().getY() + 220.f));
+    juce::Line<float> vLine (juce::Point<float>(levelMeterVLine, getLocalBounds().getY() + 30.f), juce::Point<float>(levelMeterVLine, getLocalBounds().getY() + 220.f));
     g.drawLine(vLine, 2.0f);
 }
 
@@ -126,12 +126,13 @@ void DisplaySection::resized()
     float m = 60.f; //out displacement
     
     const int distanceOuterToBounds         = bounds.getWidth() * 0.04f;
-    const int levelMeterHeight              = bounds.getHeight() * 0.6f;
-    const int levelMeterWidth               = bounds.getWidth() * 0.01f;
+    const int levelMeterHeight              = bounds.getHeight() * 0.655f;
+    const int levelMeterWidth               = bounds.getWidth() * 0.013f;
     const int distanceLRChannel             = bounds.getWidth() * 0.01f;
-    const int levelMeterY                   = bounds.getY() + getHeight() * 0.25f;
-    
-    levelMeterLineX = bounds.getX() + getWidth() * 0.19f;
+    const int levelMeterY                   = bounds.getY() + getHeight() * 0.20f;
+    levelMeterLineX                         = bounds.getX() + getWidth() * 0.21f;
+    levelMeterVLine                         = bounds.getX() + getWidth() * 0.19f;
+    levelMeterText                          = bounds.getX() + getWidth() * 0.21f;
     
     levelInMeterLeft.setBounds(bounds.getX() + distanceOuterToBounds,
                                levelMeterY,

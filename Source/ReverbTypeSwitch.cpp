@@ -30,19 +30,19 @@ void ReverbTypeSwitch::paint(juce::Graphics& g)
     int settingHeight = bounds.getHeight();
     int switchHeight = 17;
     int ledHeight = 20;
-    float ledInterSpace = 0.78f;
+    float ledInterSpace = 0.90f;
     float ledSectionDisplacement = 35.f;
 
     juce::Rectangle<int> buttonRect(bounds.getX() + 5, (settingHeight - switchHeight) * 0.25f, switchHeight, switchHeight);
     g.setColour(juce::Colours::white);
-    g.fillRoundedRectangle(buttonRect.toFloat(), 5.f);
+    //g.fillRoundedRectangle(buttonRect.toFloat(), 5.f);
 
     for (int i = 0; i < 4; ++i)
     {
         float ledSize = ledHeight * (0.5 + i * 0.1); // Increase the size of the LEDs with each iteration
         int xPos = (i * settingWidth * ledInterSpace) + ledSectionDisplacement;
         int yPos = (settingHeight - ledSize) * 0.5f;
-        juce::Rectangle<int> ledRect(xPos, yPos - 22, ledSize, ledSize);
+        juce::Rectangle<int> ledRect(xPos - 20, yPos - 15, ledSize, ledSize);
 
         if (i == currentSetting)
         {
