@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "GUIAttributes.h"
 
 class LevelMeter : public juce::Component
 {
@@ -25,7 +26,7 @@ public:
 		g.fillRoundedRectangle(bounds, 3.f);
 		//map level will go from -60 / 6 to 0/width
 		g.setColour(juce::Colours::white);
-		const auto scaledX = juce::jmap(level, -60.f, 6.f, 0.f, static_cast<float>(getHeight()));
+		const auto scaledX = juce::jmap(level, GUIAttributes::LevelMeterRange::minLMR, GUIAttributes::LevelMeterRange::maxLMR, 0.f, static_cast<float>(getHeight()));
 		g.fillRoundedRectangle(bounds.removeFromBottom(scaledX), 5.f);
 	}
 

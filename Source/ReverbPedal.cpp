@@ -80,7 +80,7 @@ reverbTypeSwitch(processor, parameterIDs[3].toStdString())
     mixLabel.setText("Mix", juce::dontSendNotification);
     highCutLabel.setText("H.Cut", juce::dontSendNotification);
     lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
-    //typeLabel.setText("Type", juce::dontSendNotification);
+    typeLabel.setText("Type", juce::dontSendNotification);
 }
 
 ReverbPedal::~ReverbPedal()
@@ -120,7 +120,7 @@ void ReverbPedal::resizeChild(){
     for (auto& slider : sliders) {
         slider->setSize(sliderWidth, sliderHeight);
         }
-    mix.setCentrePosition                       (sliderCol2CentreX, sliderRow2CentreY - 20);
+    mix.setCentrePosition                       (sliderCol2CentreX, sliderRow2CentreY - 85);
     highCut.setCentrePosition                   (sliderCol3CentreX, sliderRow1CentreY);
     lowCut.setCentrePosition                    (sliderCol1CentreX, sliderRow1CentreY);
     reverbTypeSwitch.setCentrePosition          (sliderCol2CentreX, sliderRow3CentreY);
@@ -137,7 +137,7 @@ void ReverbPedal::resizeChild(){
     int switchHeight = 20;
     int switchX = sliderCol2CentreX - switchWidth / 2;
     int switchY = sliderRow3CentreY - switchHeight / 2 - 10;
-    juce::Rectangle<int> switchBounds(switchX, switchY, switchWidth, switchHeight);
+    juce::Rectangle<int> switchBounds(switchX, switchY - 80, switchWidth, switchHeight + 80);
     reverbTypeSwitch.setBounds(switchBounds);
 }
 
