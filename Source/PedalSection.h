@@ -70,7 +70,6 @@ private:
     juce::StringArray getDistortionParameterIDs(const int& idx);
     
     void assignSlotChoice(const int& slotIdx, const int& pedalTypeID);
-    int count = 0;
     ComponentVector activeComponents;
     
     void paintDecor(juce::Graphics&);
