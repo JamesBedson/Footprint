@@ -28,7 +28,7 @@ reverbTypeSwitch(processor, parameterIDs[3].toStdString())
     
     else if     (pedalSlot == 2) {
         bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed2));
-        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice1));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice2));
     }
     
     else if     (pedalSlot == 3) {
@@ -54,15 +54,6 @@ reverbTypeSwitch(processor, parameterIDs[3].toStdString())
     }
     addAndMakeVisible(reverbTypeSwitch);
     startTimerHz(30);
-    //type.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
-    //type.setRange(0, 3, 1); // Range from 0 to 3 with a step size of 1
-    //type.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0); // Hide the text box
-    //type.setNumDecimalPlacesToDisplay(0); // Display integers only
-    //type.setPopupDisplayEnabled(true, false, this); // Enable the popup display
-    //type.setColour(juce::Slider::backgroundColourId, juce::Colours::white.withAlpha(0.5f));
-    //type.setColour(juce::Slider::trackColourId, juce::Colours::lightblue);
-    //type.setColour(juce::Slider::thumbColourId, juce::Colours::white);
-
 
     mixLabel.attachToComponent(&mix, false);
     highCutLabel.attachToComponent(&highCut, false);
@@ -78,9 +69,7 @@ reverbTypeSwitch(processor, parameterIDs[3].toStdString())
     typeLabel.setFont(labelFont);
 
     mixLabel.setText("Mix", juce::dontSendNotification);
-    //highCutLabel.setText("H.Cut", juce::dontSendNotification);
-    //lowCutLabel.setText("L.Cut", juce::dontSendNotification);;
-    //typeLabel.setText("Type", juce::dontSendNotification);
+
 }
 
 ReverbPedal::~ReverbPedal()
@@ -111,12 +100,6 @@ void ReverbPedal::paint(juce::Graphics& g)
 
 void ReverbPedal::resizeChild(){
     
-    //for (auto& slider : sliders){
-    //    if (slider != &reverbTypeSwitch){
-    //        slider->setSize(sliderWidth, sliderHeight);
-    //    }
-    //    else type.setSize(150, 50);
-    //}
     for (auto& slider : sliders) {
         slider->setSize(sliderWidth, sliderHeight);
         }
