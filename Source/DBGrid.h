@@ -21,8 +21,11 @@ public:
 
     void paint(juce::Graphics& g) override;
     void resized()                override;
+    juce::Array<float> getPositions();
+
 
 private:
+    //juce::Array<float> dbValues = {6.f, 3.f, 0.f, -3.f, -12.f, -24.f, -48.f, -60.f, -96.f};
+    juce::Array<float> dbValues = {6.f, 3.f, 0.f, -3.f, -12.f, -24.f, -48.f, -60.f};
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DBGrid)
 };
-

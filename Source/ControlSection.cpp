@@ -78,6 +78,7 @@ void ControlSection::paint(juce::Graphics& g)
 {
     g.setColour(juce::Colours::white);
     paintDecor(g);
+
     
     if (monoStereoSwitch.getToggleState()){
         switchLabel.setText("Stereo", juce::dontSendNotification);
@@ -95,7 +96,9 @@ void ControlSection::resized()
     sliderCol1CentreX = getX() + width * 0.25f;
     sliderRow1CentreY = getY() + height * 0.45f;
     sliderCol2CentreX = getX() + width * 0.71f;
-    sliderRow2CentreY = getY() + height * 0.72f;
+    sliderRow2CentreY = getY() + height * 0.685f;
+    auto toggleRowCentreX  = getX() + width * 0.25f;
+    auto toggleRowCentreY  = getY() + height * 0.72f;
 
     sliderWidth       = 75;
     sliderHeight      = 75;
@@ -127,7 +130,7 @@ void ControlSection::resized()
     
     //toggle.setBounds(width * 0.20f ,height * 0.65f , toggleWidth, toggleHeight);
     monoStereoSwitch.setSize(toggleWidth, toggleHeight);
-    monoStereoSwitch.setCentrePosition(sliderCol1CentreX, sliderRow2CentreY + 35.f);
+    monoStereoSwitch.setCentrePosition(toggleRowCentreX, toggleRowCentreY + 35.f);
     
     auto switchBounds = switchLabel.getAttachedComponent()->getBounds();
     auto bottomX = switchBounds.getBottomLeft().getX();
@@ -138,13 +141,13 @@ void ControlSection::resized()
 void ControlSection::paintDecor(juce::Graphics& g) {
 
     juce::Line<float> line1(juce::Point<float>((getLocalBounds().getWidth() * (-1.0f)), getLocalBounds().getHeight() * 0.45f), juce::Point<float>((getLocalBounds().getWidth() * (0.07f)), getLocalBounds().getHeight() * 0.45f));
-    /*juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.5f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.5f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
-    juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.75f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.75f) + 20.0f, getLocalBounds().getHeight() * 0.5f));*/
+    juce::Line<float> line2(juce::Point<float>((getLocalBounds().getWidth() * 0.5f) - 22.0f, getLocalBounds().getHeight() * 0.87f), juce::Point<float>((getLocalBounds().getWidth() * 0.5f) + 16.0f, getLocalBounds().getHeight() * 0.87f));
+    //juce::Line<float> line3(juce::Point<float>((getLocalBounds().getWidth() * 0.75f) - 17.0f, getLocalBounds().getHeight() * 0.5f), juce::Point<float>((getLocalBounds().getWidth() * 0.75f) + 20.0f, getLocalBounds().getHeight() * 0.5f));
 
 
     g.drawLine(line1, 2.0f);
-    /*g.drawLine(line2, 2.0f);
-    g.drawLine(line3, 2.0f);*/
+    g.drawLine(line2, 2.0f);
+    //g.drawLine(line3, 2.0f);
 
 
 }

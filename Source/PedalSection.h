@@ -30,8 +30,7 @@ using ComponentVector = std::vector<std::unique_ptr<juce::Component>>;
 class PedalSection
 : public juce::Component,
 public juce::ComboBox::Listener,
-public juce::Timer,
-public juce::AudioProcessorValueTreeState::Listener
+public juce::Timer
 
 {
 public:
@@ -42,7 +41,7 @@ public:
     void resized() override;
     void comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged) override;
     void timerCallback() override;
-    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    //void parameterChanged (const juce::String& parameterID, float newValue) override;
 
     ComboBoxLookandFeel comboBoxLookandFeel;
 
@@ -70,6 +69,7 @@ private:
     juce::StringArray getReverbParameterIDs(const int& idx);
     juce::StringArray getDistortionParameterIDs(const int& idx);
     
+    void assignSlotChoice(const int& slotIdx, const int& pedalTypeID);
     ComponentVector activeComponents;
     
     void paintDecor(juce::Graphics&);

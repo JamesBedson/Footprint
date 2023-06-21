@@ -91,17 +91,22 @@ void DisplaySection::paint (juce::Graphics& g)
     g.setColour(juce::Colours::white);
     juce::Font font;
     font.setTypefaceName("Futura");
+    font.setHeight(GUIAttributes::DisplayFontSizes::h5);
+    g.setFont(font); // Set the updated font
+    g.drawText("_", 639, 65, 40, 210, juce::Justification::centred);
+    font.setHeight(GUIAttributes::DisplayFontSizes::h6);
+    g.setFont(font); // Set the updated font
+    g.drawText("+", 639, 25, 40, 100, juce::Justification::centred);
     font.setHeight(GUIAttributes::DisplayFontSizes::h2);
     g.setFont(font); // Set the updated font
-    g.drawText("Zoom", 639, 75, 40, 210, juce::Justification::centred);
-    g.drawText("In", 30, 118, 40, 210, juce::Justification::centred);
-    g.drawText("Out", 91, 118, 40, 210, juce::Justification::centred);
+    g.drawText("In", 17, 118, 40, 210, juce::Justification::centred);
+    g.drawText("Out", 85, 118, 40, 210, juce::Justification::centred);
     font.setHeight(GUIAttributes::DisplayFontSizes::h3);
     g.setFont(font); // Set the updated font
     g.drawText("Peak RMS", 17, 19, 100, 10, juce::Justification::centred);
 
     g.setColour(juce::Colours::black.brighter());
-    juce::Line<float> vLine (juce::Point<float>((getLocalBounds().getX()) + 130.f, getLocalBounds().getY() + 30.f), juce::Point<float>((getLocalBounds().getX()) + 130.f, getLocalBounds().getY() + 220.f));
+    juce::Line<float> vLine (juce::Point<float>(levelMeterVLine, getLocalBounds().getY() + 30.f), juce::Point<float>(levelMeterVLine, getLocalBounds().getY() + 220.f));
     g.drawLine(vLine, 2.0f);
 }
 
@@ -109,17 +114,40 @@ void DisplaySection::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
+    juce::Rectangle<int> bounds = getLocalBounds();
     inputWaveform.setBounds(140, 18, 500, 100);
     outputWaveform.setBounds(140, 125, 500, 100);
-    dBGrid.setBounds(67, 37, 45, 180);
+    dBGrid.setBounds(47, 45, 45, 167);
     WaveformZoom.setBounds(639, 75, 40, 100);
 
     inputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
     outputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
 
-    levelInMeterLeft.setBounds(365, 80, 9, 168);
-    levelInMeterRight.setBounds(380, 80, 9, 168);
+    float m = 60.f; //out displacement
+    
+    const int distanceOuterToBounds         = bounds.getWidth() * 0.04f;
+    const int levelMeterHeight              = bounds.getHeight() * 0.655f;
+    const int levelMeterWidth               = bounds.getWidth() * 0.013f;
+    const int distanceLRChannel             = bounds.getWidth() * 0.01f;
+    const int levelMeterY                   = bounds.getY() + getHeight() * 0.20f;
+    levelMeterLineX                         = bounds.getX() + getWidth() * 0.21f;
+    levelMeterVLine                         = bounds.getX() + getWidth() * 0.19f;
+    levelMeterText                          = bounds.getX() + getWidth() * 0.21f;
+    
+    levelInMeterLeft.setBounds(bounds.getX() + distanceOuterToBounds,
+                               levelMeterY,
+                               levelMeterWidth,
+                               levelMeterHeight);
+    
+    levelInMeterRight.setBounds(levelInMeterLeft.getRight() + distanceLRChannel,
+                                levelMeterY,
+                                levelMeterWidth,
+                                levelMeterHeight);
 
-    levelOutMeterLeft.setBounds(415, 80, 9, 168);
-    levelOutMeterRight.setBounds(430, 80, 9, 168);
+    levelOutMeterRight.setSize(levelMeterWidth, levelMeterHeight);
+    levelOutMeterRight.setTopRightPosition(levelMeterLineX - distanceOuterToBounds, levelMeterY);
+    
+    levelOutMeterLeft.setSize(levelMeterWidth, levelMeterHeight);
+    levelOutMeterLeft.setTopRightPosition(levelOutMeterRight.getX() - distanceLRChannel, levelMeterY);
+    
 }

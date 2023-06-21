@@ -41,6 +41,11 @@ public:
     LevelMeter levelOutMeterLeft, levelOutMeterRight;
 
     DBGrid dBGrid;
+    int levelMeterLineX;
+    int levelMeterText;
+    int levelMeterVLine;
+    int distanceOuterToBounds;
+    int levelMeterY;
 
 private:
     

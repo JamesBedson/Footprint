@@ -93,23 +93,63 @@ DBGrid::~DBGrid()
 //g.drawFittedText(label, labelBounds, juce::Justification::centredRight, 1);
 void DBGrid::paint(juce::Graphics& g)
 {
-    g.setColour(juce::Colours::red);
-    g.fillAll();
-    g.setColour(juce::Colours::white.darker());
+    //g.setColour(juce::Colours::red);
+    //g.fillAll();
     juce::Rectangle<int> bounds = getLocalBounds();
-    juce::Array<float> dbValues = {6.f, 3.f, 0.f, -3.f, -12.f, -24.f, -48.f, -60.f, -96.f};
+    float top = bounds.getY();
+    float bottom = bounds.getBottom();
+    juce::Array<float> normPositions;
+    g.setColour(juce::Colours::white.darker().darker().darker().darker());
+
+    for (auto value : dbValues)
+    {
+        float y = juce::jmap(value, GUIAttributes::LevelMeterRange::minLMR, GUIAttributes::LevelMeterRange::maxLMR, top, bottom);
+        normPositions.add(y);
+        juce::Line<float> line{float(bounds.getX()), y, float(bounds.getRight()), y };
+        //g.drawLine(line);
+    }
+
+    juce::Array<float> positions = getPositions();
+    juce::Array<float> positionsRev = positions;
+    std::reverse(positionsRev.begin(), positionsRev.end());
+
+    g.setColour(juce::Colours::white.darker());
+    juce::String label;
+    juce::Font font;
+    font.setTypefaceName("Futura");
+    auto i = 0;
+    for (auto value : dbValues)
+    {
+        if (value >= 0)
+            label = "+" + juce::String(value) + "dB";
+        else
+            label = "-" + juce::String(-value) + "dB";
+
+        float fontSize = juce::jmap(std::abs(value), GUIAttributes::LevelMeterRange::maxLMR, GUIAttributes::LevelMeterRange::minLMR, float(GUIAttributes::DisplayFontSizes::h7), float(GUIAttributes::DisplayFontSizes::h8));
+        font.setHeight(fontSize);
+        g.setFont(font);
+        //g.drawText(label, (bounds.getWidth() / 2) * 0.45f, positionsRev[i], 30, 10, juce::Justification::centred);
+        i += 1;
+    }
+}
+
+juce::Array<float> DBGrid::getPositions()
+{
+    juce::Rectangle<int> bounds = getLocalBounds();
     float top = bounds.getY();
     float bottom = bounds.getBottom();
     juce::Array<float> normPositions;
     for (auto value : dbValues)
     {
-        float y = juce::jmap(value, -96.f, 6.f, top, bottom);
+        float y = juce::jmap(value, GUIAttributes::LevelMeterRange::minLMR, GUIAttributes::LevelMeterRange::maxLMR, top, bottom);
         normPositions.add(y);
-        juce::Line<float> line{float(bounds.getX()), y, float(bounds.getRight()), y };
-        g.drawLine(line);
     }
+    return normPositions;
 }
+
 
 void DBGrid::resized()
 {
 }
+
+

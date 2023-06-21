@@ -15,18 +15,19 @@
 PedalSection::PedalSection(FootprintAudioProcessor* processor)
 {
     processorPtr = processor;
-    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot1Param, this);
-    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
-    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
-    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
+    //processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot1Param, this);
+    //processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
+    //processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
+    //processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
     activeComponents.resize(4);
     slotParameterVector.resize(4);
     
     for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++){
-        activeComponents[componentIdx] = createComboBox();
-        activeComponents[componentIdx]->setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
-        addAndMakeVisible(activeComponents[componentIdx].get());
-    }
+            activeComponents[componentIdx] = createComboBox();
+            activeComponents[componentIdx]->setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
+            addAndMakeVisible(activeComponents[componentIdx].get());
+        }
+    
     startTimerHz(25);
     
     slot1Choice = static_cast<juce::AudioParameterChoice*>(processor->apvts.getParameter(ProcessingConstants::Pedals::Identifiers::slot1Param));
@@ -39,6 +40,68 @@ PedalSection::PedalSection(FootprintAudioProcessor* processor)
     slotParameterVector[2] = slot3Choice;
     slotParameterVector[3] = slot4Choice;
     
+    for (int slotIdx = 0; slotIdx < activeComponents.size(); slotIdx++) {
+        auto* pedalChoice       = slotParameterVector[slotIdx];
+        int pedalTypeID;
+        if (slotIdx == 0) {
+            pedalTypeID   = static_cast<int>(processorPtr->apvts.getRawParameterValue(ProcessingConstants::Pedals::Identifiers::slot1Param)->load());
+        }
+        
+        else if (slotIdx == 1) {
+            pedalTypeID   = static_cast<int>(processorPtr->apvts.getRawParameterValue(ProcessingConstants::Pedals::Identifiers::slot2Param)->load());
+        }
+        
+        else if (slotIdx == 2) {
+            pedalTypeID = static_cast<int>(processorPtr->apvts.getRawParameterValue(ProcessingConstants::Pedals::Identifiers::slot3Param)->load());
+        }
+        
+        else {
+            pedalTypeID = static_cast<int>(processorPtr->apvts.getRawParameterValue(ProcessingConstants::Pedals::Identifiers::slot4Param)->load());
+        }
+        
+        
+        if (pedalTypeID == 0) {
+            activeComponents[slotIdx] = createComboBox();
+            activeComponents[slotIdx]->setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
+            addAndMakeVisible(*activeComponents[slotIdx]);
+        }
+        
+        else if (pedalTypeID == 1) { // Compressor
+            //this->removeChildComponent(activeComponents[slotIdx].get());
+            activeComponents[slotIdx] = std::make_unique<CompressorPedal>(this->processorPtr, getCompressorParameterIDs(slotIdx), slotIdx + 1);
+            auto* pedal = dynamic_cast<CompressorPedal*>(activeComponents[slotIdx].get());
+            addAndMakeVisible(pedal);
+            pedal->setBounds(*pedalSlots[slotIdx]);
+            *pedalChoice = 1.f;
+        }
+        
+        else if (pedalTypeID == 2) { // Distortion
+            //this->removeChildComponent(activeComponents[slotIdx].get());
+            activeComponents[slotIdx] = std::make_unique<DistortionPedal>(this->processorPtr, getDistortionParameterIDs(slotIdx), slotIdx + 1);
+            auto* pedal = dynamic_cast<DistortionPedal*>(activeComponents[slotIdx].get());
+            addAndMakeVisible(pedal);
+            pedal->setBounds(*pedalSlots[slotIdx]);
+            *pedalChoice = 2.f;
+        }
+        
+        else if (pedalTypeID == 3) { // Envelope Filter
+            //this->removeChildComponent(activeComponents[slotIdx].get());
+            activeComponents[slotIdx] = std::make_unique<EnvelopePedal>(this->processorPtr, getEnvelopeFilterParameterIDs(slotIdx), slotIdx + 1);
+            auto* pedal = dynamic_cast<EnvelopePedal*>(activeComponents[slotIdx].get());
+            addAndMakeVisible(pedal);
+            pedal->setBounds(*pedalSlots[slotIdx]);
+            *pedalChoice = 3.f;
+        }
+        
+        else if (pedalTypeID == 4) { // Reverb
+            //this->removeChildComponent(activeComponents[slotIdx].get());
+            activeComponents[slotIdx] = std::make_unique<ReverbPedal>(this->processorPtr, getReverbParameterIDs(slotIdx), slotIdx + 1);
+            auto* pedal = dynamic_cast<ReverbPedal*>(activeComponents[slotIdx].get());
+            addAndMakeVisible(pedal);
+            pedal->setBounds(*pedalSlots[slotIdx]);
+            *pedalChoice = 4.f;
+        }
+    }
 }
 
 PedalSection::~PedalSection()
@@ -87,8 +150,10 @@ void PedalSection::resized()
     boxSlot4.setSize(slotSizeWidth, slotSizeHeight * 0.1f);
     boxSlot4.setCentre(slot4Centre);
     
-    for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++){
-        activeComponents[componentIdx]->setBounds(*boxSlots[componentIdx]);
+    for (int i = 0 ; i < activeComponents.size(); i++) {
+        auto& currentComponent = activeComponents.at(i);
+        if (dynamic_cast<Pedal*>(currentComponent.get())) currentComponent->setBounds(*pedalSlots[i]);
+        else currentComponent->setBounds(*boxSlots[i]);
     }
     
 }
@@ -144,48 +209,48 @@ void PedalSection::timerCallback() {
 }
 
 void PedalSection::comboBoxChanged(juce::ComboBox *comboBoxThatHasChanged) {
-    for (int componentIdx = 0; componentIdx < activeComponents.size(); componentIdx++) {
-        auto& component     = activeComponents[componentIdx];
-        auto* slotChoice    = slotParameterVector[componentIdx];
+    
+    for (int slotIdx = 0; slotIdx < activeComponents.size(); slotIdx++) {
+        auto& component     = activeComponents[slotIdx];
+        auto* slotChoice    = slotParameterVector[slotIdx];
         
         if (auto* comboBox = dynamic_cast<juce::ComboBox*>(component.get())) {
             if (comboBox == comboBoxThatHasChanged) {
-                
-                auto optionSelected = comboBoxThatHasChanged->getSelectedId();
-
-                if (optionSelected == 1) { // Compressor
-                    this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<CompressorPedal>(this->processorPtr, getCompressorParameterIDs(componentIdx), componentIdx + 1);
-                    auto* pedal = dynamic_cast<CompressorPedal*>(activeComponents[componentIdx].get());
+                auto pedalTypeID = comboBoxThatHasChanged->getSelectedId();
+    
+                if (pedalTypeID == 1) { // Compressor
+                    this->removeChildComponent(activeComponents[slotIdx].get());
+                    activeComponents[slotIdx] = std::make_unique<CompressorPedal>(this->processorPtr, getCompressorParameterIDs(slotIdx), slotIdx + 1);
+                    auto* pedal = dynamic_cast<CompressorPedal*>(activeComponents[slotIdx].get());
                     addAndMakeVisible(pedal);
-                    pedal->setBounds(*pedalSlots[componentIdx]);
+                    pedal->setBounds(*pedalSlots[slotIdx]);
                     *slotChoice = 1.f;
                 }
                 
-                else if (optionSelected == 2) { // Distortion
-                    this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<DistortionPedal>(this->processorPtr, getDistortionParameterIDs(componentIdx), componentIdx + 1);
-                    auto* pedal = dynamic_cast<DistortionPedal*>(activeComponents[componentIdx].get());
+                else if (pedalTypeID == 2) { // Distortion
+                    this->removeChildComponent(activeComponents[slotIdx].get());
+                    activeComponents[slotIdx] = std::make_unique<DistortionPedal>(this->processorPtr, getDistortionParameterIDs(slotIdx), slotIdx + 1);
+                    auto* pedal = dynamic_cast<DistortionPedal*>(activeComponents[slotIdx].get());
                     addAndMakeVisible(pedal);
-                    pedal->setBounds(*pedalSlots[componentIdx]);
+                    pedal->setBounds(*pedalSlots[slotIdx]);
                     *slotChoice = 2.f;
                 }
                 
-                else if (optionSelected == 3) { // Envelope Filter
-                    this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<EnvelopePedal>(this->processorPtr, getEnvelopeFilterParameterIDs(componentIdx), componentIdx + 1);
-                    auto* pedal = dynamic_cast<EnvelopePedal*>(activeComponents[componentIdx].get());
+                else if (pedalTypeID == 3) { // Envelope Filter
+                    this->removeChildComponent(activeComponents[slotIdx].get());
+                    activeComponents[slotIdx] = std::make_unique<EnvelopePedal>(this->processorPtr, getEnvelopeFilterParameterIDs(slotIdx), slotIdx + 1);
+                    auto* pedal = dynamic_cast<EnvelopePedal*>(activeComponents[slotIdx].get());
                     addAndMakeVisible(pedal);
-                    pedal->setBounds(*pedalSlots[componentIdx]);
+                    pedal->setBounds(*pedalSlots[slotIdx]);
                     *slotChoice = 3.f;
                 }
                 
-                else if (optionSelected == 4) { // Reverb
-                    this->removeChildComponent(comboBox);
-                    activeComponents[componentIdx] = std::make_unique<ReverbPedal>(this->processorPtr, getReverbParameterIDs(componentIdx), componentIdx + 1);
-                    auto* pedal = dynamic_cast<ReverbPedal*>(activeComponents[componentIdx].get());
+                else if (pedalTypeID == 4) { // Reverb
+                    this->removeChildComponent(activeComponents[slotIdx].get());
+                    activeComponents[slotIdx] = std::make_unique<ReverbPedal>(this->processorPtr, getReverbParameterIDs(slotIdx), slotIdx + 1);
+                    auto* pedal = dynamic_cast<ReverbPedal*>(activeComponents[slotIdx].get());
                     addAndMakeVisible(pedal);
-                    pedal->setBounds(*pedalSlots[componentIdx]);
+                    pedal->setBounds(*pedalSlots[slotIdx]);
                     *slotChoice = 4.f;
                 }
             }
@@ -342,6 +407,53 @@ juce::StringArray PedalSection::getEnvelopeFilterParameterIDs(const int &idx){
     return {};
 }
 
-void PedalSection::parameterChanged (const juce::String& parameterID, float newValue) {
+void PedalSection::assignSlotChoice(const int &slotIdx, const int &pedalTypeID){
+    
+    auto* slotChoice    = slotParameterVector[slotIdx];
+    if (pedalTypeID == 0) {
+        
+        activeComponents[slotIdx] = createComboBox();
+        activeComponents[slotIdx]->setMouseCursor(juce::MouseCursor::StandardCursorType::PointingHandCursor);
+        addAndMakeVisible(*activeComponents[slotIdx]);
+        
+    }
+    
+    else if (pedalTypeID == 1) { // Compressor
+        this->removeChildComponent(activeComponents[slotIdx].get());
+        activeComponents[slotIdx] = std::make_unique<CompressorPedal>(this->processorPtr, getCompressorParameterIDs(slotIdx), slotIdx + 1);
+        auto* pedal = dynamic_cast<CompressorPedal*>(activeComponents[slotIdx].get());
+        addAndMakeVisible(pedal);
+        pedal->setBounds(*pedalSlots[slotIdx]);
+        *slotChoice = 1.f;
+    }
+    
+    else if (pedalTypeID == 2) { // Distortion
+        this->removeChildComponent(activeComponents[slotIdx].get());
+        activeComponents[slotIdx] = std::make_unique<DistortionPedal>(this->processorPtr, getDistortionParameterIDs(slotIdx), slotIdx + 1);
+        auto* pedal = dynamic_cast<DistortionPedal*>(activeComponents[slotIdx].get());
+        addAndMakeVisible(pedal);
+        pedal->setBounds(*pedalSlots[slotIdx]);
+        *slotChoice = 2.f;
+    }
+    
+    else if (pedalTypeID == 3) { // Envelope Filter
+        this->removeChildComponent(activeComponents[slotIdx].get());
+        activeComponents[slotIdx] = std::make_unique<EnvelopePedal>(this->processorPtr, getEnvelopeFilterParameterIDs(slotIdx), slotIdx + 1);
+        auto* pedal = dynamic_cast<EnvelopePedal*>(activeComponents[slotIdx].get());
+        addAndMakeVisible(pedal);
+        pedal->setBounds(*pedalSlots[slotIdx]);
+        *slotChoice = 3.f;
+    }
+    
+    else if (pedalTypeID == 4) { // Reverb
+        this->removeChildComponent(activeComponents[slotIdx].get());
+        activeComponents[slotIdx] = std::make_unique<ReverbPedal>(this->processorPtr, getReverbParameterIDs(slotIdx), slotIdx + 1);
+        auto* pedal = dynamic_cast<ReverbPedal*>(activeComponents[slotIdx].get());
+        addAndMakeVisible(pedal);
+        pedal->setBounds(*pedalSlots[slotIdx]);
+        *slotChoice = 4.f;
+    }
     
 }
+
+
