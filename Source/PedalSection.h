@@ -69,6 +69,7 @@ private:
     juce::StringArray getReverbParameterIDs(const int& idx);
     juce::StringArray getDistortionParameterIDs(const int& idx);
     
+    void assignSlotChoice(const int& slotIdx, const int& pedalTypeID);
     ComponentVector activeComponents;
     
     void paintDecor(juce::Graphics&);
