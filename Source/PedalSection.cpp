@@ -15,10 +15,10 @@
 PedalSection::PedalSection(FootprintAudioProcessor* processor)
 {
     processorPtr = processor;
-    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot1Param, this);
-    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
-    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
-    processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
+    //processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot1Param, this);
+    //processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
+    //processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
+    //processorPtr->apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
     activeComponents.resize(4);
     slotParameterVector.resize(4);
     
@@ -342,6 +342,4 @@ juce::StringArray PedalSection::getEnvelopeFilterParameterIDs(const int &idx){
     return {};
 }
 
-void PedalSection::parameterChanged (const juce::String& parameterID, float newValue) {
-    
-}
+
