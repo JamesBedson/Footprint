@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="iRiNIf" name="Footprint" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              bundleIdentifier="Footprint" pluginManufacturer="ATL2023" aaxIdentifier="com.ATL2023.Footprint"
+              lv2Uri="www.upf.edu" companyWebsite="www.upf.edu" companyName="ATL2023">
   <MAINGROUP id="LHrdKF" name="Footprint">
     <GROUP id="{5DFC2991-19F8-2386-A172-F687A82AFD05}" name="Assets">
       <FILE id="UtrbeN" name="backgroundPurpleBlue.png" compile="0" resource="1"
