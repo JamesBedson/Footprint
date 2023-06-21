@@ -310,6 +310,50 @@ void FootprintAudioProcessor::setStateInformation (const void* data, int sizeInB
     auto tree = juce::ValueTree::readFromData(data, sizeInBytes);
         if (tree.isValid()){
             apvts.replaceState(tree);
+            initParameters();
+            
+            for (int slotIdx = 0; slotIdx < 4; slotIdx++){
+                
+                compressorVector[slotIdx] = std::make_unique<Compressor>();
+                initCompressorParameters(slotIdx);
+                
+                envelopeFilterVector[slotIdx] = std::make_unique<EnvelopeFilter>();
+                initEnvelopeFilterParameters(slotIdx);
+                
+                reverbVector[slotIdx] = std::make_unique<Reverb>();
+                initReverbParameters(slotIdx);
+                
+                distortionVector[slotIdx] = std::make_unique<Distortion>();
+                initDistortionParameters(slotIdx);
+                
+                audioPassThroughVector[slotIdx] = std::make_unique<AudioPassThrough>();
+            }
+            
+            inputGainModule.setGainValue(inputGain);
+            outputGainModule.setGainValue(outputGain);
+            
+            for (int slotIdx = 0; slotIdx < 4; slotIdx++){
+                
+                compressorVector[slotIdx] = std::make_unique<Compressor>();
+                initCompressorParameters(slotIdx);
+                
+                envelopeFilterVector[slotIdx] = std::make_unique<EnvelopeFilter>();
+                initEnvelopeFilterParameters(slotIdx);
+                
+                reverbVector[slotIdx] = std::make_unique<Reverb>();
+                initReverbParameters(slotIdx);
+                
+                distortionVector[slotIdx] = std::make_unique<Distortion>();
+                initDistortionParameters(slotIdx);
+                
+                audioPassThroughVector[slotIdx] = std::make_unique<AudioPassThrough>();
+            }
+            
+            apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot1Param, this);
+            apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
+            apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
+            apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
+            
         }
 }
 
