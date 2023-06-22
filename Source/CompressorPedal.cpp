@@ -21,10 +21,10 @@ ratioAttachment(processor->apvts, parameterIDs[3], ratio)
 {
     p = processor;
     
-    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed1));
-    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed2));
-    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed3));
-    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed4));
+    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassedID1));
+    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassedID2));
+    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassedID3));
+    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Compressor::Identifiers::compressorBypassedID4));
     else jassertfalse;
     
     for (auto& slider : sliders) {
@@ -111,7 +111,7 @@ void CompressorPedal::paintBackground(juce::Graphics &g){
     } else if (pedalSlot == 3){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else if (pedalSlot == 4){
-        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+        g.drawImage(backgroundSlot4, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else {
         return;
     }   

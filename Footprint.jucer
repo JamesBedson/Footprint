@@ -5,17 +5,19 @@
               bundleIdentifier="Footprint" pluginManufacturer="ATL2023" aaxIdentifier="com.ATL2023.Footprint"
               lv2Uri="www.upf.edu" companyWebsite="www.upf.edu" companyName="ATL2023">
   <MAINGROUP id="LHrdKF" name="Footprint">
-    <GROUP id="{5DFC2991-19F8-2386-A172-F687A82AFD05}" name="Assets">
-      <FILE id="UtrbeN" name="backgroundPurpleBlue.png" compile="0" resource="1"
+    <GROUP id="{1022616C-DCDA-D155-1FA6-05CD43818C75}" name="Assets">
+      <FILE id="vEK898" name="backgroundPurpleBlue.png" compile="0" resource="1"
             file="Assets/backgroundPurpleBlue.png"/>
-      <FILE id="dI7ZNj" name="DisplayPanel.png" compile="0" resource="1"
+      <FILE id="h98rJ6" name="DisplayPanel.png" compile="0" resource="1"
             file="Assets/DisplayPanel.png"/>
-      <FILE id="IJGeEP" name="Slot1PurpleBlue.png" compile="0" resource="1"
+      <FILE id="XQE5uQ" name="Slot1PurpleBlue.png" compile="0" resource="1"
             file="Assets/Slot1PurpleBlue.png"/>
-      <FILE id="DzCCiq" name="Slot2PurpleBlue.png" compile="0" resource="1"
+      <FILE id="HXOoVL" name="Slot2PurpleBlue.png" compile="0" resource="1"
             file="Assets/Slot2PurpleBlue.png"/>
-      <FILE id="Zf7n2C" name="Slot3PurpleBlue.png" compile="0" resource="1"
+      <FILE id="oa9irv" name="Slot3PurpleBlue.png" compile="0" resource="1"
             file="Assets/Slot3PurpleBlue.png"/>
+      <FILE id="OI21sV" name="Slot4PurpleBlue.png" compile="0" resource="1"
+            file="Assets/Slot4PurpleBlue.png"/>
     </GROUP>
     <GROUP id="{2A57332B-23B2-E97B-D7CF-CBDA2246C730}" name="IR_UPF_formated">
       <GROUP id="{94E2506C-168C-94C6-C196-28A7C4D45862}" name="44.1kHz">
@@ -165,8 +167,12 @@
             file="Source/ReverbTypeSwitch.h"/>
       <FILE id="c9AMiz" name="DBGrid.cpp" compile="1" resource="0" file="Source/DBGrid.cpp"/>
       <FILE id="aKNVYt" name="DBGrid.h" compile="0" resource="0" file="Source/DBGrid.h"/>
+      <FILE id="hfqK1z" name="CustomAudioParameters.cpp" compile="1" resource="0"
+            file="Source/CustomAudioParameters.cpp"/>
+      <FILE id="PadeFM" name="CustomAudioParameters.h" compile="0" resource="0"
+            file="Source/CustomAudioParameters.h"/>
+      <FILE id="wivgJ8" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
     </GROUP>
-    <FILE id="wivgJ8" name="Parametres.h" compile="0" resource="0" file="Source/Parametres.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

@@ -20,10 +20,10 @@ cutoffThreshAttachment(processor->apvts, parameterIDs[2], cutoffThreshold)
 {
     p = processor;
     
-    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed1));
-    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed2));
-    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed3));
-    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed4));
+    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassedID1));
+    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassedID2));
+    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassedID3));
+    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassedID4));
     else jassertfalse;
     
     for (auto& slider : sliders){
@@ -71,7 +71,7 @@ void EnvelopePedal::paintBackground(juce::Graphics& g){
     } else if (pedalSlot == 3){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else if (pedalSlot == 4){
-        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+        g.drawImage(backgroundSlot4, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else {
         return;
     }

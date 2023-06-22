@@ -15,30 +15,28 @@
 ReverbPedal::ReverbPedal(FootprintAudioProcessor* processor, juce::StringArray parameterIDs, const int& pedalSlot)
 : Pedal(pedalSlot),
 mixAttachment(processor->apvts, parameterIDs[0], mix),
-lowpassAttachment(processor->apvts, parameterIDs[1], lowCut),
-highpassAttachment(processor->apvts, parameterIDs[2], highCut),
-reverbTypeSwitch(processor, parameterIDs[3].toStdString())
+reverbTypeSwitch(processor, parameterIDs[1].toStdString())
 {
     p = processor;
     
     if          (pedalSlot == 1) {
-        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed1));
-        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice1));
+        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassedID1));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID1));
     }
     
     else if     (pedalSlot == 2) {
-        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed2));
-        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice2));
+        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassedID2));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID2));
     }
     
     else if     (pedalSlot == 3) {
-        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed3));
-        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice3));
+        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassedID3));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID3));
     }
     
     else if     (pedalSlot == 4) {
-        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed4));
-        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice4));
+        bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbBypassedID4));
+        irSetting.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID4));
     }
     else jassertfalse;
     
@@ -56,16 +54,12 @@ reverbTypeSwitch(processor, parameterIDs[3].toStdString())
     startTimerHz(30);
 
     mixLabel.attachToComponent(&mix, false);
-    highCutLabel.attachToComponent(&highCut, false);
-    lowCutLabel.attachToComponent(&lowCut, false);
     typeLabel.attachToComponent(&reverbTypeSwitch, false);
 
     juce::Font labelFont;
     labelFont.setTypefaceName("Futura");
     labelFont.setHeight(GUIAttributes::PedalFontSizes::h2);
     mixLabel.setFont(labelFont);
-    highCutLabel.setFont(labelFont);
-    lowCutLabel.setFont(labelFont);
     typeLabel.setFont(labelFont);
 
     mixLabel.setText("Mix", juce::dontSendNotification);
@@ -104,8 +98,6 @@ void ReverbPedal::resizeChild(){
         slider->setSize(sliderWidth, sliderHeight);
         }
     mix.setCentrePosition                       (sliderCol2CentreX, sliderRow2CentreY - 85);
-    highCut.setCentrePosition                   (sliderCol3CentreX, sliderRow1CentreY);
-    lowCut.setCentrePosition                    (sliderCol1CentreX, sliderRow1CentreY);
     reverbTypeSwitch.setCentrePosition          (sliderCol2CentreX, sliderRow3CentreY);
 
     for (auto& label : sliderLabels) {
@@ -133,7 +125,7 @@ void ReverbPedal::paintBackground(juce::Graphics& g){
     } else if (pedalSlot == 3){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else if (pedalSlot == 4){
-        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+        g.drawImage(backgroundSlot4, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else {
         return;
     }
@@ -146,16 +138,16 @@ void ReverbPedal::timerCallback() {
         float choice;
         
         if (pedalSlot == 1)
-            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice1)->load();
+            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID1)->load();
         
         else if (pedalSlot == 2)
-            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice2)->load();
+            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID2)->load();
         
         else if (pedalSlot == 3)
-            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice3)->load();
+            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID3)->load();
         
         else if (pedalSlot == 4)
-            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice4)->load();
+            choice = p->apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID4)->load();
         
         else return;
         
