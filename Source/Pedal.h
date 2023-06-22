@@ -61,9 +61,10 @@ protected:
     PedalLookAndFeel    pedalLookAndFeel;
     DeleteSwitchLookandFeel deleteSwitchLookandFeel;
     
-    juce::Image         backgroundSlot1 = juce::ImageCache::getFromMemory(BinaryData::Slot1PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
-    juce::Image         backgroundSlot2 = juce::ImageCache::getFromMemory(BinaryData::Slot2PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
-    juce::Image         backgroundSlot3 = juce::ImageCache::getFromMemory(BinaryData::Slot3PurpleBlue_png, BinaryData::Slot3PurpleBlue_pngSize);
+    juce::Image backgroundSlot1 = juce::ImageCache::getFromMemory(BinaryData::Slot1PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
+    juce::Image backgroundSlot2 = juce::ImageCache::getFromMemory(BinaryData::Slot2PurpleBlue_png, BinaryData::Slot2PurpleBlue_pngSize);
+    juce::Image backgroundSlot3 = juce::ImageCache::getFromMemory(BinaryData::Slot3PurpleBlue_png, BinaryData::Slot3PurpleBlue_pngSize);
+    juce::Image backgroundSlot4 = juce::ImageCache::getFromMemory(BinaryData::Slot4PurpleBlue_png, BinaryData::Slot4PurpleBlue_pngSize);
 
     bool isInside = true;
 

@@ -264,34 +264,34 @@ juce::StringArray PedalSection::getCompressorParameterIDs(const int &idx){
             
         case 0:
             return {
-                ProcessingConstants::Compressor::Identifiers::compressorAttack1,
-                ProcessingConstants::Compressor::Identifiers::compressorRelease1,
-                ProcessingConstants::Compressor::Identifiers::compressorThreshold1,
-                ProcessingConstants::Compressor::Identifiers::compressorRatio1
+                ProcessingConstants::Compressor::Identifiers::compressorAttackID1,
+                ProcessingConstants::Compressor::Identifiers::compressorReleaseID1,
+                ProcessingConstants::Compressor::Identifiers::compressorThresholdID1,
+                ProcessingConstants::Compressor::Identifiers::compressorRatioID1
             };
             
         case 1:
             return {
-                ProcessingConstants::Compressor::Identifiers::compressorAttack2,
-                ProcessingConstants::Compressor::Identifiers::compressorRelease2,
-                ProcessingConstants::Compressor::Identifiers::compressorThreshold2,
-                ProcessingConstants::Compressor::Identifiers::compressorRatio2
+                ProcessingConstants::Compressor::Identifiers::compressorAttackID2,
+                ProcessingConstants::Compressor::Identifiers::compressorReleaseID2,
+                ProcessingConstants::Compressor::Identifiers::compressorThresholdID2,
+                ProcessingConstants::Compressor::Identifiers::compressorRatioID2
             };
             
         case 2:
             return {
-                ProcessingConstants::Compressor::Identifiers::compressorAttack3,
-                ProcessingConstants::Compressor::Identifiers::compressorRelease3,
-                ProcessingConstants::Compressor::Identifiers::compressorThreshold3,
-                ProcessingConstants::Compressor::Identifiers::compressorRatio3
+                ProcessingConstants::Compressor::Identifiers::compressorAttackID3,
+                ProcessingConstants::Compressor::Identifiers::compressorReleaseID3,
+                ProcessingConstants::Compressor::Identifiers::compressorThresholdID3,
+                ProcessingConstants::Compressor::Identifiers::compressorRatioID3
             };
             
         case 3:
             return {
-                ProcessingConstants::Compressor::Identifiers::compressorAttack4,
-                ProcessingConstants::Compressor::Identifiers::compressorRelease4,
-                ProcessingConstants::Compressor::Identifiers::compressorThreshold4,
-                ProcessingConstants::Compressor::Identifiers::compressorRatio4
+                ProcessingConstants::Compressor::Identifiers::compressorAttackID4,
+                ProcessingConstants::Compressor::Identifiers::compressorReleaseID4,
+                ProcessingConstants::Compressor::Identifiers::compressorThresholdID4,
+                ProcessingConstants::Compressor::Identifiers::compressorRatioID4
             };
     }
     return {};
@@ -303,34 +303,26 @@ juce::StringArray PedalSection::getReverbParameterIDs(const int &idx){
             
         case 0:
             return {
-                ProcessingConstants::Reverb::Identifiers::reverbWetMix1,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass1,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass1,
-                ProcessingConstants::Reverb::Identifiers::reverbIRChoice1
+                ProcessingConstants::Reverb::Identifiers::reverbWetMixID1,
+                ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID1
             };
             
         case 1:
             return {
-                ProcessingConstants::Reverb::Identifiers::reverbWetMix2,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass2,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass2,
-                ProcessingConstants::Reverb::Identifiers::reverbIRChoice2
+                ProcessingConstants::Reverb::Identifiers::reverbWetMixID2,
+                ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID2
             };
             
         case 2:
             return {
-                ProcessingConstants::Reverb::Identifiers::reverbWetMix3,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass3,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass3,
-                ProcessingConstants::Reverb::Identifiers::reverbIRChoice3
+                ProcessingConstants::Reverb::Identifiers::reverbWetMixID3,
+                ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID3
             };
             
         case 3:
             return {
-                ProcessingConstants::Reverb::Identifiers::reverbWetMix4,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass4,
-                ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass4,
-                ProcessingConstants::Reverb::Identifiers::reverbIRChoice4
+                ProcessingConstants::Reverb::Identifiers::reverbWetMixID4,
+                ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID4
             };
     }
     return {};
@@ -342,30 +334,30 @@ juce::StringArray PedalSection::getDistortionParameterIDs(const int &idx){
             
         case 0:
             return {
-                ProcessingConstants::Distortion::Identifiers::distortionGain1,
-                ProcessingConstants::Distortion::Identifiers::distortionLevel1,
-                ProcessingConstants::Distortion::Identifiers::distortionTone1
+                ProcessingConstants::Distortion::Identifiers::distortionGainID1,
+                ProcessingConstants::Distortion::Identifiers::distortionLevelID1,
+                ProcessingConstants::Distortion::Identifiers::distortionToneID1
             };
             
         case 1:
             return {
-                ProcessingConstants::Distortion::Identifiers::distortionGain2,
-                ProcessingConstants::Distortion::Identifiers::distortionLevel2,
-                ProcessingConstants::Distortion::Identifiers::distortionTone2
+                ProcessingConstants::Distortion::Identifiers::distortionGainID2,
+                ProcessingConstants::Distortion::Identifiers::distortionLevelID2,
+                ProcessingConstants::Distortion::Identifiers::distortionToneID2
             };
             
         case 2:
             return {
-                ProcessingConstants::Distortion::Identifiers::distortionGain3,
-                ProcessingConstants::Distortion::Identifiers::distortionLevel3,
-                ProcessingConstants::Distortion::Identifiers::distortionTone3
+                ProcessingConstants::Distortion::Identifiers::distortionGainID3,
+                ProcessingConstants::Distortion::Identifiers::distortionLevelID3,
+                ProcessingConstants::Distortion::Identifiers::distortionToneID3
             };
             
         case 3:
             return {
-                ProcessingConstants::Distortion::Identifiers::distortionGain4,
-                ProcessingConstants::Distortion::Identifiers::distortionLevel4,
-                ProcessingConstants::Distortion::Identifiers::distortionTone4
+                ProcessingConstants::Distortion::Identifiers::distortionGainID4,
+                ProcessingConstants::Distortion::Identifiers::distortionLevelID4,
+                ProcessingConstants::Distortion::Identifiers::distortionToneID4
             };
     }
     return {};
@@ -378,30 +370,30 @@ juce::StringArray PedalSection::getEnvelopeFilterParameterIDs(const int &idx){
             
         case 0:
             return {
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality1,
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity1,
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold1
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQualityID1,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivityID1,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThresholdID1
             };
             
         case 1:
             return {
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality2,
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity2,
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold2
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQualityID2,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivityID2,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThresholdID2
             };
             
         case 2:
             return {
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality3,
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity3,
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold3
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQualityID3,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivityID3,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThresholdID3
             };
             
         case 3:
             return {
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality4,
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity4,
-                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold4
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQualityID4,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivityID4,
+                ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThresholdID4
             };
     }
     return {};

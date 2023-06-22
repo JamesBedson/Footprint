@@ -17,6 +17,7 @@
 #include "MonoDSP.h"
 #include "PassThrough.h"
 #include "ProcessingConstants.h"
+#include "CustomAudioParameters.h"
 //==============================================================================
 /**
 */
@@ -159,16 +160,6 @@ private:
     std::atomic<float>* wetDryMix3;
     std::atomic<float>* wetDryMix4;
     
-    std::atomic<float>* cutoffLowpass1;
-    std::atomic<float>* cutoffLowpass2;
-    std::atomic<float>* cutoffLowpass3;
-    std::atomic<float>* cutoffLowpass4;
-    
-    std::atomic<float>* cutoffHighpass1;
-    std::atomic<float>* cutoffHighpass2;
-    std::atomic<float>* cutoffHighpass3;
-    std::atomic<float>* cutoffHighpass4;
-    
     std::atomic<float>* reverbIRChoice1;
     std::atomic<float>* reverbIRChoice2;
     std::atomic<float>* reverbIRChoice3;
@@ -234,6 +225,7 @@ private:
     std::vector<AudioProcessingModule*>             activeModules;
     
     //==============================================================================
+    void updateRMSLevelMeter(const float decibelValue, juce::LinearSmoothedValue<float>& rmsLevel);
     juce::LinearSmoothedValue<float> rmsInLevelLeft, rmsInLevelRight;
     juce::LinearSmoothedValue<float> rmsOutLevelLeft, rmsOutLevelRight;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FootprintAudioProcessor)
