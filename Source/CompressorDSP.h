@@ -30,11 +30,12 @@ public:
 
 private:
     
+    juce::AudioBuffer<float> gainEnvelope;
     std::atomic<float>* attack;
     std::atomic<float>* release;
     std::atomic<float>* threshold;
     std::atomic<float>* ratio;
-    ARAverager attackReleaseAverager;
+    ARAverager attackReleaseAveragerPre, attackReleaseAveragerEnv;
     
     void computeStaticCurve(juce::AudioBuffer<float>&);
     

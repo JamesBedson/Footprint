@@ -20,18 +20,20 @@ Compressor::~Compressor(){
 
 void Compressor::prepare(double sampleRate, int samplesPerBlock, int numChannels){
     
-    attackReleaseAverager.setAttack(attack);
-    attackReleaseAverager.setRelease(release);
-    attackReleaseAverager.prepare(sampleRate, samplesPerBlock, numChannels);
-    
+    gainEnvelope.setSize(numChannels, samplesPerBlock);
+    attackReleaseAveragerPre.setAttack(attack);
+    attackReleaseAveragerPre.setRelease(release);
+    attackReleaseAveragerPre.prepare(sampleRate, samplesPerBlock, numChannels);
+    attackReleaseAveragerEnv.setAttack(attack);
+    attackReleaseAveragerEnv.setRelease(release);
+    attackReleaseAveragerEnv.prepare(sampleRate, samplesPerBlock, numChannels);
     
 }
 
 void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages){
     if (this->isBypassed()) return;
     
-    juce::AudioBuffer<float> gainEnvelope;
-    gainEnvelope.makeCopyOf(buffer);
+    gainEnvelope.makeCopyOf(buffer, true);
     
     // Computing Envelope/Detector
     for (int ch = 0; ch < buffer.getNumChannels(); ch++){
@@ -43,9 +45,9 @@ void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
         }
     }
     
-    attackReleaseAverager.processBlock(gainEnvelope, midiMessages);
-    
+    //attackReleaseAveragerPre.processBlock(gainEnvelope, midiMessages);
     computeStaticCurve(gainEnvelope);
+    attackReleaseAveragerEnv.processBlock(gainEnvelope, midiMessages);
     
     for (int ch = 0; ch < buffer.getNumChannels(); ch++){
         
@@ -60,23 +62,24 @@ void Compressor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer
 }
 
 void Compressor::computeStaticCurve(juce::AudioBuffer<float>& envelope){
-    float slope     = 1 - 1/static_cast<int>(ratio->load());
-    float th        = threshold->load();
+    int ratioParam      = static_cast<int>(ratio->load());
+    float slope         = 1 - 1/ratioParam;
+    float th            = threshold->load();
     
     for (int ch = 0; ch < envelope.getNumChannels(); ch++){
         
-        auto* channelDataWrite  = envelope.getWritePointer(ch);
-        auto* channelDataRead   = envelope.getReadPointer(ch);
+        auto* envelopeDataWrite  = envelope.getWritePointer(ch);
+        auto* envelopeDataRead   = envelope.getReadPointer(ch);
         
         for (int n = 0; n < envelope.getNumSamples(); n++){
             
-            if (channelDataRead[n] == 0) channelDataWrite[n] = epsilonFloat;
-            channelDataWrite[n] = 20 * std::log10f(channelDataRead[n]);
+            if (envelopeDataRead[n] == 0) envelopeDataWrite[n] = epsilonFloat;
+            envelopeDataWrite[n] = 20 * std::log10f(envelopeDataRead[n]);
             
-            if (channelDataRead[n] > th) channelDataWrite[n] = slope * (th - channelDataRead[n]);
-            else channelDataWrite[n] = 0;
+            if (envelopeDataRead[n] > th) envelopeDataWrite[n] = slope * (th - envelopeDataRead[n]);
+            else envelopeDataWrite[n] = 0;
             
-            channelDataWrite[n] = std::pow(10, channelDataRead[n] / 10);
+            envelopeDataWrite[n] = std::pow(10, envelopeDataRead[n] / 10);
         }
     }
 }
