@@ -59,6 +59,7 @@ apvts(*this, nullptr, "Parameters",
     apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
     apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
     
+    
 }
 
 FootprintAudioProcessor::~FootprintAudioProcessor()
@@ -172,7 +173,6 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     assignActiveModules(ProcessingConstants::Pedals::Identifiers::slot4Param,
                         static_cast<int>(apvts.getParameterAsValue(ProcessingConstants::Pedals::Identifiers::slot4Param).getValue()));
 
-    
 }
 
 void FootprintAudioProcessor::releaseResources()
@@ -289,10 +289,12 @@ void FootprintAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     juce::MemoryOutputStream mos(destData, true);
     apvts.state.writeToStream(mos);
+
 }
 
 void FootprintAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+
     auto tree = juce::ValueTree::readFromData(data, sizeInBytes);
         if (tree.isValid()){
             apvts.replaceState(tree);

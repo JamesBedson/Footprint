@@ -111,7 +111,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     APVTS apvts;
-    
+    int count = 0;
     float getInRmsValue(const int channel) const;
     float getOutRmsValue(const int channel) const;
     

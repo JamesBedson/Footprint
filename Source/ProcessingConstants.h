@@ -107,7 +107,7 @@ const juce::StringArray choiceArray
         const float thresholdSkew       = 1.f;
         
         const int   ratioMin            = 1;
-        const int   ratioMax            = 15;
+        const int   ratioMax            = 30;
 
         const float defaultAttack       = 0.1f;
         const float defaultRelease      = 0.1f;
