@@ -26,7 +26,7 @@ namespace GUIAttributes {
         const int h4 = 13; //RMS GRID
         const int h5 = 15; //- Zoom
         const int h6 = 20; //+ Zoom
-        const int h7 = 15; //dB Max Value
+        const int h7 = 13; //dB Max Value
         const int h8 = 8; //dB Min Value
     }
     namespace LevelMeterRange {
