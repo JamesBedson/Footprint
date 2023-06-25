@@ -91,6 +91,7 @@ DBGrid::~DBGrid()
 //labelFont.setHeight(GUIAttributes::DisplayFontSizes::h4);
 //g.setFont(labelFont);
 //g.drawFittedText(label, labelBounds, juce::Justification::centredRight, 1);
+
 void DBGrid::paint(juce::Graphics& g)
 {
     //g.setColour(juce::Colours::red);
@@ -98,15 +99,18 @@ void DBGrid::paint(juce::Graphics& g)
     juce::Rectangle<int> bounds = getLocalBounds();
     float top = bounds.getY();
     float bottom = bounds.getBottom();
+    float rangeMin = GUIAttributes::LevelMeterRange::minLMR;
+    float rangeMax = GUIAttributes::LevelMeterRange::maxLMR;
+
     juce::Array<float> normPositions;
     g.setColour(juce::Colours::white.darker().darker().darker().darker());
 
     for (auto value : dbValues)
     {
-        float y = juce::jmap(value, GUIAttributes::LevelMeterRange::minLMR, GUIAttributes::LevelMeterRange::maxLMR, top, bottom);
+        float y = juce::jmap(value, rangeMin, rangeMax, top, bottom);
         normPositions.add(y);
         juce::Line<float> line{float(bounds.getX()), y, float(bounds.getRight()), y };
-        //g.drawLine(line);
+        g.drawLine(line);
     }
 
     juce::Array<float> positions = getPositions();
@@ -125,11 +129,12 @@ void DBGrid::paint(juce::Graphics& g)
         else
             label = "-" + juce::String(-value) + "dB";
 
-        float fontSize = juce::jmap(std::abs(value), GUIAttributes::LevelMeterRange::maxLMR, GUIAttributes::LevelMeterRange::minLMR, float(GUIAttributes::DisplayFontSizes::h7), float(GUIAttributes::DisplayFontSizes::h8));
+        //float fontSize = juce::jmap(std::abs(value), GUIAttributes::LevelMeterRange::maxLMR, GUIAttributes::LevelMeterRange::minLMR, float(GUIAttributes::DisplayFontSizes::h7), float(GUIAttributes::DisplayFontSizes::h8));
+        float fontSize = GUIAttributes::DisplayFontSizes::h7 - i;
         font.setHeight(fontSize);
         g.setFont(font);
-        //g.drawText(label, (bounds.getWidth() / 2) * 0.45f, positionsRev[i], 30, 10, juce::Justification::centred);
-        i += 1;
+        g.drawText(label, (bounds.getWidth() / 2) * 0.45f, positionsRev[i], 30, 10, juce::Justification::centred);
+        i++;
     }
 }
 
@@ -138,10 +143,13 @@ juce::Array<float> DBGrid::getPositions()
     juce::Rectangle<int> bounds = getLocalBounds();
     float top = bounds.getY();
     float bottom = bounds.getBottom();
+    float rangeMin = GUIAttributes::LevelMeterRange::minLMR;
+    float rangeMax = GUIAttributes::LevelMeterRange::maxLMR;
+
     juce::Array<float> normPositions;
     for (auto value : dbValues)
     {
-        float y = juce::jmap(value, GUIAttributes::LevelMeterRange::minLMR, GUIAttributes::LevelMeterRange::maxLMR, top, bottom);
+        float y = juce::jmap(value, rangeMin, rangeMax, top, bottom);
         normPositions.add(y);
     }
     return normPositions;
