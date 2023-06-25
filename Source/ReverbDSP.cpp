@@ -260,15 +260,26 @@ void Reverb::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &mi
         }
     }
     
-    else {
-        return;
+    float gainFactor = wetValue*3;
+
+    // Iterate over the channels of the audio buffer
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    {
+        // Get a pointer to the samples of the current channel
+        float* channelData = buffer.getWritePointer(channel);
+
+        // Iterate over the samples in the channel
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            // Apply the gain factor to each sample
+            channelData[sample] = channelData[sample] + channelData[sample]*gainFactor;
+        }
     }
     
     
-    
-    
-    
-    
+//    else {
+//        return;
+//    }
     
     
     
