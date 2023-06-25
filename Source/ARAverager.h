@@ -29,7 +29,7 @@ public:
 private:
     std::atomic<float>*    attack;
     std::atomic<float>*    release;
-    
+    bool firstIteration;
     double                  alphaA, alphaR;
     double                  sampleRate;
     std::vector<float>      previousOuts;

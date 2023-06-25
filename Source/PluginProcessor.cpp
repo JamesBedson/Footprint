@@ -23,7 +23,7 @@ FootprintAudioProcessor::FootprintAudioProcessor()
                        ),
 #endif
 apvts(*this, nullptr, "Parameters",
-#include "Parametres.h"
+#include "Parameters.h"
 )
 {
     initParameters();
@@ -58,6 +58,7 @@ apvts(*this, nullptr, "Parameters",
     apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot2Param, this);
     apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot3Param, this);
     apvts.addParameterListener(ProcessingConstants::Pedals::Identifiers::slot4Param, this);
+    
     
 }
 
@@ -172,7 +173,6 @@ void FootprintAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     assignActiveModules(ProcessingConstants::Pedals::Identifiers::slot4Param,
                         static_cast<int>(apvts.getParameterAsValue(ProcessingConstants::Pedals::Identifiers::slot4Param).getValue()));
 
-    
 }
 
 void FootprintAudioProcessor::releaseResources()
@@ -207,83 +207,69 @@ bool FootprintAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 }
 #endif
 
+void FootprintAudioProcessor::updateRMSLevelMeter(const float decibelValue, juce::LinearSmoothedValue<float>& rmsLevel) {
+    if (decibelValue < rmsLevel.getCurrentValue()) rmsLevel.setTargetValue(decibelValue);
+    else rmsLevel.setCurrentAndTargetValue(decibelValue);
+}
+
 void FootprintAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-
-    /////////////////////////////////////////////INPUT RMS LEVEL METER//////////////////////////////////////////////////
     juce::ScopedNoDenormals noInDenormals;
+    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    
+    float leftValue, rightValue; // (For RMS)
+    
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear (i, 0, buffer.getNumSamples());
+    
+    // Input Gain and Waveform visualiser =============================================================================================
     
     inputGainModule.processBlock(buffer, midiMessages);
     guiFifoInput.push(buffer);
     
+    // Input RMS ======================================================================================================================
     rmsInLevelLeft.skip(buffer.getNumSamples());
     rmsInLevelRight.skip(buffer.getNumSamples());
-    {
-        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-        if (value < rmsInLevelLeft.getCurrentValue())
-        {
-            rmsInLevelLeft.setTargetValue(value);
-        }
-        else
-            rmsInLevelLeft.setCurrentAndTargetValue(value);
-    }
-
-    {
-        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
-        if (value < rmsInLevelRight.getCurrentValue())
-        {
-            rmsInLevelRight.setTargetValue(value);
-        }
-        else
-            rmsInLevelRight.setCurrentAndTargetValue(value);
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+        // Left Input
+    leftValue = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+    updateRMSLevelMeter(leftValue, rmsInLevelLeft);
+    
+        // Right Input
+    if (buffer.getNumChannels() > 1) rightValue = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
+    else rightValue = leftValue;
+    updateRMSLevelMeter(rightValue, rmsInLevelRight);
 
 
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
-    // DSP Block
+    // DSP Block =======================================================================================================================
     
     activeModules[0]->processBlock(buffer, midiMessages);
     activeModules[1]->processBlock(buffer, midiMessages);
     activeModules[2]->processBlock(buffer, midiMessages);
     activeModules[3]->processBlock(buffer, midiMessages);
 
-    //INSERT OTHER DSP EFFECTS PROCESS BLOCKS BEFORE THIS LINE
-
-    /////////////////////////////////////////////OUTPUT RMS LEVEL METER//////////////////////////////////////////////////
+    // Output Gain + Mono/Stereo and Waveform Visualiser ===============================================================================
     juce::ScopedNoDenormals noOutDenormals;
+    
     bool isStereo = static_cast<bool>(apvts.getRawParameterValue(ProcessingConstants::EditorControls::Identifiers::monoStereoParam)->load());
     if (!isStereo) monoStereoModule.processBlock(buffer, midiMessages);
+    
     outputGainModule.processBlock(buffer, midiMessages);
     guiFifoOutput.push(buffer);
     
+    // Output RMS ======================================================================================================================
     rmsOutLevelLeft.skip(buffer.getNumSamples());
     rmsOutLevelRight.skip(buffer.getNumSamples());
-    {
-        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-        if (value < rmsOutLevelLeft.getCurrentValue())
-        {
-            rmsOutLevelLeft.setTargetValue(value);
-        }
-        else
-            rmsOutLevelLeft.setCurrentAndTargetValue(value);
-    }
-
-    {
-        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
-        if (value < rmsOutLevelRight.getCurrentValue())
-        {
-            rmsOutLevelRight.setTargetValue(value);
-        }
-        else
-            rmsOutLevelRight.setCurrentAndTargetValue(value);
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+        // Left Input
+    leftValue = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+    updateRMSLevelMeter(leftValue, rmsOutLevelLeft);
+    
+        // Right Input
+    if (buffer.getNumChannels() > 1) rightValue = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
+    else rightValue = leftValue;
+    updateRMSLevelMeter(rightValue, rmsOutLevelRight);
 
 }
 
@@ -303,10 +289,12 @@ void FootprintAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     juce::MemoryOutputStream mos(destData, true);
     apvts.state.writeToStream(mos);
+
 }
 
 void FootprintAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+
     auto tree = juce::ValueTree::readFromData(data, sizeInBytes);
         if (tree.isValid()){
             apvts.replaceState(tree);
@@ -372,99 +360,89 @@ void FootprintAudioProcessor::initParameters(){
     outputGain  = apvts.getRawParameterValue(ProcessingConstants::EditorControls::Identifiers::outputGainParam);
     
     // Compressor
-    attack1     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack1);
-    attack2     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack2);
-    attack3     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack3);
-    attack4     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttack4);
+    attack1     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttackID1);
+    attack2     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttackID2);
+    attack3     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttackID3);
+    attack4     = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorAttackID4);
     
-    release1    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease1);
-    release2    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease2);
-    release3    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease3);
-    release4    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRelease4);
+    release1    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorReleaseID1);
+    release2    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorReleaseID2);
+    release3    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorReleaseID3);
+    release4    = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorReleaseID4);
     
-    threshold1  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold1);
-    threshold2  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold2);
-    threshold3  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold3);
-    threshold4  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThreshold4);
+    threshold1  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThresholdID1);
+    threshold2  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThresholdID2);
+    threshold3  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThresholdID3);
+    threshold4  = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorThresholdID4);
     
-    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio1);
-    ratio2      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio2);
-    ratio3      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio3);
-    ratio4      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatio4);
+    ratio1      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatioID1);
+    ratio2      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatioID2);
+    ratio3      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatioID3);
+    ratio4      = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorRatioID4);
     
-    compressorBypass1 = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed1);
-    compressorBypass2 = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed2);
-    compressorBypass3 = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed3);
-    compressorBypass4 = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorBypassed4);
+    compressorBypass1 = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorBypassedID1);
+    compressorBypass2 = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorBypassedID2);
+    compressorBypass3 = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorBypassedID3);
+    compressorBypass4 = apvts.getRawParameterValue(ProcessingConstants::Compressor::Identifiers::compressorBypassedID4);
     
     // Reverb
-    wetDryMix1      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMix1);
-    wetDryMix2      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMix2);
-    wetDryMix3      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMix3);
-    wetDryMix4      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMix4);
+    wetDryMix1      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMixID1);
+    wetDryMix2      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMixID2);
+    wetDryMix3      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMixID3);
+    wetDryMix4      = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbWetMixID4);
     
-    cutoffLowpass1  = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass1);
-    cutoffLowpass2  = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass2);
-    cutoffLowpass3  = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass3);
-    cutoffLowpass4  = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffLowpass4);
+    reverbBypass1   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassedID1);
+    reverbBypass2   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassedID2);
+    reverbBypass3   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassedID3);
+    reverbBypass4   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassedID4);
     
-    cutoffHighpass1 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass1);
-    cutoffHighpass2 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass2);
-    cutoffHighpass3 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass3);
-    cutoffHighpass4 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbCutoffHighpass4);
-    
-    reverbBypass1   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed1);
-    reverbBypass2   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed2);
-    reverbBypass3   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed3);
-    reverbBypass4   = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbBypassed4);
-    
-    reverbIRChoice1 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice1);
-    reverbIRChoice2 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice2);
-    reverbIRChoice3 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice3);
-    reverbIRChoice4 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoice4);
+    reverbIRChoice1 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID1);
+    reverbIRChoice2 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID2);
+    reverbIRChoice3 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID3);
+    reverbIRChoice4 = apvts.getRawParameterValue(ProcessingConstants::Reverb::Identifiers::reverbIRChoiceID4);
     
     // Distortion
-    distGain1   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain1);
-    distGain2   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain2);
-    distGain3   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain3);
-    distGain4   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGain4);
+    distGain1   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGainID1);
+    distGain2   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGainID2);
+    distGain3   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGainID3);
+    distGain4   = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionGainID4);
     
-    level1      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevel1);
-    level2      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevel2);
-    level3      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevel3);
-    level4      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevel4);
+    level1      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevelID1);
+    level2      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevelID2);
+    level3      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevelID3);
+    level4      = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionLevelID4);
     
-    tone1       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionTone1);
-    tone2       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionTone2);
-    tone3       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionTone3);
-    tone4       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionTone4);
+    tone1       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionToneID1);
+    tone2       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionToneID2);
+    tone3       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionToneID3);
+    tone4       = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionToneID4);
     
-    distortionBypass1 = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionBypassed1);
-    distortionBypass2 = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionBypassed2);
-    distortionBypass3 = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionBypassed3);
-    distortionBypass4 = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionBypassed4);
+    distortionBypass1 = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionBypassedID1);
+    distortionBypass2 = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionBypassedID2);
+    distortionBypass3 = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionBypassedID3);
+    distortionBypass4 = apvts.getRawParameterValue(ProcessingConstants::Distortion::Identifiers::distortionBypassedID4);
     
     
     // Envelope Filter
-    quality1            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality1);
-    quality2            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality2);
-    quality3            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality3);
-    quality4            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQuality4);
+    quality1            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQualityID1);
+    quality2            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQualityID2);
+    quality3            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQualityID3);
+    quality4            = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterQualityID4);
     
-    sensitivity1        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity1);
-    sensitivity2        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity2);
-    sensitivity3        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity3);
-    sensitivity4        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivity4);
+    sensitivity1        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivityID1);
+    sensitivity2        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivityID2);
+    sensitivity3        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivityID3);
+    sensitivity4        = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterSensitivityID4);
     
-    cutoffThreshold1    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold1);
-    cutoffThreshold2    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold2);
-    cutoffThreshold3    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold3);
-    cutoffThreshold4    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThreshold4);
+    cutoffThreshold1    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThresholdID1);
+    cutoffThreshold2    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThresholdID2);
+    cutoffThreshold3    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThresholdID3);
+    cutoffThreshold4    = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterCutoffThresholdID4);
     
-    envelopeFilterBypass1 = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed1);
-    envelopeFilterBypass2 = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed2);
-    envelopeFilterBypass3 = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed3);
-    envelopeFilterBypass4 = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassed4);
+    envelopeFilterBypass1 = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassedID1);
+    envelopeFilterBypass2 = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassedID2);
+    envelopeFilterBypass3 = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassedID3);
+    envelopeFilterBypass4 = apvts.getRawParameterValue(ProcessingConstants::EnvelopeFilter::Identifiers::envelopeFilterBypassedID4);
     
 }
 
@@ -626,8 +604,6 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
         case 0: {
             
             reverbVector[slotIdx]->setWet(wetDryMix1);
-            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass1);
-            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass1);
             reverbVector[slotIdx]->setBypassParam(reverbBypass1);
             reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice1);
         }
@@ -636,8 +612,6 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
         case 1: {
             
             reverbVector[slotIdx]->setWet(wetDryMix2);
-            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass2);
-            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass2);
             reverbVector[slotIdx]->setBypassParam(reverbBypass2);
             reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice2);
         }
@@ -646,8 +620,6 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
         case 2: {
             
             reverbVector[slotIdx]->setWet(wetDryMix3);
-            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass3);
-            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass3);
             reverbVector[slotIdx]->setBypassParam(reverbBypass3);
             reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice3);
         }
@@ -656,8 +628,6 @@ void FootprintAudioProcessor::initReverbParameters(const int &slotIdx){
         case 3:{
             
             reverbVector[slotIdx]->setWet(wetDryMix4);
-            reverbVector[slotIdx]->setLowpassCutoff(cutoffLowpass4);
-            reverbVector[slotIdx]->setHighpassCutoff(cutoffHighpass4);
             reverbVector[slotIdx]->setBypassParam(reverbBypass4);
             reverbVector[slotIdx]->setIRChoiceParameter(reverbIRChoice4);
         }

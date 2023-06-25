@@ -23,7 +23,7 @@ EnvelopeFilter::~EnvelopeFilter() {
 void EnvelopeFilter::prepare(double sampleRate, int samplePerBlock, int numChannels) {
 
     this->sampleRate = sampleRate;
-    this->windowSize = 400;
+    this->windowSize = 800;
 
     windowCutoffs.resize(numChannels);
     previousXamplitude.resize(numChannels);

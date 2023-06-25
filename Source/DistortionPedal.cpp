@@ -20,10 +20,10 @@ toneAttachment(processor->apvts, parameterIDs[2], tone)
 {
     p = processor;
     
-    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Distortion::Identifiers::distortionBypassed1));
-    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Distortion::Identifiers::distortionBypassed2));
-    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Distortion::Identifiers::distortionBypassed3));
-    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Distortion::Identifiers::distortionBypassed4));
+    if          (pedalSlot == 1) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Distortion::Identifiers::distortionBypassedID1));
+    else if     (pedalSlot == 2) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Distortion::Identifiers::distortionBypassedID2));
+    else if     (pedalSlot == 3) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Distortion::Identifiers::distortionBypassedID3));
+    else if     (pedalSlot == 4) bypassState.referTo(p->apvts.getParameterAsValue(ProcessingConstants::Distortion::Identifiers::distortionBypassedID4));
     else jassertfalse;
     
     for (auto& slider : sliders) {
@@ -105,7 +105,7 @@ void DistortionPedal::paintBackground(juce::Graphics& g){
     } else if (pedalSlot == 3){
         g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else if (pedalSlot == 4){
-        g.drawImage(backgroundSlot3, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
+        g.drawImage(backgroundSlot4, getLocalBounds().toFloat(), juce::RectanglePlacement::stretchToFit);
     } else {
         return;
     }
