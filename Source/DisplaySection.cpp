@@ -117,7 +117,7 @@ void DisplaySection::resized()
     juce::Rectangle<int> bounds = getLocalBounds();
     inputWaveform.setBounds(140, 18, 500, 100);
     outputWaveform.setBounds(140, 125, 500, 100);
-    dBGrid.setBounds(47, 45, 45, 167);
+    dBGrid.setBounds(50, 50, 45, 157);
     WaveformZoom.setBounds(639, 75, 40, 100);
 
     inputWaveform.setColours(juce::Colours::transparentBlack, juce::Colours::white);
@@ -149,5 +149,4 @@ void DisplaySection::resized()
     
     levelOutMeterLeft.setSize(levelMeterWidth, levelMeterHeight);
     levelOutMeterLeft.setTopRightPosition(levelOutMeterRight.getX() - distanceLRChannel, levelMeterY);
-    
 }
