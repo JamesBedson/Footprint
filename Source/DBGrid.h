@@ -26,5 +26,6 @@ public:
 
 private:
     juce::Array<float> dbValues = {6.f, 3.f, 0.f, -3.f, -12.f, -24.f, -48.f, -60.f};
+    //juce::Array<float> dbValues = {6.f ,0.f, -6.f, -12.f, -18.f, -24.f, -30.f, -36.f, -42.f, -60.f};
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DBGrid)
 };
